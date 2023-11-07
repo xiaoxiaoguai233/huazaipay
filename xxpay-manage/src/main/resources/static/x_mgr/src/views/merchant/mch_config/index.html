@@ -1,0 +1,141 @@
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>商户管理</cite></a>
+    <a><cite>收银台限额</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">商户限额配置列表</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-row">
+            <div class="layui-form" style="float:right;">
+              <div class="layui-form-item" style="margin:0;">
+                <div class="layui-input-inline">
+                  <input type="text" name="mchId" id="mchId" placeholder="商户号" autocomplete="off" class="layui-input">
+                </div>
+
+                <div class="layui-input-inline">
+                  <select name="configType" id="configType" lay-search="">
+                    <option value="-99">参数类型</option>
+                    <option value="0">全局</option>
+                    <option value="1">商户</option>
+                  </select>
+                </div>
+
+                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+              </div>
+            </div>
+          </div>
+          <div class="layui-row">
+            <div class="layuiAdmin-btns" style="margin-bottom: 10px;">
+              <a class="layui-btn" lay-href="merchant/mch_config/mchConfig_add">新增</a>
+<!--              <button class="layui-btn" data-type="all" data-events="del">删除</button>-->
+            </div>
+          </div>
+          <table id="XxPay_Mch_Cashier_Config_table" lay-filter="XxPay_Mch_Cashier_Config_table"></table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="xxpayBar">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+</script>
+
+<script>
+layui.use(['admin', 'table', 'util'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,table = layui.table
+  ,element = layui.element
+  ,form = layui.form;
+  
+  element.render('breadcrumb', 'breadcrumb');
+
+  var configPlate = function(d){
+    if(d.configType == 0) {
+      return "<span style='color: green'>全局</span>";
+    }else if(d.configType == 1) {
+      return "<span style='color: blue'>商户</span>";
+    }
+  };
+
+  //资源列表
+  table.render({
+    elem: '#XxPay_Mch_Cashier_Config_table'
+    ,url: layui.setter.baseUrl + '/mch_config/list' //列表接口
+    ,where: {
+      access_token: layui.data(layui.setter.tableName).access_token
+    }
+    ,id: 'tableReload'
+    ,page: true
+    ,cols: [[
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'mchId', title: '商户ID'}
+      ,{field: 'configType', title: '参数类型',templet:configPlate}
+      // ,{field: 'configName', title: '配置项'}
+      // ,{field: 'configValue', title: '配置参数'}
+      // ,{field: 'configDescribe', title: '参数描述'}
+      ,{field: 'createTime', title: '创建时间',templet: '<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'}
+      ,{field: 'updateTime', title: '更新时间',templet: '<div>{{ layui.util.toDateString(d.updateTime, "yyyy-MM-dd HH:mm:ss") }}</div>'}
+      ,{field: 'edit', width:260, title: '操作', toolbar: '#xxpayBar' }
+    ]]
+    ,skin: 'line'
+  });
+
+  //监听工具条
+  table.on('tool(XxPay_Mch_Cashier_Config_table)', function(obj){
+    var data = obj.data;
+   if(obj.event === 'edit'){
+      location.hash = "/merchant/mch_config/mchConfig_edit/mchId=" + data.mchId;
+    } else if(obj.event === 'add'){
+      location.hash = "/merchant/mch_config/mchConfig_add" ;
+    }
+  });
+
+
+
+  // 搜索
+  var $ = layui.$, active = {
+    reload: function(){
+      var mchId = $("#mchId").val();
+      var configType = $("#configType").val();
+
+      //执行重载
+      table.reload('tableReload', {
+        page: {
+          curr: 1 //重新从第 1 页开始
+        }
+        ,where: {
+          mchId: mchId,
+          configType : configType
+        }
+      });
+    }
+  };
+  $('#search').on('click', function() {
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+
+
+  $('.layuiAdmin-btns .layui-btn').on('click', function(){
+    var othis = $(this)
+            ,thisEvent = othis.data('events')
+            ,type = othis.data('type');
+    events[thisEvent] && events[thisEvent].call(this, othis, type);
+  });
+  // 渲染表单
+  form.render();
+});
+</script>

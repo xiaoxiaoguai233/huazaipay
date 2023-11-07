@@ -1,0 +1,789 @@
+/*css reset*/
+html {
+    font-family:sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+	font-size:100%;
+}
+
+body {
+	width: 100%;
+	font-size:1rem;/* 1*16px=16px */
+    line-height: 1.666;
+    color: #333333;
+    -webkit-font-smoothing: antialiased;
+    background: #FFFFFF;
+    overflow-x: hidden;
+}
+
+body,input,textarea {
+    font-family: sans-serif;
+}
+
+header,footer,section,aside,article,nav,hgroup,figure,figcaption,body,h1,h2,h3,h4,h5,h6,ul,ol,li,form,p,dl,dt,dd,blockquote,legend,table,th,td,fieldset,menu,pre {
+    margin: 0;
+    padding: 0
+}
+
+table,th,td,img,fieldset {
+    border: 0
+}
+
+time,mark,output,meter,address,cite,em,code,var,dfn,ins,i,th,caption {
+    font-style: normal;
+    text-decoration: none
+}
+
+h1,h2,h3,h4,h5,h6,th {
+    font-size: 100%;
+    font-weight: normal
+}
+
+input,select,button,textarea,table {
+    margin: 0;
+    font-family: inherit;
+    font-size: 100%
+}
+
+abbr,acronym {
+    border: 0;
+    font-variant: normal
+}
+
+q:before,q:after {
+    content: ""
+}
+
+ul,ol {
+    list-style: none
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+th,caption {
+    text-align: left
+}
+
+header,footer,section,aside,article,nav,hgroup,figure,figcaption {
+    display: block
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+}
+
+select, button, input, textarea:active, a:active, select:active, option:active, input:active, textarea:focus, a:focus, select:focus, option:focus, input:focus {
+    outline: 0;
+}
+
+*{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+/*css reset end*/
+#service {
+	display:block;
+	position:fixed;
+	right:10px;
+	bottom:0;
+	z-index:10;
+}
+#service img{
+	width:45px;
+	height:auto;
+}
+
+.header {
+    position: relative;
+	width: 100%;
+	min-width:320px;
+    height: auto;
+	padding: 8px 0 0;
+    margin: 0px;
+	border: 1px solid #d2dde4;
+	background: #dae6ee; 
+    background: -moz-linear-gradient(top, #dae6ee 9%, #c6d8e4 100%);
+    background: -webkit-linear-gradient(top, #dae6ee 9%,#c6d8e4 100%);
+    background: linear-gradient(to bottom, #dae6ee 9%,#c6d8e4 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dae6ee', endColorstr='#c6d8e4',GradientType=0 );
+	height:60px;
+	line-height:60px;
+}
+
+.header .logo {
+	width:170px;
+	margin: 0 auto ;
+}
+
+.header .logo img{
+    width: 100%;
+    height:auto;
+}
+
+.promot {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.promot img {
+    display: block;
+    width: 100%;
+	height:auto;
+}
+
+.marqueeWrap{
+    position: relative;
+    width: 100%;
+	min-width:320px;
+    height: auto;
+	overflow:hidden;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 3px 10px;
+	border-bottom: 7px solid #eeeeee;
+}
+.marqueeWrap .speaker{
+	float:left;
+    display: block;
+	width:20px;
+	height:20px;
+    background: url(../images/speaker.png) no-repeat;
+    background-size: 18px 18px;
+	margin:7px 10px 0 5px;
+}
+.marqueeWrap a {
+	float:left;
+	display:block;
+	height:30px; 
+	line-height:30px; 
+	width:87%; 
+	overflow:hidden
+}
+.marqueeWrap .marquee {
+    width: 100%;
+    overflow: hidden;
+    color: #333333;
+    background: #fff;
+}
+
+.content {
+    position: relative;
+    width: 100%;
+	min-width:320px;
+    height: auto;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 10px 0 0 0;
+}
+
+.content p{font-size: 1rem;line-height:1.6rem;text-align: center;margin:10px;}
+
+.reg-form {
+	width: 100%;
+	font-size: 1rem;
+    padding: 10px 0 5px 0;
+	display:inline-block;
+	background: #fff;
+	overflow: hidden;
+	border-top:7px solid #eeeeee;
+	border-bottom:7px solid #eeeeee;
+}
+
+.reg-form .col{
+    height: 65px;
+	line-height: 65px;
+	padding: 0;
+	margin: 0;
+	float:left;
+}
+
+.reg-form .col-name{ width:25%;color:#000000;text-align:right;}
+.reg-form .col-data{ width:75%;padding-right:4%;}
+.reg-form .col-line{width:100%;height:7px;background:#eeeeee;margin: 10px 0;float:left;}
+
+
+.reg-form .reg-input {
+    width: 100%;
+    padding: 5px 10px;
+    line-height: 30px;
+    font-size: 1rem;
+    color: #000;
+    border: 1px solid #ccc;
+	border-radius:5px;
+}
+
+.reg-form .pay-label {
+    display: block;
+	height:65px;
+    float: left;
+}
+
+.reg-form .pay-label img {
+    width: 50%;
+	height:auto;
+    vertical-align: middle;
+	margin: 0 5px;
+}
+
+.reg-form-btn {
+    border-bottom:7px solid #eeeeee;
+}
+
+.reg-form-btn a {
+    display: block;
+    width: 50%;
+    height: 50px;
+    background-color:#0071bc;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 50px;
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin: 5px auto 15px auto;
+}
+
+.reg-form-btn2 a {
+	display: inline-block;
+	width: 23%;
+	height: 50px;
+	background-color:#0071bc;
+	border-radius: 5px;
+	text-align: center;
+	line-height: 30px;
+	height: 30px;
+	color: #ffffff;
+	font-size: 1rem;
+	margin: 5px auto 15px auto;
+}
+
+.reg-form-btn a.disable {
+	background: #868585;
+	cursor:not-allowed;
+}
+
+.reg-form-btn a:hover{
+background: #1e6399; /* Old browsers */
+background: -moz-linear-gradient(top, #1e6399 0%, #1a9adb 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #1e6399 0%,#1a9adb 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #1e6399 0%,#1a9adb 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e6399', endColorstr='#1a9adb',GradientType=0 ); /* IE6-9 */
+}
+
+.reg-form-btn a.disable:hover {
+	background: #868585;
+	cursor:not-allowed;
+}
+
+.tips {
+    font-size: 1rem;
+	line-height:2rem;
+    padding: 5px 10px;
+}
+
+.tips p {
+	color:#848484;
+    text-align: left;
+	margin: 5px 0;
+}
+
+.tips h5 {
+    font-size: 1.25rem;
+	line-height:2rem;
+    text-align: center;
+	font-weight:bold;
+	color:#fa5b16;
+}
+
+.txt-red{color:#D7160D}
+.txt-dark{color:#000000}
+.txt-blue{color:#0751e8}
+.txt-gray{color:#808080}
+.txt-orange{color:#f60}
+.txt-green{color:#2ab10f}
+.txt-yellow-bg{background:#ffec00}
+
+footer { 
+	text-align: center;
+    background: #c6d8e4;
+}
+
+footer .copyright {
+	max-width:100%;
+	margin:0 auto;
+    padding: 5px 10px;
+	color:#69737A;
+	font-size: 0.75rem;
+}
+
+@media (max-width:320px){
+	.reg-form .col-name{ width:30%;}
+	.reg-form .col-data{ width:70%}
+}
+
+#m-pay{
+	height:65px;
+	background:#fffffff;
+	border-bottom:2px solid #0271BC;
+}
+
+#m-pay.payResult{
+	background:#d7e5ef;
+	border-bottom:2px solid #198ede;
+}
+
+#m-pay.weixin{
+	background:#FFF;
+	border-bottom:2px solid #0271BC;
+}
+
+#m-pay.qq{
+	background:#f5f5f5;
+	border-bottom:2px solid #4c4c4c;
+}
+
+#m-pay .head{
+	width: 100%;
+	margin: 0;
+	padding:15px 30px;
+}
+
+#m-pay .head h1{
+	font-size:1.5rem;
+	font-weight:bold;
+	text-align:center;
+	color:#1c77b5;
+	width:320px;
+}
+
+#m-pay .head h1.payResult{
+	color:#1c77b5;
+}
+
+#m-pay .head img{
+	width:140px;
+	float:left;
+}
+
+#m-pay .head h1.weixin{
+	color:#1c77b5;
+	width:300px;
+}
+
+#m-pay .head h1.qq{
+	color:#000000;
+}
+
+.ico {
+	display:inline-block;
+    width: 24px;
+    height: 24px;
+    background: url(../images/pics.png) no-repeat;
+    background-size: 74px 24px;
+	vertical-align: middle;
+	margin-right:5px;
+}
+.ico-success {background-position: -25px 0px;}
+.ico-wrong {background-position: -50px 0px;}
+.ico-fail {background-position: 0px 0px;}
+
+.payResult-wrap{
+	position: relative;
+	display:block;
+    width: 94%;
+    padding: 1rem 0;
+	margin: 10px auto;
+    background:#eeeeee;
+    border-radius:10px;
+}
+.payResult-wrap h5{
+	font-size: 1.25rem;
+	line-height:1.5rem;
+	text-align: center;
+	margin-top:5%;
+	margin-bottom:5%;
+}
+
+.order-info{
+	position: relative;
+	display:block;
+    width: 96%;
+	height:auto;
+    background-color: #e8e8e8;
+    border-radius: 8px;
+    margin: 10px auto;
+	font-size: 1rem;
+}
+
+.order-info .order-num {
+	padding: 5px 10px;
+	border-bottom: 1px dashed #CACACA;
+}
+
+.order-info .order-time {
+	padding: 5px 10px;
+}
+
+.pay-Wrap{
+	position: relative;
+	display:block;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.pay-Wrap .codeWrap{
+	width:100%;
+	text-align: center;
+}
+
+.pay-Wrap .codeWrap.noSide{
+	width:100%;
+	text-align: center;
+}
+
+.pay-Wrap .codeWrap .QRcode{
+	width:200px;
+	height:200px;
+	margin:10px auto 20px auto;
+}
+.pay-Wrap .codeWrap .QRcode img{
+	width:100%;
+	height:auto;
+	border:1px solid #CECECE;
+}
+
+.pay-Wrap .explain{
+	width:100%;
+	margin: 0;
+	padding: 0 10px;
+	text-align: center;
+	border-top:7px solid #eeeeee;
+}
+
+.pay-Wrap .explain img{
+	width:100%;
+	height:auto;
+}
+
+.paySuccessBtn a {
+    display: block;
+    width: 45%;
+    background-color:#453c3c;
+    border-radius: 6px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.25rem;
+    padding:10px;
+    margin: 15px auto;
+}
+
+.paySuccessBtn.alipay a {
+    background-color: #ea5a42;
+}
+.paySuccessBtn.weixin a {
+	background-color: #5B972A;
+}
+.paySuccessBtn.qq a {
+	background-color: #f5b118;
+}
+.blink{
+	opacity: 50;
+    /*animation: blinking 0.8s cubic-bezier(0.47, 0, 0.75, 0.72) infinite;*/
+	color:#FF393D;
+	display: block;
+	width:100%;
+	position: relative;
+	line-height: 21px;
+	font-weight: bold;
+	margin-right:12%;
+	margin-bottom: -25px;
+
+	/* caster add for not to zip img */
+	text-align: left;
+	padding-left: 60px;
+}
+
+/* if we need to change blink text's position, use this style. ( Just for 1 column !) */
+.reg-form .col-data.width-100 { width:100%;padding: 0 3%;}
+.reg-form .col-data.width-100 .pay-label{ width:100%;}
+.reg-form .pay-label span.blink-right, .reg-form .pay-label span.blink-left{
+	width: 40%;
+	height:auto;
+	display:inline-block;
+	float:right;
+	opacity: 50;
+	color:#FF393D;
+	font-weight: bold;
+	line-height:1.2;
+	word-break: break-all;
+	white-space:pre-wrap;
+	vertical-align:middle;
+	padding: 0px 10px;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	margin: auto;
+}
+
+/* Left*/
+.reg-form .pay-label span.blink-left{
+	float:left;
+	text-align: right;
+}
+/* blink text's position-end */
+
+@keyframes blinking {
+  from,
+  49.9% {
+    opacity: 0;
+  }
+  50%,
+  to {
+    opacity: 1;
+  }
+}
+/*=======wuma==========*/
+#wuma .notice{
+	width:100%;
+	margin: 0;
+	padding: 0px 60px 15px;
+	font-size:1rem;
+	line-height:1.8rem;
+	text-align: center;
+	color:#2094e6;
+
+}
+#wuma .reg-form{
+	border:none;
+	width:80%;
+	margin-top: -20px;
+}
+#wuma .reg-form .col-name{
+	text-align: center;
+	width:40%;
+	height:30px;
+	line-height: 30px;
+	margin-left: 30%;
+}
+#wuma .reg-form .reg-input{
+	line-height: 18px;
+	width:70%;
+}
+
+#wuma .reg-form .col-data{
+	height:30px;
+	line-height: 30px;
+	width:100%;
+	padding-right: initial;
+}
+#wuma .payName{
+	width:100%;
+	margin-top:52%;
+	margin-left: -6px;
+	font-size: 14px;
+	font-weight:900;
+	position: absolute;
+}
+#wuma .paySuccessBtn a{
+	background-color: #0271bc;
+	margin:10px auto 25px;
+}
+/*========Kuai xuan money============*/
+
+.money-box ul{
+   float: left;
+   border-top: 1px solid #CCC;
+   border-left: 1px solid #CCC;
+   margin-bottom: 15px;
+   width: 100%;
+   margin-left: 0; 
+   margin-top: 2%
+}
+.money-box li{
+	float: left;
+    height:35px;
+    border-right: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    position: relative;
+    background: #fff;
+    display: inline-block;
+	text-align: center;
+	color: #727273;
+	cursor:pointer;
+}
+.money-box .active{
+	background-image: url(../images/check.png);
+	background-position: 100% 100%;
+	background-repeat: no-repeat;
+	border:1.2px solid #0a64ab;
+	background-size: 27%;
+	color: #0a64ab;
+	font-weight: 500;
+}
+.money-box ul li p{
+	margin:5px;
+}
+
+/*========weixin online pay============*/
+#weixin #m-pay{
+	border:none; 
+	background-color:#2BA245;
+}
+#weixin #m-pay h1{
+	color:#FFF;
+	text-align: center;
+	width:initial;
+}
+#weixin .content{
+	background-color:#f8f8f8;
+}
+
+#weixin .content p{
+	margin:5px 20px;
+	text-align: left;
+	color:#737372;
+}
+#weixin .reg-form .col-name{
+	width:20%;
+}
+#weixin .reg-form, #weixin .reg-form-btn{
+	border:none;
+
+}
+#weixin .last_col{
+	background-color: #FFF;
+	padding-top: 10px;
+}
+#weixin .last_col p{
+	text-align: center;
+}
+#weixin .reg-form-btn a{
+	background-color: #2BA245;
+}
+
+#weixin .reg-form-btn a:hover{
+
+background: #2ba245; 
+background: -moz-linear-gradient(top, #2ba245 0%, #006300 96%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #2ba245 0%,#006300 96%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #2ba245 0%,#006300 96%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2ba245', endColorstr='#006300',GradientType=0 ); /* IE6-9 */
+}
+
+/*========saomapay pay============*/
+#saomapay_m .content p{
+	padding:10px;
+	border-bottom:7px solid #eeeeee;
+}
+#saomapay_m .content_2{
+	display: none;
+	position:absolute;
+	padding:10px 0 0 0 ;
+	margin:0;
+
+	
+}
+#saomapay_m .content_2 p{
+	margin:10px;
+	text-align: center;
+	font-size: 1rem;
+	line-height: 1.6rem;
+}
+
+.go-back-btn, .saoma-form-btn{
+	display: inline-block;
+	text-align: center;
+	width:48%
+}
+
+.go-back-btn a, .saoma-form-btn a{
+    display: block;
+    height: 50px;
+    background-color:#0071bc;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 50px;
+    color: #ffffff;
+    margin: 5px auto 15px auto;
+}
+
+#saomapay_m .QRcode{
+	border:1px solid #3177EE;
+	padding:10px;
+	width:230px;
+	height:230px;
+}
+#saomapay_m .QRcode img{
+	border:none;
+	padding:5px;
+}
+
+
+/*==pay-label two-column===*/
+label.pay-label.two-column{
+    width:50%;
+  }
+label.pay-label.two-column img{
+    width:82%;
+    max-width: 160px;
+  }
+
+
+/*sidebar menu*/
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #2b3b58;
+    opacity: 0.95;
+    overflow-x: hidden;
+    transition: 0.2s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 20px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #9cd1ff;
+    display: block;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    font-size: 36px;
+    margin-left: 50px;
+    color:#d1dfe9;
+    width:60px;
+    height:68px;
+}
+
+.menu{
+  font-size:30px;
+  cursor:pointer;
+  position:absolute;
+  top:10px;
+  left:10px;
+}
+
+.menu_icon{
+    width: 35px;
+    height: 5px;
+    border-radius: 3px;
+    background-color: #0070bc;
+    margin: 6px 0;
+}
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}

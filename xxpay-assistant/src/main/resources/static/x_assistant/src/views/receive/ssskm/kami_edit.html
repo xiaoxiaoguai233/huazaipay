@@ -1,0 +1,110 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>京东E卡—HSH</cite></a>
+        <a><cite>编辑收款账号</cite></a>
+    </div>
+</div>
+
+<style>
+    .layui-form-label {
+        width:15% !important;
+        margin-left:1%;
+    }
+    .layui-input-inline {
+        width: 33% !important;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本信息</li>
+                </ul>
+
+                <input type="hidden" id="id" name="id" class="layui-input">
+
+                <div class="layui-tab-content">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="state" value="0" title="可用" checked="checked">
+                            <input type="radio" name="state" value="1" title="已发放">
+    <!--                            <input type="radio" name="state" value="3" title="已使用">-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="padding-bottom: 20px;">
+                        <button type="button" class="layui-btn" lay-submit="" lay-filter="Edit">保存</button>
+                        <a class="layui-btn" lay-href="/receive/ssskm/my_kami">返回</a>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'],function(){
+        var form = layui.form
+        ,$ = layui.$
+        ,admin = layui.admin
+        ,element = layui.element
+        ,layer = layui.layer;
+
+        // 导航
+        element.render('breadcrumb', 'breadcrumb');
+        var router = layui.router();
+        var id = router.search.id;
+
+        admin.req({
+            type: 'get',
+            url: layui.setter.baseUrl + '/receive/ssskm/kami/get',
+            data: {
+                id : id
+            },
+            error: function(err){
+                layer.alert(JSON.stringify(err.field), {
+                    title: '错误提示'
+                })
+            },
+            success: function(res){
+                if(res.code == 0){
+                    $('#id').val(res.data.id);
+                    $('#state').val(res.data.state);
+
+                    if(res.data.state == '0') {
+                        $("input[name='state'][value='0']").attr("checked", true);
+                    }else{
+                        $("input[name='state'][value='1']").attr("checked", true);
+                    }
+
+                    form.render();
+                }
+            }
+        });
+
+        form.on('submit(Edit)', function(data) {
+            //这里可以写ajax方法提交表单
+            admin.req({
+                type: "POST",
+                url: layui.setter.baseUrl + '/receive/ssskm/kami/update',
+                data: data.field,
+                success: function(res){
+                    if(res.code == 0) {
+                        layer.alert(res.msg, {title: "提示"}, function(index){
+                          layer.close(index);
+                          location.href = layui.setter.baseLocal + '/receive/ssskm/my_kami';
+                        });
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+    })
+</script>

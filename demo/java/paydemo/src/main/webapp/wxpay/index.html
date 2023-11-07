@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>通道测试</title>
+    <style>
+        *{
+            margin:0;padding:0
+        }
+        ol,ul{
+            list-style: none;
+        }
+        .mask{
+            background:#f0eff5;
+            position:fixed;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            z-index:-1;
+        }
+        .container{
+            width:90%;
+            margin:0 auto;
+            background:#fff;
+            margin-top:5%;
+        }
+        .container_logo{
+            background:#fbfbfb
+        }
+        .play{
+            margin:0 auto;
+            padding:10px 0px;
+        }
+        .play img{
+            width:80%;
+            display:block;
+            margin:0 auto;
+        }
+        .number_amount label{
+            position:absolute;
+            top:50%;
+            margin-top:-18px;
+            font-size:24px;
+            left:0;
+        }
+        .play input[type="number"]{
+            width:100%;
+            height:100%;
+            font-size:24px;
+            border:none;
+            border-bottom:1px solid #eee;
+            outline: none;
+            padding:0 30px;
+        }
+        .quick_amount p{
+            display:inline-block;
+            text-align:center;
+            font-size:16px;
+            line-height:40px;
+            border:dashed 1px #eee;
+            color:#888;
+            margin:10px 3.3%;
+        }
+        .quick_amount p.active{
+            border:#337ab7 1px solid;
+            color:#337ab7;
+            border-radius:2px;
+        }
+        ._submit{
+            margin:30px auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="container_logo">
+            <div class="play col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <img src="https://ts1.cn.mm.bing.net/th/id/R-C.0cd0765b8785535e9466354d65453c35?rik=Un9Qmks5YjGBkA&riu=http%3a%2f%2fimg.logozhan.com%2fd%2ffile%2flogo%2f20160326%2ffad158a5a0f5dd302f118e7df5179462.png&ehk=KByOZmPo3e%2fvKdS8Ibjuaf7hy6K3HxMau3U4qFsZKbU%3d&risl=&pid=ImgRaw&r=0" />
+            </div>
+        </div>
+    </div>
+    <form action="http://192.168.0.103:8082/api/pay/createOrder" method="post">
+        <input type="hidden" name="productId" value="8019">
+        <input id="mchOrderNo" type="hidden" name="mchOrderNo" value="M12345678170">
+        <input type="hidden" name="appId" value="0976e2d7d1434e479cf3575b9fc9fe9b">
+        <input type="hidden" name="extra" value="1">
+        <input type="hidden" name="channelUserId" value="1">
+        <div class="row">
+            <div class="play col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <div class="form-group" style="padding: 20px;">
+
+                    <center> <h3>当前测试通道</h3> </center>
+                    <center style="color: red;margin-top: 20px;margin-bottom: 30px;"> <h4>8022-微信APP原生(IOS)-8022</h4> </center>
+                    <h4>充值金额</h4>
+                    <div class="number_amount">
+                        <label>￥</label>
+                        <input type="number" name="amount">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--      <div class="row">-->
+        <!--        <div class="quick_amount col-xs-10 col-sm-10 col-md-10 col-lg-10">-->
+        <!--          <p class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-item='50'>50</p>-->
+        <!--          <p class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-item='100'>100</p>-->
+        <!--        </div>-->
+        <!--      </div>-->
+        <div class="row">
+            <div class="_submit col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <input type="submit" value="充值" class="btn btn-primary submit-amount">
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+<div class="mask"></div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.min.js"></script>
+<script>
+
+    var $amountInput = $('[type="number"]');
+    var amount = '';
+    var $getId = $('[type="hidden"]');
+
+    $getId.val(getparse.id);
+    $(".quick_amount p").off("click").on("click", function () {
+        amount = $(this).text();
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active').siblings().removeClass('active');
+            $amountInput.val(amount);
+        } else {
+            $(this).removeClass('active');
+            $amountInput.val('');
+        }
+    })
+
+</script>
+
+</body>
+</html>

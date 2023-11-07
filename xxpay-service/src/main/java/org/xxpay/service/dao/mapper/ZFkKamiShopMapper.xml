@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.xxpay.service.dao.mapper.ZFkKamiShopMapper" >
+
+    <resultMap id="BaseResultMap" type="org.xxpay.core.entity.ZFkShop" >
+        <id column="Id" property="id" jdbcType="BIGINT" />
+        <result column="Name" property="name" jdbcType="VARCHAR" />
+        <result column="Link" property="link" jdbcType="VARCHAR" />
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="Remark" property="remark" jdbcType="VARCHAR" />
+        <result column="Status" property="status" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        Id, Name, Link, CreateTime, Remark, State
+    </sql>
+
+
+
+    <select id="selectListByPay" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.ZFkShop" >
+        select
+        Id, `Name`, Link, CreateTime, Remark, `State`
+        from t_z_fk_kami_shop
+        where `state` = 1;
+    </select>
+
+
+
+    <!-- *******************************
+                常规业务
+    *******************************  -->
+
+    <!-- 查询当前的惠生活账号列表-->
+    <select id="selectList" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.ZFkShop" >
+        select
+            Id, `Name`, Link, CreateTime, Remark, `State`
+        from t_z_fk_kami_shop
+        where 1 = 1
+        <if test="zFkShop.name != null">
+            and `Name` = #{zFkShop.name}
+        </if>
+        <if test="zFkShop.link != null and zFkShop.link != ''">
+            and Link = #{zFkShop.link}
+        </if>
+        order by CreateTime desc
+        limit #{page}, #{limit};
+    </select>
+
+    <!-- 计算全数-->
+    <select id="selectListCount" resultType="Integer">
+        select
+            COUNT(*)
+        from t_z_fk_kami_shop
+    </select>
+
+    <!-- 查询当前的惠生活账号By手机号-->
+    <select id="selectByName" resultMap="BaseResultMap" >
+        select
+            Id, `Name`, Link, CreateTime, Remark, `State`
+        from t_z_fk_kami_shop
+        where `Name` = #{name};
+    </select>
+
+    <!-- 查询当前的惠生活账号ByID-->
+    <select id="selectById" resultMap="BaseResultMap" >
+        select
+            Id, `Name`, Link, CreateTime, Remark, `State`
+        from t_z_fk_kami_shop
+        where Id = #{id};
+    </select>
+
+    <!-- 更新数据-->
+    <update id="update" parameterType="org.xxpay.core.entity.ZFkShop" >
+        update t_z_fk_kami_shop
+        set `Name` = #{zFkShop.name},
+            Link = #{zFkShop.link},
+            Remark = #{zFkShop.remark},
+            `State` = #{zFkShop.state}
+        where Id = #{zFkShop.id};
+    </update>
+
+    <!-- 添加新的收款账号-->
+    <insert id="insert" parameterType="org.xxpay.core.entity.ZFkShop">
+        insert into t_z_fk_kami_shop (
+            `Name`, Link, CreateTime, Remark, `State`
+        )
+        values (
+                   #{zFkShop.name},
+                   #{zFkShop.link},
+                   now(),
+                   #{zFkShop.remark},
+                   1
+               )
+    </insert>
+
+    <!-- 删除按钮-->
+    <delete id="deleteByPrimaryKey">
+        delete from t_z_fk_kami_shop
+        where Id = #{id};
+    </delete>
+
+
+</mapper>

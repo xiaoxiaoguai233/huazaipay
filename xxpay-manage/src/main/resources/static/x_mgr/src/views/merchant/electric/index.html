@@ -1,0 +1,177 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>电子账户管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">电子账户</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row">
+                        <div class="layui-form" style="float:left; margin-bottom: 10px;">
+                            <div class="layui-form-item" style="margin:0;">
+                                <!--                                <div class="layui-input-inline">-->
+                                <!--                                    <input type="text" name="createTimeStart" id="createTimeStart" autocomplete="off"-->
+                                <!--                                           placeholder="开始时间" class="layui-input">-->
+                                <!--                                </div>-->
+                                <!--                                <div class="layui-input-inline">-->
+                                <!--                                    <input type="text" name="createTimeEnd" id="createTimeEnd" autocomplete="off"-->
+                                <!--                                           placeholder="结束时间" class="layui-input">-->
+                                <!--                                </div>-->
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchId" id="mchId" placeholder="商户ID" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchName" id="mchName" placeholder="商户名称" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <blockquote class="layui-elem-quote" id="amountTip">
+                                概况:
+<!--                                <sapn id="allTotalCount" style="color: blue; margin-right: 10px;"></sapn>-->
+                                可用总金额:<span id="allTotalBalance" style="color: blue; margin-right: 10px;"></span>
+                                可结算总金额:<span id="allTotalSettAmount" style="color: green; margin-right: 10px;"></span>
+                                冻结总金额:<span id="allTotalFrozenMoney" style="color: green; margin-right: 10px;"></span>
+                                不可用总金额:<span id="allTotalUnBalance" style="color: green; margin-right: 10px;"></span>
+                            </blockquote>
+                        </div>
+                    </div>
+                    <table id="XxPay_Mgr_PayOrder_dataAll" lay-filter="XxPay_Mgr_PayOrder_dataAll"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="xxpayBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+</script>
+<script type="text/html" id="indexTpl">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script>
+    layui.use(['admin', 'table', 'util', 'laydate'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , element = layui.element
+            , laydate = layui.laydate
+            , form = layui.form;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        $.setCountResult = function (mchId, name, type, status, createTimeStart, createTimeEnd) {
+            admin.req({
+                type: 'get',
+                url: layui.setter.baseUrl + '/trade_order/stat',
+                data: {
+                    createTimeStart: createTimeStart,
+                    createTimeEnd: createTimeEnd
+                },
+                error: function (err) {
+                    layer.alert(JSON.stringify(err.field), {
+                        title: '错误提示'
+                    })
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        $('#allTotalBalance').html(res.data.allTotalBalance / 100);
+                        $('#allTotalSettAmount').html("￥" + res.data.allTotalSettAmount / 100);
+                        $('#allTotalUnBalance').html(res.data.allTotalUnBalance / 100);
+                        $('#allTotalFrozenMoney').html("￥" + res.data.allTotalFrozenMoney / 100);
+                    }
+                }
+            });
+        };
+
+
+        // 初始化统计结果
+        $.setCountResult();
+
+        //用户列表
+        table.render({
+            elem: '#XxPay_Mgr_PayOrder_dataAll'
+            , url: layui.setter.baseUrl + '/trade_order/account' //用户列表接口
+            , where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            , id: 'tableReload'
+            , page: true
+            , cols: [[
+                {title: '序号', templet: '#indexTpl'}
+                , {field: 'mchId', title: '商户ID'}
+                , {field: 'name', title: '商户名称'}
+                // , {field: 'type', title: '账户类型'}
+                , {field: 'balance', title: '账户余额', templet: '<div>{{ d.balance/100 }}</div>'}
+                , {field: 'settAmount', title: '可结算金额', templet: '<div>{{ d.settAmount/100 }}</div>'}
+                , {field: 'unBalance', title: '不可用余额', templet: '<div>{{ d.unBalance/100 }}</div>'}
+                , {field: 'frozenMoney', title: '冻结金额', templet: '<div>{{ d.frozenMoney/100 }}</div>'}
+                , {field: 'edit', title: '操作', toolbar: '#xxpayBar'}
+            ]]
+            , skin: 'line'
+        });
+
+
+        //监听工具条
+        table.on('tool(XxPay_Mgr_PayOrder_dataAll)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                location.href = layui.setter.baseLocal + "merchant/account_history/index.html?" + data.mchId+"&"+data.name;
+            }
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var mchId = $('#mchId').val();
+                var name = $('#mchName').val();
+
+                $.setCountResult(mchId, name);
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        mchId: mchId,
+                        name: name
+                        // createTimeStart : createTimeStart,
+                        // createTimeEnd : createTimeEnd
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        laydate.render({
+            elem: '#createTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        laydate.render({
+            elem: '#createTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+        // 渲染表单
+        form.render();
+    });
+</script>
+
+

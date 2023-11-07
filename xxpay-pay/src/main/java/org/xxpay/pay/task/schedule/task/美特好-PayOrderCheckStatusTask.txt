@@ -1,0 +1,115 @@
+package org.xxpay.pay.task.schedule.task;
+
+import com.alibaba.fastjson.JSONObject;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.xxpay.core.common.util.MyLog;
+import org.xxpay.core.entity.PayOrder;
+import org.xxpay.core.entity.ZMthAccount;
+import org.xxpay.pay.mq.BaseNotify4MchPay;
+import org.xxpay.pay.service.RpcCommonService;
+import org.xxpay.pay.task.schedule.CheckOrderStatusScheduled;
+import org.xxpay.pay.util.RedisUtil;
+import org.xxpay.pay.util.mth.SignUtil;
+
+import java.io.IOException;
+
+@Slf4j
+@Data
+public class PayOrderCheckStatusTask implements Runnable {
+
+
+    private static final MyLog _log = MyLog.getLog(CheckOrderStatusScheduled.class);
+
+    private String key;
+
+    private RpcCommonService rpcCommonService;
+
+    private BaseNotify4MchPay baseNotify4MchPay;
+
+    public PayOrderCheckStatusTask(String key, RpcCommonService rpcCommonService, BaseNotify4MchPay baseNotify4MchPay) {
+        this.key = key;
+        this.rpcCommonService = rpcCommonService;
+        this.baseNotify4MchPay = baseNotify4MchPay;
+    }
+
+
+    @Override
+    public void run() {
+        // 获取订单参数
+        JSONObject params = RedisUtil.getObject(key, JSONObject.class);
+
+        // 获取phone与token
+        String phone = params.getString("phone");
+        String token = params.getString("token");
+        String tradeNo = params.getString("tradeNo");
+        String payOrderId = params.getString("payOrderId");
+
+
+        Request request_getSign = new Request.Builder()
+                .url("https://nb.quanqiuwa.com/api/orders/app/orders/queryTradeResult?tradeNo=" + tradeNo)       // 75371406948498430a0000100201 75371418860152230a0000100201
+                .get()
+                .build();
+        JSONObject sign = SignUtil.sign(request_getSign);
+        Request request = request_getSign.newBuilder()
+                .addHeader("x-qqw-token", token)
+                .addHeader("x-qqw-client-version", "android-KJLJC2J7I9-4.0.2")
+                .addHeader("x-qqw-request-nonce", sign.getString("x-qqw-request-nonce"))
+                .addHeader("x-qqw-request-sign", sign.getString("x-qqw-request-sign"))
+                .build();
+
+        Response response = null;
+        try {
+            response = new OkHttpClient().newCall(request).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = JSONObject.parseObject(response.body().string());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        _log.info("=== 【{}-{}】 查单回调结果： {} ===", phone, payOrderId, jsonObject);
+
+        if(jsonObject.getString("code").equals("-1")){
+            return;
+        }
+
+        // 支付成功
+        if (jsonObject.getString("code").equals("0") && jsonObject.getJSONObject("data").getString("tradeStatus").equals("2")){
+            String tradeStatus = jsonObject.getJSONObject("data").getString("tradeStatus");
+            System.out.println("支付成功： " + tradeStatus);
+
+            // 获取订单的详细信息
+            PayOrder payOrder = rpcCommonService.rpcPayOrderService.findByPayOrderId(params.getString("payOrderId"));
+
+            // 更新收款账号信息，并且判断账号是否收款成功
+            ZMthAccount zMthAccount = rpcCommonService.rpcZMthAccountService.selectByPhone(phone);
+            zMthAccount.setTodayMoney(zMthAccount.getTodayMoney() + payOrder.getAmount());
+            zMthAccount.setTotalMoney(zMthAccount.getTotalMoney() + payOrder.getAmount());
+            // 如果收款金额达到日限额或者账号限额，状态设置为限额
+            if (zMthAccount.getTodayMoney() > zMthAccount.getLimitDayMoney() || zMthAccount.getTotalMoney() >= zMthAccount.getLimitMaxMoney()){
+                zMthAccount.setState((byte) 3);
+            }
+            int update = rpcCommonService.rpcZMthAccountService.update(zMthAccount);
+
+            // 更新订单为支付成功状态
+            int result = rpcCommonService.rpcPayOrderService.updateStatus4Success(payOrder.getPayOrderId());
+
+            // 通知业务
+            if (result == 1 && update == 1) {
+                // 通知业务系统
+                baseNotify4MchPay.doNotify(payOrder, true);
+                // 删除redis的Key
+                RedisUtil.del(key);
+            }
+
+        }
+    }
+}

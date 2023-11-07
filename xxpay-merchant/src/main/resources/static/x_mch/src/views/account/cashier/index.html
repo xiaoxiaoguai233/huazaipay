@@ -1,0 +1,164 @@
+<div class="layui-card-header layui-card">
+    <span class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">首页</a>
+        <a><cite>基本信息</cite></a>
+    </span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">收银台配置</li>
+            </ul>
+            <div class="layui-tab-content">
+                <style>
+                    .center {
+                        width: 80%;
+                    }
+                </style>
+                <div id="remind"></div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">收银台名称</label>
+                    <div class="layui-input-block width_250 pos-r">
+                        <input id="name" type="text" class="layui-input" name="ColumnCode"
+                               lay-verify="required|inputLength_100" placeholder="请输入收银台名称" autocomplete="off">
+                        <i class="icon_ca_layui"></i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">收银台logo</label>
+                    <div class="layui-input-block width_250 pos-r">
+                        <input id="logo" type="text" class="layui-input" name="ColumnCode"
+                               lay-verify="required|inputLength_100" placeholder="请输入收银台logoUrl地址" autocomplete="off">
+                        <i class="icon_ca_layui"></i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">回调地址</label>
+                    <div class="layui-input-block width_250 pos-r">
+                        <input id="callBackUrl" type="text" class="layui-input" name="ColumnCode"
+                               lay-verify="required|inputLength_100" placeholder="请输入回调地址【必填】" autocomplete="off">
+                        <i class="icon_ca_layui"></i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">跳转地址</label>
+                    <div class="layui-input-block width_250 pos-r">
+                        <input id="returnUrl" type="text" class="layui-input" name="ColumnCode"
+                               lay-verify="required|inputLength_100" width="40%" placeholder="请输入跳转地址" autocomplete="off">
+                        <i class="icon_ca_layui"></i>
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">收银台状态</label>
+                    <div class="layui-input-block width_250 pos-r">
+                        <input id="status" type="text" class="layui-input" name="ColumnCode"
+                               lay-verify="required|inputLength_100" placeholder="请输入收银台状态 请填入 1 或 0" autocomplete="off">
+                        <i class="icon_ca_layui"></i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button id="save" class="layui-btn" lay-submit lay-filter="formDemo">保存</button>
+                        <button id="cancel" type="reset" class="layui-btn layui-btn-primary">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    layui.use(['form', 'table', 'laytpl', 'admin',], function () {
+        var form = layui.form
+            , $ = layui.$
+            , admin = layui.admin
+            , layer = layui.layer
+            , element = layui.element
+            , table = layui.table;
+        element.render('breadcrumb', 'breadcrumb');//渲染导航信息
+        $.refresh = function () {
+            admin.req({
+                type: 'get',
+                url: layui.setter.baseUrl + '/mch/cashier' //获取收银台信息,
+                , error: function (err) {
+                    console.log(err)
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+
+                        if (res.data == null) {
+                            $("#remind").html("没有设置收银台<p style='color: orangered'>提示：在使用支付接口前必须配置收银台信息！</p>");
+                            return;
+                        }
+                        var name = res.data.name;
+                        if (name != null) {
+                            $("#name").val(name);
+                        }
+                        form.render('radio', 'status');
+
+                        $("#logo").val(res.data.logo);
+                        $("#callBackUrl").val(res.data.callbackUrl);
+                        $("#returnUrl").val(res.data.returnUrl);
+                        $("#status").val(res.data.status)
+                        form.render('radio', 'paySetDivForm');
+                    }
+                }
+            });
+        };
+
+        $.refresh();
+
+        function notEmpty(arg) {
+            if (arg == "" ||
+                arg == undefined ||
+                arg == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        $(document).on('click', '#cancel', function () {
+            $.refresh();
+        });
+
+        //更新保存收银台信息
+        form.on('submit(formDemo)', function (data) {
+            layer.confirm('确定要修改点保存，否则点取消?', {
+                btn: ['保存', '取消'], btn1: function () {
+                    data.field.name = $("#name").val();
+                    data.field.logo = $("#logo").val();
+                    data.field.returnUrl = $("#returnUrl").val();
+                    data.field.callbackUrl = $("#callBackUrl").val();
+                    data.field.status = $("#status").val();
+                    if (!notEmpty(data.field.callbackUrl)) {
+                        layer.msg("回调地址不能为空");
+                         $.refresh();
+                        return;
+                    }
+                    admin.req({
+                        type: 'post',
+                        url: layui.setter.baseUrl + '/mch/update_cashier',
+                        data: data.field,
+                        success: function (res) {
+                            if (res.code == 0) {
+                                layer.msg(res.msg);
+                                $.refresh();
+                            }
+                        }
+                    });
+                },
+                btn2: function () {
+                    $.refresh();
+                }
+            });
+        });
+    });
+
+
+</script>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/images/paycenter/favicon.ico" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.8.8/css/layui.css" integrity="sha512-i0z3bjxCkuX0RBCJ0MD1SnLdE2wOutQc8Jg7f0nwD147c0Z3bJ3LdJ9TRnfh4GKmmyZ3h594rFK7iRRD+/gx8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>创建订单</title>
+</head>
+<body>
+<div class="layui-tab layui-tab-brief">
+    <ul class="layui-tab-title">
+        <li class="layui-this">充值卡密</li>
+        <li>卡密购买</li>
+    </ul>
+    <div class="layui-tab-content">
+
+        <div class="layui-tab-item layui-show layui-panel" style="padding: 10px;">
+            <blockquote class="layui-elem-quote">
+                <span style="color: red;font-weight: bolder;">提示:</span>&nbsp;如无卡密，请先在卡密购买处，联系商家。
+                <#--                    <button type="reset" class="layui-btn layui-btn-danger" onclick="tis()">提示</button>-->
+            </blockquote>
+
+            <form class="layui-form" action="#">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label" style="display: flex;flex-direction: row; max-width: 10%;">卡密&nbsp;<P style="color: red;">*</P></label>
+                    <div class="layui-input-block" style="margin-left: 20% !important;">
+                        <textarea id="kami_text" placeholder="请输入卡密" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        <button type="button" class="layui-btn" lay-submit lay-filter="demo1" onclick="submitKami()">提交</button>
+                    </div>
+                </div>
+            </form>
+
+
+            <blockquote class="layui-elem-quote">
+                <span style="color: red;font-weight: bolder;">操作教程:</span>&nbsp;↓ ↓ ↓&nbsp;↓ ↓ ↓&nbsp;↓ ↓ ↓&nbsp;↓ ↓ ↓&nbsp;↓ ↓ ↓
+                <#--                    <button type="reset" class="layui-btn layui-btn-danger" onclick="tis()">提示</button>-->
+                <image src="https://s1.locimg.com/2023/08/25/68087f6fafc9e.jpg" style="width: 100%;height: auto" onclick="tis()"></image>
+            </blockquote>
+
+
+            <div style="display: flex;flex-direction: column;margin-top: 50px;">
+                <div style="display: flex;flex-direction: row; color: #000000">
+                    <p style="font-weight: bolder;">格式：</p>
+                    <p>卡号,密码(多个请换行)</p>
+                </div>
+
+                <div style="display: flex;flex-direction: column; color: #000000">
+                    <p style="font-weight: bolder;">示例：</p>
+                    <p>9462503327,912234</p>
+                    <p>5292857980,651310</p>
+                    <p>4230471410,561832</p>
+                    <p>2815085138,495504</p>
+                    <p>4826979080,959014</p>
+                    <p>0394545283,494388</p>
+                    <p>9406659016,348847</p>
+                    <p>...,...</p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-panel" style="padding: 10px;">
+                <table class="layui-table" id="table_kefu">
+                    <colgroup>
+                        <col width="150">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>商家列表</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    <#list online_assistants as online_assistant>
+                        <tr>
+                            <td>
+                                点击购买：
+                                <button style="color: #0a64ab;border: 0;outline: none;background-color: transparent;" onclick="chooseAssistant('${online_assistant.assistantId ! ''}','${online_assistant.assistantName ! ''}')">${online_assistant.assistantName ! ''}</button>
+                            </td>
+                        </tr>
+                    </#list>
+                    </tbody>
+                </table>
+
+
+
+
+
+                <table class="layui-table" id="table_kefu_shop" style="margin-top: 50px;">
+                    <colgroup>
+                        <col width="150">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>网点列表 &nbsp;&nbsp;&nbsp;(购买Astropay卡、不要买错了)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    <#list ShopLists as ShopList>
+                        <tr>
+                            <td>
+                                点击购买：
+                                <a href="${ShopList.link}" style="color: #0a64ab;border: 0;outline: none;background-color: transparent;" target="_blank">${ShopList.name ! ''}</a>
+                            </td>
+                        </tr>
+                    </#list>
+
+
+                    </tbody>
+                </table>
+
+                <div id="payImage" style="display: flex;flex-direction: column;padding: 50px;"></div>
+
+                <div id="succusePay" style="display: flex;flex-direction: column;padding: 50px;">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.8.8/layui.js" integrity="sha512-tQC4F8lHFB2IAdzFd0zE4ogMgnco1nJG3hgt26H/ZPysSBR8SGRkNi+T/ah7SerkrstEanqzmJf3mXlVdkqRJw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+
+<script type="text/javascript">
+
+    var orderId = '${orderId!}';
+
+    var status = '-1';
+
+    var expireTime = '${expireTime!}';
+    var interval = '${interval!}';
+
+    var amount = '${amount!}';
+
+    var loading;
+
+    var pay_for_name = '';
+    var pay_method = '';
+
+
+    var global_interval; //启动,func不能使用括号
+
+    // 每 interval 秒刷新一次图表
+    // setInterval(function () {
+    //需要执行的代码写在这里
+    // });
+
+    order_info();
+
+    function order_info(){
+        const data = get_order_status();
+
+        if (data.data.status != status){
+            // 停止定时器
+            clearInterval(global_interval);
+            // 关闭加载
+            layer.close(loading);
+
+            status = data.data.status;
+            if(status == "2"){  // 已发收款码
+                var payImage = document.getElementById("payImage");
+                // 还有两个按钮
+                payImage.innerHTML =
+                    '<div style="font-size: 28px;text-align: center;margin-bottom: 20px;">扫码购买卡密</div>' +
+                    '<img id="payImage" src="' + data.data.imageurl + '" style="width: 100%;height: auto"/>' +
+                    '<div class="layui-btn-container" style="margin-top: 20px;display: flex;flex-direction: row;justify-content: center;">' +
+                    '<button type="button" class="layui-btn" onclick="confirmPay(' + "3" + ')">确认已支付</button>' +
+                    '<button type="button" class="layui-btn layui-btn-warm" onclick="confirmPay(' + "4" + ')">码失效，重发</button>' +
+                    '</div>';
+            }else if(status == "5"){  // 已发送卡密
+                var payImage = document.getElementById("payImage");
+                // 还有两个按钮
+                payImage.innerHTML =
+                    '<div style="font-size: 28px;text-align: center;margin-bottom: 20px;">扫码购买卡密</div>' +
+                    '<img id="payImage" src="' + data.data.imageurl + '" style="width: 100%;height: auto"/>' +
+                    '<div class="layui-btn-container" style="margin-top: 20px;display: flex;flex-direction: row;justify-content: center;">' +
+                    '<button type="button" class="layui-btn layui-btn-disabled">确认已支付</button>' +
+                    '<button type="button" class="layui-btn layui-btn-warm layui-btn-disabled">码失效，重发</button>' +
+                    '</div>';
+
+                var succusePay = document.getElementById("succusePay");
+                // 还有两个按钮
+                succusePay.innerHTML =
+                    '<div style="font-size: 28px;text-align: center;margin-bottom: 20px;">购买成功-卡密</div>' +
+                    '<textarea style="cursor: pointer" onclick="" id="bar">' + data.data.card_pwd + '</textarea>' +
+                    '<button type="button" style="margin-top: 30px;" class="layui-btn" data-clipboard-action="cut" data-clipboard-target="#bar" onclick="copykami()">一键复制</button>';
+            }
+        }
+
+    }
+
+    function confirmPay(data){
+        var msg = '';
+        if (data == '3'){
+            msg = '等待客服发送卡密';
+        }else{
+            msg = '等待客服重新发码';
+        }
+        loading = layer.msg(msg, {icon: 16, shade: 0.3, time:0});
+
+        var param = {}
+        param.status = data;
+        status = param.status;
+        update_order_status(param);
+    }
+
+
+    /**
+     * 提交卡密
+     */
+    function submitKami(){
+        var kami_text = $("#kami_text").val();
+        $.ajax({
+            type: "get",
+            url: '/api/ssskm/submit', //列表接口
+            data: {
+                card: kami_text,
+                orderId: orderId
+            },
+            dataType:"json",
+            success: function (data) {
+                console.log(data)
+                if (data.code == 0){
+                    layer.confirm('卡密已充值' + data.data + '元, 请稍等', function(index){
+                        layer.close(index)
+                    });
+                }else {
+                    layer.confirm(data.data, function(index){
+                        layer.close(index)
+                    });
+                }
+
+                setTimeout(function (){
+                    window.location.reload();
+                }, 3000)
+
+
+            }
+        });
+    }
+
+
+    // 1. 选择码商
+    function chooseAssistant(assistantId, assistantName){
+        // 1.确认是否使用该码商
+        layer.confirm('确认选择 [' + assistantName + "] 卡商购买", function(index){
+            // 2. 选择支付宝或者微信
+            layer.confirm('选择支付方式', {
+                btn: ['微信', '支付宝'] //按钮
+            }, function () {
+                layer.msg('已选择微信', {icon: 1});
+                pay_method = '微信';
+                layer.close(index);
+
+                // 3. 填入付款名称
+                layer.prompt({title: '请输入您的付款人名称'}, function (value, index_, elem) {
+                    if (value === '') return elem.focus();
+                    pay_for_name = value;
+                    // 关闭 prompt
+                    layer.close(index_);
+                    loading = layer.msg('等待客服接单, 预计时间20秒', {icon: 16, shade: 0.3, time: 0});
+
+                    console.log(pay_for_name, pay_method);
+
+                    var param = {}
+                    param.assistantId = assistantId;
+                    param.pay_for_name = pay_for_name;
+                    param.pay_method = pay_method;
+                    param.status = '1';
+
+                    status = param.status;
+
+                    update_order_status(param);
+                });
+            },function () {
+                layer.msg('已选择支付宝', {icon: 1});
+                pay_method = '支付宝';
+                layer.close(index);
+
+                // 3. 填入付款名称
+                layer.prompt({title: '请输入您的付款人名称'}, function (value, index_, elem) {
+                    if (value === '') return elem.focus();
+                    pay_for_name = value;
+                    // 关闭 prompt
+                    layer.close(index_);
+                    loading = layer.msg('等待客服接单, 预计时间20秒', {icon: 16, shade: 0.3, time: 0});
+
+                    console.log(pay_for_name, pay_method);
+
+                    var param = {}
+                    param.assistantId = assistantId;
+                    param.pay_for_name = pay_for_name;
+                    param.pay_method = pay_method;
+                    param.status = '1';
+
+                    status = param.status;
+
+                    update_order_status(param);
+                });
+            });
+        })
+    }
+
+    // 更新订单信息
+    function update_order_status(param){
+        // 获取当前订单状态
+        $.ajax({
+            type: "get",
+            url: '/api/update/' + orderId, //模拟基本信息接口,
+            data: param,
+            dataType:"json",
+            success: function (data) {
+                console.log(data);
+            },fail: function (date){
+                setInterval(function () {
+                    //需要执行的代码写在这里
+                    update_order_status(param);
+                }, 5000);
+            }
+        });
+
+        global_interval = setInterval(order_info, interval * 1000);
+    }
+
+
+    // 购买卡密成功后复制卡密的功能
+    function copykami(){
+        var bar = document.getElementById("bar");
+        const input = document.createElement('input');
+        document.body.appendChild(input);
+        input.setAttribute('value', bar.value);
+        input.select();
+
+        if (document.execCommand('copy')) {
+            document.execCommand('copy');
+            layer.msg('复制成功: ' + bar.value, {icon: 1, time: 3000});
+        }
+        input.remove();
+    }
+
+
+    // 获取订单状态
+    function get_order_status(){
+        console.log("订单更新")
+
+        var result = {};
+        // 获取当前订单状态
+        $.ajax({
+            type: "get",
+            url: '/api/status/' + orderId, //模拟基本信息接口,
+            dataType:"json",
+            async : false,
+            success: function (data) {
+                console.log(data)
+                result = data;
+            }
+        });
+        return result;
+    }
+
+</script>
+</body>
+</html>

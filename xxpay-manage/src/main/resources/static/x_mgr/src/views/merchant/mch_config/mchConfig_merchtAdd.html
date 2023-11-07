@@ -1,0 +1,121 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>商户管理</cite></a>
+        <a><cite>添加商户参数</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">添加支付参数</li>
+      </ul>
+      <div class="layui-tab-content">
+          <form class="layui-form center">
+            <input type="hidden" id="id" name="id" value="0" />
+
+            <div class="layui-form-item layui-hide">
+              <div class="layui-inline">
+                <label class="layui-form-label">参数类型</label>
+
+                  <div class="layui-input-block">
+                      <input type="radio" name="configType" value="0" title="全局"  lay-filter="mchSelect" checked="" >
+                      <input type="radio" name="configType" value="1"  title="商户"  lay-filter="mchSelect">
+                  </div>
+              </div>
+            </div>
+            <div class="layui-form-item layui-hide">
+              <div class="layui-inline">
+                <label class="layui-form-label">商户ID</label>
+                  <div class="layui-input-block">
+                    <input type="text" id="mchId" name="mchId"  placeholder="输入商户ID" readonly="readonly" class="layui-input layui-input-inline">
+                      <a class='layui-btn  layui-inline' id="chooseMchId">选择商户ID</a>
+                  </div>
+                </div>
+             </div>
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label">参数名</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="configName" name="configName" placeholder="输入参数名" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                  <label class="layui-form-label">参数值</label>
+                  <div class="layui-input-inline">
+                      <input type="text" id="configValue" name="configValue" placeholder="输入参数值" autocomplete="off" class="layui-input">
+                  </div>
+              </div>
+            </div>
+
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                  <label class="layui-form-label">参数描述</label>
+                  <div class="layui-input-inline">
+                      <input type="text" id="configDescribe" name="configDescribe" placeholder="输入参数描述" autocomplete="off" class="layui-input">
+                  </div>
+              </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="configAdd">保存</button>
+                    <a class="layui-btn" lay-href="/merchant/mch_config/">返回</a>
+                </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'],function(){
+        var form = layui.form
+        ,$ = layui.$
+        ,admin = layui.admin
+        ,element = layui.element
+        ,layer = layui.layer;
+        element.render('breadcrumb', 'breadcrumb');
+        var router = layui.router();
+        var mchId = router.search.mchId;
+        $("#mchId").val(mchId);
+        var configType = router.search.configType;
+        if(configType==1){
+            $("input[name=configType][value='1']").attr("checked",true);
+        }else{
+            $("input[name=configType][value='0']").attr("checked",true);
+        }
+
+        form.on('submit(configAdd)', function(data) {
+            //这里可以写ajax方法提交表单
+            admin.req({
+                type: "GET",
+                url: layui.setter.baseUrl + '/mch_config/add',
+                where: {
+                    access_token: layui.data(layui.setter.tableName).access_token
+                },
+                data: data.field,
+                success: function(res){
+                    if(res.code == 0) {
+                        layer.alert(res.msg, {title: "保存成功"}, function(index){
+                          layer.close(index);
+                          location.href = layui.setter.baseLocal + '/merchant/mch_config/mchConfig_edit/mchId='+mchId;
+                        });
+                    }else {
+                        layer.alert(res.msg, {
+                            title: '保存失败'
+                        }); 
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        form.render();
+    })
+</script>

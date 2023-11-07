@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="./css/bootstrap.min.css">
+<link rel="stylesheet" href="./css/style.css">
+<title>通道测试</title>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+      <div class="container_logo">
+        <div class="play col-xs-10 col-sm-10 col-md-10 col-lg-10">
+          <img src="./images/logo.png" />
+        </div>
+      </div>
+    </div>
+    <form action="http://192.168.0.105:8082/api/pay/createOrder" method="post">
+      <input type="hidden" name="productId" value="8019">
+      <input id="mchOrderNo" type="hidden" name="mchOrderNo" value="M12345678170">
+      <input type="hidden" name="appId" value="0976e2d7d1434e479cf3575b9fc9fe9b">
+      <input type="hidden" name="extra" value="1">
+      <input type="hidden" name="channelUserId" value="1">
+      <div class="row">
+        <div class="play col-xs-10 col-sm-10 col-md-10 col-lg-10">
+          <div class="form-group">
+            <center> <h3>当前测试通道</h3> </center>
+            <center style="color: red;margin-top: 20px;margin-bottom: 30px;"> <h4>8019-云闪付测试-8019</h4> </center>
+            <h4>充值金额</h4>
+            <div class="number_amount">
+              <label>￥</label>
+              <input type="number" name="amount">
+            </div>
+          </div>
+        </div>
+      </div>
+<!--      <div class="row">-->
+<!--        <div class="quick_amount col-xs-10 col-sm-10 col-md-10 col-lg-10">-->
+<!--          <p class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-item='50'>50</p>-->
+<!--          <p class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-item='100'>100</p>-->
+<!--        </div>-->
+<!--      </div>-->
+      <div class="row">
+        <div class="_submit col-xs-10 col-sm-10 col-md-10 col-lg-10">
+          <input type="submit" value="充值" class="btn btn-primary submit-amount">
+        </div>
+      </div>
+    </form>
+  </div>
+  </div>
+</div>
+<div class="mask"></div>
+
+<script src="./js/jquery.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script>
+
+  var $amountInput = $('[type="number"]');
+  var amount = '';
+  var $getId = $('[type="hidden"]');
+
+  $getId.val(getparse.id);
+  $(".quick_amount p").off("click").on("click", function () {
+    amount = $(this).text();
+    if (!$(this).hasClass('active')) {
+      $(this).addClass('active').siblings().removeClass('active');
+      $amountInput.val(amount);
+    } else {
+      $(this).removeClass('active');
+      $amountInput.val('');
+    }
+  })
+
+</script>
+
+</body>
+</html>

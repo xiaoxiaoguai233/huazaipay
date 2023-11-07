@@ -1,0 +1,679 @@
+<div class="layui-card layadmin-header" xmlns="http://www.w3.org/1999/html">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>实时收款码</cite></a>
+    <a><cite>接单</cite></a>
+  </div>
+</div>
+
+
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">接单</li>
+      </ul>
+      <div class="layui-tab-content">
+        <blockquote class="layui-elem-quote">
+          第一步： 启动在线接单功能
+        </blockquote>
+
+        </br>
+
+        <form class="layui-form" action="">
+          <div class="layui-form-item">
+            <label class="layui-form-label">开关</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" title="ON|OFF">
+            </div>
+          </div>
+        </form>
+
+        </br></br>
+
+        <blockquote class="layui-elem-quote">
+          第二步： 等待订单
+        </blockquote>
+
+
+        </br></br>
+
+        <button type="button" class="layui-btn" onclick="clearStorage()">清空所有订单</button>
+
+        <table class="layui-table">
+          <thead>
+          <tr>
+            <th>订单号</th>
+            <th>金额</th>
+            <th>名称</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody id="table_tbody">
+          <!--                        <tr id="P01202306291407087060000">-->
+          <!--                            <td>P01202306291407087060000</td>-->
+          <!--                            <td>-->
+          <!--                                <span class='layui-badge layui-bg-blue'>交易开始，待发码</span>-->
+          <!--                            </td>-->
+          <!--                            <td>-->
+          <!--                                <div class="layui-table-cell laytable-cell-1-0-3">-->
+          <!--                                    <a class="layui-badge layui-bg-green layui-btn layui-btn-xs" lay-event="upload_img">上传收款码</a>-->
+          <!--                                    <a class="layui-badge layui-bg-blue layui-btn layui-btn-xs" lay-event="send_kami">发送卡密</a>-->
+          <!--                                    <a class="layui-badge layui-bg-orange layui-btn layui-btn-xs" lay-event="ping">检查对方状态</a>-->
+          <!--                                    <a class="layui-badge layui-bg-red layui-btn layui-btn-xs" lay-event="delete">删除</a>-->
+          <!--                                </div>-->
+          <!--                            </td>-->
+          <!--                        </tr>-->
+          </tbody>
+        </table>
+
+
+        <div id="openProductBox" style="display: none; padding: 10px;">
+          <table id="openProductTable" lay-filter="openProductTable">
+            <h3 style="text-align: center">可提交的卡密</h3>
+          </table>
+        </div>
+
+        <!--                <audio autoplay preload controls id="auto" src="/video/y1839.mp3"> </audio>-->
+
+        <div id="remind">
+          <audio id="myAudio" style="display: none;" controls autoplay src="/x_assistant/start/layui/css/modules/layer/default/y1839.mp3"></audio>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+
+  // 清空所有订单
+  function clearStorage() {
+    layer.confirm('确认清空所有有订单？', function(index) {
+      var arrayOrderId = localStorage.getItem('arrayOrderId');
+      if (arrayOrderId) {
+        arrayOrderId = arrayOrderId.split(',');
+      }
+
+      for (var key in arrayOrderId) {
+        console.log(arrayOrderId[key]);
+
+        localStorage.removeItem(arrayOrderId[key]);
+        localStorage.removeItem(arrayOrderId[key] + '_nick');
+      }
+      localStorage.removeItem('arrayOrderId');
+
+      var table_tbody = document.getElementById("table_tbody");
+
+      table_tbody.innerHTML = '';
+
+      layer.close(index);
+    })
+  }
+
+
+
+  // 1. 图片上传
+  function upload_img(order){
+
+    window.vipName = order
+
+    layui.use(['admin', 'form', 'table', 'util'], function() {
+      var $ = layui.$
+              , admin = layui.admin
+              , table = layui.table
+              , element = layui.element
+              , form = layui.form;
+
+      element.render('breadcrumb', 'breadcrumb');
+
+      var upload = layui.upload;
+      var layer = layui.layer;
+
+
+      layer.open({
+        type: 1,
+        area: ['350px', '400px'], // 宽高
+        title: false,
+        content: [
+          '<div style="padding: 11px;">',
+          '上传收款码',
+          '<tr>',
+          '    <td className="tdstyle">上传图片：</td>',
+          '    <td>',
+          '        <img id="image" src="" style="width: 300px; height: 200px;display: block;"/>',
+          '        <span><input type="file" name="file" id="file" onChange="selectImage(this);"></span>',
+          '        <button onClick="importWeldingMachine()">上传</button>',
+          '    </td>',
+          '</tr>',
+
+          '</div>'
+        ].join(''),
+        move: '#ID-test-layer-move'
+      });
+    })
+  }
+
+  // 2. 提交卡密
+  function send_kami(order){
+    layui.use(['admin', 'table', 'jquery', 'util'], function(){
+      var $ = layui.jquery
+              ,admin = layui.admin
+              ,table = layui.table
+              ,element = layui.element
+              ,form = layui.form;
+
+      var layer = layui.layer;
+
+      // 行单击事件( 双击事件为: rowDouble )
+      table.on('row(transfer)', function(obj){
+        var data = obj.data; // 获取当前行数据
+
+        var kami = data.card + ',' + data.card_pwd;
+
+        layer.confirm('确认选择 [' + kami + "] ", function(index) {
+          var data_ = {
+            "fromUserId": assistantName,
+            "toUserId": vipName,
+            "msg": "5 " + kami
+          }
+
+          sendMessage(JSON.stringify(data_));
+
+          //加载中样式...
+          loading = layer.msg('正在加载', {icon: 16, shade: 0.3, time: 0});
+
+          data.order_id = order;
+          data.access_token = layui.data(layui.setter.tableName).access_token;
+
+          $.ajax({
+            type: "get",
+            url: layui.setter.baseUrl + '/receive/ssskm/get/update', //列表接口
+            data: data,
+            dataType:"json",
+            success: function (data) {
+              table.reload('transfer', {});
+              console.log(data)
+              layer.close(loading);
+            }
+          });
+
+
+          // 更新保单信息
+          var vipName_ = document.getElementById(order);
+          if(vipName_) vipName_.remove();
+
+          var table_tbody = document.getElementById("table_tbody");
+
+          // 获取金额
+          var amount = getAmount(order);
+
+
+          var nick = localStorage.getItem(msg_data.fromUserId + '_nick');
+
+
+          var code =
+                  "<tr id='" + msg_data.fromUserId + "'> "+
+                  "<td>" + msg_data.fromUserId + "</td>" +
+                  "<td><span class='layui-badge layui-bg-green'>" + amount + "</span></td>" +
+                  "<td>" + nick + "</td>" +
+                  "<td>" + tplState('5') + "</td>" +
+                  "<td>" +
+                  '<button class="layui-badge layui-bg-green layui-btn layui-btn-xs" onclick="upload_img(' +  "'" + msg_data.fromUserId + "'" + ' )" >上传收款码</button>' +
+                  '<button class="layui-badge layui-bg-blue layui-btn layui-btn-xs" onclick="send_kami(' +  "'" + msg_data.fromUserId + "'" + ' )" >发送卡密</button>' +
+                  '<button class="layui-badge layui-bg-orange layui-btn layui-btn-xs" onclick="pings(' +  "'" + msg_data.fromUserId + "'" + ' )" >检查对方状态</button>' +
+                  '<button class="layui-badge layui-bg-red layui-btn layui-btn-xs" onclick="deleted(' +  "'" + msg_data.fromUserId + "'" + ' )" >删除</button>' +
+                  "</td>" +
+                  "</tr>";
+
+          updateStorage(order, code, '');
+
+          table_tbody.innerHTML = code + table_tbody.innerHTML;
+
+        });
+      });
+
+
+      layer.open({  // 打开弹出框
+        type: 1,  // 这个很关键！1为页面层
+        title: '发送卡密',
+        shadeClose: true,  //开启遮罩关闭
+        area: ['70%', '90%'],
+        maxmin: true,
+        content: '<div class="layui-container" style="width: 98%;"><table id="transfer" lay-filter="transfer" class=""></table></div>',
+        // 弹出层表格定义
+        success: function () {
+          table.render({
+            elem: '#transfer',  // 弹出层表格id
+            url: layui.setter.baseUrl + '/receive/ssskm/list/order', //列表接口
+            where: {
+              access_token: layui.data(layui.setter.tableName).access_token,
+              order_id: order
+            },
+            // ,method: 'post'
+            page: true,
+            // 以下为transfer表格的定义
+            cols: [[
+              {type: 'radio', fixed: 'left'}
+              , {field: 'id', title: 'ID'}
+              , {field: 'card', title: '卡号'}
+              , {field: 'card_pwd', title: '卡密'}
+              , {field: 'amount', title: '额度', templet: "<span class='layui-green'>{{ d.amount/100 }}</span>"}
+              , {
+                field: 'add_time',
+                title: '创建时间',
+                templet: "<div>{{ d.add_time ? layui.util.toDateString(d.add_time, 'yyyy-MM-dd HH:mm:ss') : '-' }}</div>"
+              }
+              , {field: 'state', title: '状态', templet: KamiState}
+              , {field: 'remark', title: '备注'}
+            ]],
+            skin: 'line',
+            limit: 20
+          })
+        }
+      });
+
+    })
+  }
+
+  // 3. 检查对方状态
+  function pings(order){
+    console.log(order);
+  }
+
+  // 4. 删除
+  function deleted(order){
+    console.log(order);
+
+    layer.confirm('确认删除该订单？', function(index) {
+
+      var arrayOrderId = localStorage.getItem('arrayOrderId');
+      if (arrayOrderId) {
+        arrayOrderId = arrayOrderId.split(',');
+      }
+      arrayOrderId = arrayOrderId.filter(function(item) {
+        return item !== order;
+      });
+
+      localStorage.removeItem("arrayOrderId");
+      localStorage.setItem('arrayOrderId', arrayOrderId);
+      localStorage.removeItem(order);
+      localStorage.removeItem(order + "_nick");
+
+
+      var htmlCode = document.getElementById(order);
+      if(htmlCode) htmlCode.remove();
+
+      layer.close(index);
+    })
+
+
+  }
+
+  layui.use(['admin', 'form', 'table', 'util'], function(){
+    var $ = layui.$
+            ,admin = layui.admin
+            ,table = layui.table
+            ,element = layui.element
+            ,form = layui.form;
+
+    element.render('breadcrumb', 'breadcrumb');
+
+
+    var socket;
+    window.assistantName = '';
+
+    // 状态 1-正常，2-禁用，3-限额
+    window.tplState = function(d){
+      if(d == '0') {
+        return "<span class='layui-badge layui-bg-blue'>交易开始，待发码</span>";
+      }else if(d == '00') {
+        return "<span class='layui-badge layui-bg-blue'>交易开始，待发码</span><span style='margin-left: 10px;' class='layui-badge layui-bg-blue'>微信</span>";
+      }else if(d == '01') {
+        return "<span class='layui-badge layui-bg-blue'>交易开始，待发码</span><span style='margin-left: 10px;'  class='layui-badge layui-bg-blue'>支付宝</span>";
+      }else if(d == '1') {
+        return "<span class='layui-badge layui-bg-green'>码已发，待支付</span>";
+      }else if(d == '2') {
+        return "<span class='layui-badge layui-bg-blue'>码失效，重新发码</span>";
+      }else if(d == '3') {
+        return "<span class='layui-badge layui-bg-green'>客户未支付，待支付</span>";
+      }else if(d == '4') {
+        return "<span class='layui-badge layui-bg-blue'>客户已支付，请查看收款金额，再发卡密</span>";
+      }else if(d == '5') {
+        return "<span class='layui-badge layui-bg-green'>卡密已发送</span>";
+      }
+      return "<span class='layui-badge layui-bg-red'>订单交易失败</span>";
+    };
+
+    // 状态 1-正常，2-禁用，3-限额
+    window.KamiState = function(d){
+      if(d.state == 0) {
+        return "<span class='layui-badge layui-bg-green'>可用</span>";
+      }else if(d.state == 1) {
+        return "<span class='layui-badge layui-bg-blue'>已发放</span>";
+      }
+      return "<span class='layui-badge layui-bg-orange'>已使用</span>";
+    };
+
+    // 指定开关事件
+    form.on('switch(switchTest)', function(data){
+      layer.msg((this.checked ? '接单已开启' : '接单已关闭'), {
+        offset: '6px'
+      });
+
+      if(this.checked){
+        // 创建Socket对象
+        // socket = new WebSocket('ws://103.211.125.154:8194/websocket/M_' + assistantName);
+
+        socket = new WebSocket('ws://192.168.0.107:8194/websocket/M_' + assistantName);
+
+        // 2. 监听 WebSocket 连接事件
+        socket.addEventListener("open", function (event) {
+          console.log("WebSocket connected:", event);
+        });
+        // 3. 监听 WebSocket 收到消息事件
+        socket.addEventListener("message", function (event) {
+          console.log("WebSocket message received:", event.data);
+
+          // switch_ = true;
+          msg_data = JSON.parse(event.data);
+
+          window.vipName = msg_data.fromUserId;
+
+          if(msg_data.msg == "连接成功！")
+            return;
+
+          var vipName_ = document.getElementById(vipName);
+          if(vipName_) vipName_.remove();
+
+          var table_tbody = document.getElementById("table_tbody");
+
+          // 获取金额
+          var amount = getAmount(msg_data.fromUserId);
+
+
+          var nick = '';
+          if ( msg_data.nick ){
+            nick = msg_data.nick
+            localStorage.setItem(msg_data.fromUserId + '_nick', msg_data.nick);
+          }else{
+            nick = localStorage.getItem(msg_data.fromUserId + '_nick');
+          }
+
+
+
+          // 添加到缓存
+          var code = "<tr id='" + msg_data.fromUserId + "'> "+
+                  "<td>" + msg_data.fromUserId + "</td>" +
+                  "<td><span class='layui-badge layui-bg-green'>" + amount + "</span></td>" +
+                  "<td>" + nick + "</td>" +
+                  "<td>" + tplState(msg_data.msg) + "</td>" +
+                  "<td>" +
+                  '<button class="layui-badge layui-bg-green layui-btn layui-btn-xs" onclick="upload_img(' +  "'" + msg_data.fromUserId + "'" + ' )" >上传收款码</button>' +
+                  '<button class="layui-badge layui-bg-blue layui-btn layui-btn-xs" onclick="send_kami(' +  "'" + msg_data.fromUserId + "'" + ' )" >发送卡密</button>' +
+                  '<button class="layui-badge layui-bg-orange layui-btn layui-btn-xs" onclick="pings(' +  "'" + msg_data.fromUserId + "'" + ' )" >检查对方状态</button>' +
+                  '<button class="layui-badge layui-bg-red layui-btn layui-btn-xs" onclick="deleted(' +  "'" + msg_data.fromUserId + "'" + ' )" >删除</button>' +
+                  "</td>" +
+                  "</tr>";
+
+          updateStorage(msg_data.fromUserId, code, '');
+
+          table_tbody.innerHTML = code + table_tbody.innerHTML;
+
+          playSound();
+
+        });
+        // 4. 监听 WebSocket 关闭事件
+        socket.addEventListener("close", function (event) {
+          console.log("WebSocket closed:", event);
+        });
+        // 5. 监听 WebSocket 出错事件
+        socket.addEventListener("error", function (event) {
+          console.error("WebSocket error:", event);
+        });
+
+        // 将缓存的数据添加到页面中
+        var arrayOrderId = localStorage.getItem('arrayOrderId');
+        if (arrayOrderId){
+          arrayOrderId = arrayOrderId.split(',');
+          var table_tbody = document.getElementById("table_tbody");
+          for(var i = 0; i < arrayOrderId.length; i++) {
+            console.log(arrayOrderId[i]);
+
+            const code = localStorage.getItem(arrayOrderId[i]);
+            console.log(code)
+            table_tbody.innerHTML += code;
+          }
+        }
+
+      }else{
+        socket.close();
+      }
+      // layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是 ON|OFF', data.othis)
+    });
+
+
+
+
+    window.sendMessage = function (text) {
+      let message = text;
+      if (message) {
+        socket.send(message);
+      }
+    }
+
+    // 搜索
+    var $ = layui.$, active = {
+      reload: function(){
+        var phone = $('#phone').val();
+        var token = $("#token").val();
+        //执行重载
+        table.reload('tableReload', {
+          page: {
+            curr: 1 //重新从第 1 页开始
+          }
+          ,where: {
+            token: token,
+            phone : phone
+          }
+        });
+      }
+    };
+
+    $('#search').on('click', function() {
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+    // 渲染表单
+    form.render();
+
+    admin.req({
+      type: 'get',
+      url:  layui.setter.baseUrl + '/assistant/get' //模拟基本信息接口,
+      ,error: function(err){
+        console.log(err)
+      },
+      success: function(res){
+        if(res.code == 0){
+          console.log(res);
+          assistantName = res.data.assistantName;
+        }
+      }
+    })
+  });
+
+
+
+  //选择文件
+  var imgdata = '';
+
+  function selectImage(obj){
+    var f=$(obj).val();
+    if(f == null || f ==undefined || f == ''){
+      document.getElementById('image').src = "";
+      $("#image").show();
+      return false;
+    }
+
+    if(!/\.(?:png|jpg|bmp|gif|PNG|JPG|BMP|GIF)$/.test(f)){
+      alert("类型必须是图片(.png|jpg|bmp|gif|PNG|JPG|BMP|GIF)");
+      $(obj).val('');
+      return false;
+    }
+
+    imgdata = new FormData();
+    $.each($(obj)[0].files,function(i,file){
+      imgdata.append('file', file);
+    });
+    if(!file.files || !file.files[0]){
+      return;
+    }
+    //将上传的图片显示到页面
+    var reader = new FileReader();
+    reader.onload = function(evt){
+      $("#image").show();
+      document.getElementById('image').src = evt.target.result;
+      uploadfile = evt.target.result;
+    }
+    reader.readAsDataURL(file.files[0]);
+  }
+
+  var imageurl = "";
+  //点击上传
+  function importWeldingMachine() {
+    var file = $("#file").val();
+    $.ajax({
+      type : "post",
+      async : false,
+      url : "/api/receive/ssskm/uploadimage",
+      data : imgdata,
+      cache : false,
+      contentType : false,            //  不可缺
+      processData : false,            //  不可缺,设置为true的时候,ajax提交的时候不会序列化 data，而是直接使用data
+      dataType : "json",              //  返回数据形式为json
+      success : function(result) {
+        console.log(result)
+        if (result) {
+          if (!result.success) {
+            imageurl = "";
+            console.log("上传失败")
+          } else {
+            imageurl = result.imgurl;
+            //上传图片后，进行保存入库图片信息操作
+            swal("图片上传成功！", {
+              buttons: false,
+              timer: 3000,
+            });
+
+            var data = {
+              "fromUserId": assistantName,
+              "toUserId":  vipName,
+              "msg":"1 " + result.imgurl
+            }
+
+            sendMessage(JSON.stringify(data));
+
+            var vipName_ = document.getElementById(vipName);
+            vipName_.remove();
+
+            var table_tbody = document.getElementById("table_tbody");
+
+            // 获取金额
+            var amount = getAmount(vipName);
+
+            var nick = localStorage.getItem(msg_data.fromUserId + '_nick');
+
+            var code =
+                    "<tr id='" + vipName + "'> "+
+                    "<td>" + vipName + "</td>" +
+                    "<td><span class='layui-badge layui-bg-green'>" + amount + "</span></td>" +
+                    "<td>" + nick + "</td>" +
+                    "<td>" + tplState('1') + "</td>" +
+                    "<td>" +
+                    '<button class="layui-badge layui-bg-green layui-btn layui-btn-xs" onclick="upload_img(' +  "'" + msg_data.fromUserId + "'" + ' )" >上传收款码</button>' +
+                    '<button class="layui-badge layui-bg-blue layui-btn layui-btn-xs" onclick="send_kami(' +  "'" + msg_data.fromUserId + "'" + ' )" >发送卡密</button>' +
+                    '<button class="layui-badge layui-bg-orange layui-btn layui-btn-xs" onclick="pings(' +  "'" + msg_data.fromUserId + "'" + ' )" >检查对方状态</button>' +
+                    '<button class="layui-badge layui-bg-red layui-btn layui-btn-xs" onclick="deleted(' +  "'" + msg_data.fromUserId + "'" + ' )" >删除</button>' +
+                    "</td>" +
+                    "</tr>";
+
+            updateStorage(vipName, code, '');
+
+            table_tbody.innerHTML = code + table_tbody.innerHTML;
+
+
+          }
+        }
+      },
+      error : function(errorMsg) {
+        alert("数据请求失败，请联系系统管理员!");
+      }
+    });
+  }
+
+  function getAmount(orderId){
+    var amount = -100;
+    $.ajax({
+      type : "get",
+      async : false,
+      url : "/api/receive/ssskm/get/amount/" + orderId,
+      data : imgdata,
+      cache : false,
+      contentType : false, //不可缺
+      processData : false, //不可缺,设置为true的时候,ajax提交的时候不会序列化 data，而是直接使用data
+      dataType : "json", //返回数据形式为json
+      success : function(result) {
+        console.log(result)
+        if (result.code == 0){
+          amount =  result.data;
+        }
+      },
+      error : function(errorMsg) {
+        alert("数据请求失败，请联系系统管理员!");
+      }
+    });
+
+    return amount;
+  }
+
+  // 系统提示调用
+  function playSound() {
+    var audio = document.getElementById('myAudio');
+    audio.play();
+
+  }
+
+
+  // 更新缓存
+  function updateStorage(orderId, data, event){
+
+    var arrayOrderId = localStorage.getItem('arrayOrderId');
+    if (arrayOrderId) {
+      arrayOrderId = arrayOrderId.split(',');
+    }else {
+      arrayOrderId = [];
+    }
+
+    if (!arrayOrderId.includes(orderId)){
+      arrayOrderId.push(orderId);
+    }
+
+    localStorage.setItem('arrayOrderId', arrayOrderId);
+    localStorage.setItem(orderId, data);
+
+    // console.log(localStorage.getItem(orderId));//输出
+  }
+
+
+</script>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+<script>
+
+
+</script>

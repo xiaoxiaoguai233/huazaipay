@@ -1,0 +1,200 @@
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/login.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+<!-- nav部分 -->
+<div class="page">
+  <div class="layui-header header" winter>
+    <!-- 公司logo -->
+    <a class="logo layui-hide-xs" href="/index.html" id="siteLogo"></a>
+    <ul class="layui-nav xxpay-nav" lay-filter="xxpay_nav">
+      <li class="layui-nav-item"><a href="../../../../index.html">首页</a></li>
+      <li class="layui-nav-item"><a href="../../../../demo.html">支付体验</a></li>
+      <li class="layui-nav-item"><a lay-href="/user/login"><button class="layui-btn mch-login">商户登录</button></a></li>
+    </ul>
+    <div class="layadmin-user-login-main">
+      <div class="layadmin-user-login-box layadmin-user-login-header">
+        <div class="login-text"><img class="layui-hide-md layui-hide-lg layui-hide-sm" src="layui/images/imgs/mch_mobile.png"><img class="layui-hide-xs" src="layui/images/imgs/mch.png">商户登录</div>
+        <p class="siteTitle layui-hide-xs"></p>
+      </div>
+      <form>
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+          <div class="layadmin-user-login-box-bg">
+<!--            <input name="vercodeRandomStr" id="vercodeRandomStr" type='hidden'>-->
+            <div class="layui-form-item">
+              <img class="xxpay-icon" src="layui/images/imgs/username.png">
+              <input type="text" name="username" id="LAY-user-login-username" lay-verify="required" placeholder="请输入用户名" class="layui-input">
+            </div>
+            <input type="hidden" name="type" value="2">
+            <div class="layui-form-item">
+              <img class="xxpay-icon" src="layui/images/imgs/password.png">
+              <input type="password" name="password" id="LAY-user-login-password" lay-verify="required" placeholder="请输入密码" class="layui-input">
+            </div>
+
+<!--            <div class="layui-form-item">-->
+<!--              <img class="xxpay-icon" src="layui/images/imgs/vercode.png">-->
+<!--              <div class="layui-row" style="width: 100%">-->
+<!--                <div class="layui-col-xs7">-->
+<!--                  <input type="text" name="vercode" lay-verify="required" id="LAY-user-login-vercode" autocomplete="off" placeholder="请输入图形验证码" class="layui-input">-->
+<!--                </div>-->
+<!--                <div class="layui-col-xs5">-->
+<!--                  <div style="margin-left: 10px;">-->
+<!--                    <img src="" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode">-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+            <div class="layui-form-item">
+              <img class="xxpay-icon" src="layui/images/imgs/vercode.png">
+              <input type="number" name="googleCode" id="LAY-user-login-google-code" placeholder="谷歌验证码（如未绑定不必填写）" class="layui-input">
+            </div>
+
+            <div class="layui-form-item" style="margin-top: 30px">
+              <button class="layui-btn layui-btn-fluid login-opacity06" id="login-btn2" lay-submit lay-filter="LAY-user-login-submit" >登 入</button>
+            </div>
+            <div class="layui-trans layui-form-item layadmin-user-login-other" style="margin-bottom: 20px">
+              <a lay-href="/user/reg" class="layadmin-user-jump-change">没有账户？前往注册</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div style="height: 100px"></div>
+</div>
+<!-- footer部分 -->
+<div class="footer layui-hide-xs">
+  <div class="layui-container">
+    <div class="layui-row footer-contact">
+      <div class="layui-col-xs12 layui-col-md6 layui-row">
+        <div class="layui-col-xs4 layui-col-md4">
+          <h2 style="color: #ffffff">关于我们</h2><br/><br/>
+          <a href="javascript:void(0);">关于我们</a><br />
+        </div>
+        <div class="layui-col-xs4 layui-col-md4">
+          <h2>服务支持</h2><br /><br />
+          <a href="javascript:void(0);">开发文档</a>
+        </div>
+        <div class="layui-col-xs4 layui-col-md4">
+          <h2>联系我们</h2><br /><br />
+          <a id="serviceTel"></a><br /><br />
+          <a id="serviceQQ"></a><br /><br />
+        </div>
+      </div>
+      <div class="layui-hide-xs layui-col-md6">
+        <div style="width:50%;margin-left: 50%">
+          <h2>合作伙伴</h2><br /><br />
+          <img src="/images/alipay.png"/>&nbsp;&nbsp;
+          <img src="/images/wxpay.png"/>
+        </div>
+      </div>
+    </div>
+    <div id="copyRight" style="color: rgba(255,255,255,0.4);margin:15px auto;text-align: center"></div>
+  </div>
+</div>
+<script>
+  layui.use(['admin', 'form', 'user'], function(){
+    var $ = layui.$
+            ,setter = layui.setter
+            ,admin = layui.admin
+            ,form = layui.form
+            ,router = layui.router()
+            ,search = router.search;
+
+    //变更网站标题
+    var siteInfo = layui.data(layui.setter.tableName).siteTitle;
+    $('.siteTitle').text(siteInfo.siteTitle);
+    $("#siteLogo").append('<img src="'+siteInfo.siteLogo+'" style="height: 30px;width: 120px;" alt="'+siteInfo.siteTitle+'">');
+    $('#copyRight').text(siteInfo.copyRight);
+    $("#serviceTel").append(siteInfo.serviceTel);
+    $("#serviceQQ").append(siteInfo.serviceQQ);
+
+
+    form.render();
+
+      $.loginOk = function(res) {
+          //请求成功后，写入 access_token
+          layui.data(setter.tableName, {
+              key: setter.request.tokenName
+              ,value: res.data.access_token
+          });
+
+          //登入成功的提示与跳转
+          layer.msg('登入成功', {
+              offset: '15px'
+              ,icon: 1
+              ,time: 1000
+          }, function(){
+              location.hash = search.redirect ? decodeURIComponent(search.redirect) : '/';
+          });
+      };
+
+      //提交
+      form.on('submit(LAY-user-login-submit)', function(obj){
+
+          //请求登入接口
+          admin.req({
+              url: layui.setter.baseUrl + '/auth' //实际使用请改成服务端真实接口
+              ,data: obj.field
+              ,done: function(res){
+                  var loginSecurityType = res.data.loginSecurityType;
+                  var mchId = res.data.mchId;
+                  if(loginSecurityType == 2) {  // 登录密码+谷歌验证组合
+                      layer.prompt({
+                          formType: 0,
+                          title: '请输入谷歌验证码'
+                      }, function(value, index, elem){
+                          admin.req({
+                              url: layui.setter.baseUrl + '/google_auth' //校验谷歌验证码
+                              ,data: {
+                                  mchId : mchId,
+                                  googleCode : value
+                              }
+                              ,done: function(res1){
+                                  if(res.code == 0) {
+                                      $.loginOk(res);
+                                  }
+                                  layer.close(index);
+                              }
+                          });
+                      });
+                  }else {
+                      $.loginOk(res);
+                  }
+              }
+          });
+
+      });
+
+    // $.randomString = function (len) {
+    //   len = len || 32;
+    //   var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+    //   var maxPos = $chars.length;
+    //   var pwd = '';
+    //   for (i = 0; i < len; i++) {
+    //     pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    //   }
+    //   return pwd;
+    // };
+
+    // $('body').off('click', "#LAY-user-get-vercode").on('click', "#LAY-user-get-vercode", function(){
+    //   var vercodeRandomStr = $.randomString(6) + new Date().getTime();
+    //   $("#vercodeRandomStr").val(vercodeRandomStr);
+    //   $("#LAY-user-get-vercode").attr('src', layui.setter.baseUrl + '/auth/vercode?vercodeRandomStr=' + vercodeRandomStr);
+    // });
+
+    $("#LAY-user-get-vercode").click();
+
+    $(".layui-input").keyup(function(){
+      //如果三个输入框都存在值， 则按钮不在置灰
+      // if($("#LAY-user-login-username").val().length > 0 && $("#LAY-user-login-password").val().length > 0 && $("#LAY-user-login-vercode").val().length > 0){
+      if($("#LAY-user-login-username").val().length > 0 && $("#LAY-user-login-password").val().length > 0 ){
+        $('#login-btn2').removeClass('login-opacity06').addClass('login-opacity10');
+      }else{
+        $('#login-btn2').removeClass('login-opacity10').addClass('login-opacity06');
+      }
+    });
+
+  });
+</script>
+

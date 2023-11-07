@@ -1,0 +1,26 @@
+server:
+  port: 8082
+  context-path: /
+
+spring:
+  profiles:
+     active: prod
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    encoding: UTF-8 #编码
+    suffix: .html # 模板后缀
+    mode: HTML #模板
+
+logging:
+  file: ./log/demo.log
+
+# 支付配置 （注意yml格式中 k/v之间的空格）
+config:
+  #商户ID
+  mchId: 20000003
+  #商户秘钥
+  mchKey: IFBFLVIYXMQ6SHRBYDEEQ7JCSU6U3W0QLCGMZAJVU1JHXQN0ZPP7H5GOVO55TAVDRPGWAIVBER85TQDMJGCUWX4CROZ1OIPOM9D9UNPVCQYELQPY9NBXVRT7G4NKUS3J
+  #支付网关地址
+  payHost: http://payment.huazaipay.pro/
+#  payHost: http://192.168.75.1:3020

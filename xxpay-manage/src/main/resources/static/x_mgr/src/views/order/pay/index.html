@@ -1,0 +1,437 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>订单管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">支付订单</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row">
+                        <div class="layui-form" style="float:right; margin-bottom: 10px;">
+                            <div class="layui-form-item" style="margin:0;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeStart" id="createTimeStart" autocomplete="off"
+                                           placeholder="开始时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeEnd" id="createTimeEnd" autocomplete="off"
+                                           placeholder="结束时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchId" id="mchId" placeholder="商户ID" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+
+
+                                <div class="layui-input-inline">
+                                    <input type="text" name="cardPwd" id="cardPwd" placeholder="卡密" autocomplete="off" class="layui-input">
+                                </div>
+
+
+                                <div class="layui-input-inline">
+                                    <input type="text" name="subMchId" id="subMchId" placeholder="会员账号"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="payOrderId" id="payOrderId" placeholder="支付订单号"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchOrderNo" id="mchOrderNo" placeholder="商户订单号"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="payProduct" id="payProduct" placeholder="支付通道"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="phone" id="phone" placeholder="手机号(码商)"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="payProductType" id="payProductType" placeholder="支付方式"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="productId" id="productId" lay-search="">
+                                        <option value="-99">支付产品</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="type" id="productType" placeholder="产品类型" lay-search="">
+                                        <option value="-99">产品类型</option>
+                                        <option value="1">收款</option>
+                                        <option value="2">充值</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="status" id="status" lay-search="">
+                                        <option value="-99">订单状态</option>
+                                        <option value="0">订单生成</option>
+                                        <option value="1">支付中</option>
+                                        <option value="2">支付成功</option>
+                                        <option value="-1">支付失败</option>
+                                        <option value="3">成功，已通知</option>
+                                        <option value="4">已退款</option>
+                                    </select>
+                                </div>
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                                <button id="exportOrder" class="layui-btn " lay-event="table_export">导出订单</button>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <blockquote class="layui-elem-quote" id="amountTip">
+                                提交订单数:
+                                <sapn id="allTotalCount" style="color: blue; margin-right: 10px;"></sapn>
+                                订单总金额:<span id="allTotalAmount" style="color: blue; margin-right: 10px;"></span>
+                                已付订单数:<span id="successTotalCount" style="color: green; margin-right: 10px;"></span>
+                                已付总金额:<span id="successTotalAmount" style="color: green; margin-right: 10px;"></span>
+                                商户总收入:<span id="successTotalMchIncome" style="color: green; margin-right: 10px;"></span>
+                                代理商收入:<span id="successTotalAgentProfit"
+                                            style="color: green; margin-right: 10px;"></span>
+                                平台收入:<span id="successTotalPlatProfit" style="color: green; margin-right: 10px;"></span>
+                                未付订单数:<span id="failTotalCount" style="color: red; margin-right: 10px;"></span>
+                                未付总金额:<span id="failTotalAmount" style="color: red; margin-right: 10px;"></span>
+                            </blockquote>
+                        </div>
+                    </div>
+                    <table id="XxPay_Mgr_PayOrder_dataAll" lay-filter="XxPay_Mgr_PayOrder_dataAll"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="xxpayBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="reissue">补单</a>
+<!--    {{#  if(d.status == 1){ }}-->
+<!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="reissue">补单</a>-->
+<!--    {{#  } else { }}-->
+<!--    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-disabled" lay-event="reissue">补单</a>-->
+<!--    {{#  } }}-->
+</script>
+
+<script>
+    layui.use(['admin', 'table', 'util', 'laydate','excel'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , element = layui.element
+            , laydate = layui.laydate
+            , form = layui.form
+            , excel = layui.excel;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        $.setCountResult = function (mchId, productId, payOrderId, mchOrderNo, productType, createTimeStart, createTimeEnd,payProductType, payProduct, subMchId, phone, cardPwd) {
+            admin.req({
+                type: 'get',
+                url: layui.setter.baseUrl + '/pay_order/count',
+                data: {
+                    mchId: mchId,
+                    productId: productId,
+                    payOrderId: payOrderId,
+                    mchOrderNo: mchOrderNo,
+                    productType: productType,
+                    subMchId: subMchId,
+                    channelType: payProduct,
+                    channelId: payProductType,
+                    createTimeStart: createTimeStart,
+                    createTimeEnd: createTimeEnd,
+                    phone: phone,
+                    cardPwd: cardPwd
+                },
+                error: function (err) {
+                    layer.alert(JSON.stringify(err.field), {
+                        title: '错误提示'
+                    })
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        $('#allTotalCount').html(res.data.allTotalCount);
+                        $('#allTotalAmount').html("￥" + res.data.allTotalAmount / 100.00);
+                        $('#successTotalCount').html(res.data.successTotalCount);
+                        $('#successTotalAmount').html("￥" + res.data.successTotalAmount / 100.00);
+                        $('#successTotalMchIncome').html("￥" + res.data.successTotalMchIncome / 100.00);
+                        $('#successTotalAgentProfit').html("￥" + res.data.successTotalAgentProfit / 100.00);
+                        $('#successTotalPlatProfit').html("￥" + res.data.successTotalPlatProfit / 100.00);
+                        $('#failTotalCount').html(res.data.failTotalCount);
+                        $('#failTotalAmount').html("￥" + res.data.failTotalAmount / 100.00);
+                    }
+                }
+            });
+        };
+
+        // 加载支付产品
+        admin.req({
+            type: 'post',
+            url: layui.setter.baseUrl + '/config/common/pay_product_all',
+            error: function (err) {
+                layer.alert(err);
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    var payProductList = res.data;
+                    //遍历赋值
+                    for (var i in payProductList) {
+                        $("#productId").append('<option value= ' + payProductList[i].id + '>' + payProductList[i].productName + '</option>');
+                    }
+                    form.render('select');
+                }
+            }
+        });
+
+        var tplStatus = function (d) {
+            if (d.status == 0) {
+                return "<span class='layui-badge layui-bg-blue'>订单生成</span>";
+            } else if (d.status == 1) {
+                return "<span class='layui-badge layui-bg-orange'>支付中</span>";
+            } else if (d.status == 2) {
+                return "<span class='layui-badge layui-bg-green'>支付成功</span>";
+            } else if (d.status == -1) {
+                return "<span class='layui-badge layui-bg-gray'>支付失败</span>";
+            } else if (d.status == 3) {
+                return "<span class='layui-badge layui-bg-green'>成功，已通知</span>";
+            } else if (d.status == 4) {
+                return "<span class='layui-badge layui-bg-red'>已退款</span>";
+            }
+        };
+
+        var paySuccTime = function (d) {
+            if (d.paySuccTime == null) {
+                return '<div>-</div>';
+            } else{
+                return '<div>{{ layui.util.toDateString(d.paySuccTime, "yyyy-MM-dd HH:mm:ss") }}</div>';
+            }
+        };
+
+
+
+
+        // 初始化统计结果
+        $.setCountResult();
+
+        //用户列表
+        table.render({
+             elem: '#XxPay_Mgr_PayOrder_dataAll'
+            ,even: true
+            ,url: layui.setter.baseUrl + '/pay_order/list' //用户列表接口
+            ,where: { access_token: layui.data(layui.setter.tableName).access_token }
+            ,toolbar: true
+            ,id: 'tableReload'
+            ,page: true
+            ,skin: 'line'
+            ,limit: 20
+            ,loading: true
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'mchId', title: '商户ID'}
+                // , {field: 'subMchId', title: '会员账号'}
+                ,{field: 'phone', title: '码商编号'}
+                ,{field: 'channelUser', title: '码商名称'}
+                , {field: 'cardPwd', title: '使用卡密'}
+                ,{field: 'mchOrderNo', title: '商户单号'}
+                ,{field: 'payOrderId', title: '支付单号'}
+                ,{field: 'channelId', title: '支付方式'}
+                ,{field: 'channelType', title: '支付通道'}
+                ,{
+                    field: 'amount',
+                    title: '支付金额',
+                    templet: "<span class='layui-green'>{{ d.amount/100 }}</span>"}
+                // , {
+                //     field: 'productType',
+                //     title: '产品类型',
+                //     templet: '<div>{{ d.productType == 1 ? "收款" : d.productType == 2 ? "充值" : ""}}</div>'
+                // }
+                ,{field: 'status', title: '状态', templet: tplStatus}
+                ,{
+                    field: 'createTime',
+                    title: '创建时间',
+                    templet: '<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                }
+                ,{ field: 'paySuccTime', title: '支付时间', templet: "<div>{{ d.paySuccTime ? layui.util.toDateString(d.paySuccTime, 'yyyy-MM-dd HH:mm:ss') : '-' }}</div>" }
+                ,{field: 'edit', title: '操作', toolbar: '#xxpayBar'}
+            ]]
+        });
+
+        //监听工具条
+        table.on('tool(XxPay_Mgr_PayOrder_dataAll)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                location.href = layui.setter.baseLocal + "order/pay/view.html?" + data.payOrderId;
+            } else if (obj.event === 'reissue') {
+                var payOrderId = data.payOrderId;
+                layer.prompt({
+                    formType: 1,
+                    title: '确认补单，请输入超级密码：'
+                }, function (value, index, elem) {
+                    layer.close(index);
+                    var load = layer.msg('重新发送中...', {
+                        icon: 16
+                        , shade: 0.01
+                        , time: 9999999999
+                    });
+                    admin.req({
+                        type: 'post',
+                        url: layui.setter.baseUrl + '/pay_order/reissue',
+                        timeout: 1000 * 60,
+                        data: {
+                            payOrderId: payOrderId,
+                            password: value
+                        },
+                        error: function (err) {
+                            layer.close(load);
+                            layer.alert(err);
+                        },
+                        success: function (res) {
+                            layer.close(load);
+                            if (res.code == 0) {
+                                layer.alert("补单完成，请注意查看状态！");
+                                table.reload("tableReload");
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var mchId = $('#mchId').val();
+                var subMchId = $('#subMchId').val();
+                var productId = $('#productId').val();
+                var payOrderId = $('#payOrderId').val();
+                var mchOrderNo = $("#mchOrderNo").val();
+                var productType = $("#productType").val();
+                var createTimeStart = $('#createTimeStart').val();
+                var createTimeEnd = $('#createTimeEnd').val();
+                var status = $("#status").val();
+                var payProduct = $('#payProduct').val();
+                var payProductType = $('#payProductType').val();
+                var phone = $('#phone').val();
+
+
+
+                var cardPwd = $('#cardPwd').val();
+
+                $.setCountResult(mchId, productId, payOrderId, mchOrderNo, productType, createTimeStart, createTimeEnd, payProductType, payProduct, subMchId, phone, cardPwd);
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        mchId: mchId,
+                        subMchId: subMchId,
+                        productId: productId,
+                        payOrderId: payOrderId,
+                        mchOrderNo: mchOrderNo,
+                        productType: productType,
+                        channelType: payProduct,
+                        channelId: payProductType,
+                        status: status,
+                        createTimeStart: createTimeStart,
+                        createTimeEnd: createTimeEnd,
+                        phone: phone,
+                        cardPwd: cardPwd
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        laydate.render({
+            elem: '#createTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        laydate.render({
+            elem: '#createTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+        // 渲染表单
+        form.render();
+
+
+        // 导出
+        $('#exportOrder').on('click',function(){
+            var mchId = $('#mchId').val();
+            var subMchId = $('#subMchId').val();
+            var productId = $('#productId').val();
+            var payOrderId = $('#payOrderId').val();
+            var mchOrderNo = $("#mchOrderNo").val();
+            var productType = $("#productType").val();
+            var createTimeStart = $('#createTimeStart').val();
+            var createTimeEnd = $('#createTimeEnd').val();
+            var status = $("#status").val();
+            var payProduct = $('#payProduct').val();
+            var payProductType = $('#payProductType')             .val();
+            var accessToken = layui.data(layui.setter.tableName).access_token;
+            var reqUrl= layui.setter.baseUrl + '/pay_order/downOrder'+'?' +'access_token='+ accessToken + '&createTimeStart=' + createTimeStart + '&createTimeEnd=' + createTimeEnd+
+                '&mchId='+mchId+'&subMchId='+subMchId+'&productId='+productId+'&payOrderId='+payOrderId+'&mchOrderNo='+mchOrderNo+'&productType='+productType+'&status='+status+
+                 '&payProduct='+payProduct+'&payProductType='+payProductType;
+            // layer.alert("开始导出订单");
+
+            var index = layer.load(1, exportFile(reqUrl));
+
+            // exportFile(reqUrl);
+
+            //关闭
+            layer.close(index);
+
+        })
+
+        // 表格导出
+        function exportFile(reqUrl) {
+
+            var headerArr = ['mchId', 'subMchId', 'mchOrderNo', 'channelType', 'channelId', 'payOrderId', 'amount', 'productType', 'status', 'createTime'];
+            var titles = {mchId:"商户ID",
+                subMchId:"会员账号",
+                mchOrderNo:"商户单号",
+                channelType:"支付通道",
+                channelId:"支付方式",
+                payOrderId:"支付单号",
+                amount:"支付金额",
+                productType:"产品类型",
+                status:"状态",
+                createTime:"创建时间"
+            };
+            $.ajax({
+                url: reqUrl,
+                dataType: 'json',
+                success:function(res) {
+                    var data = res.data;
+                    data = excel.filterExportData(data,headerArr);
+                    //将标题行置顶添加到数组
+                    data.unshift(titles);
+                    //导出excel
+                    var year = new Date().getFullYear();
+                    var month = new Date().getMonth()+1;
+                    var date = new Date().getDate();
+                    excel.exportExcel({
+                        商户订单: data
+                    }, 'PayOrderList_' +year+'-'+ month+'-'+date+ '.xlsx', 'xlsx');
+                },
+                error:function(){
+                    layer.alert('获取数据失败');
+                }
+
+        });
+        }
+    });
+</script>

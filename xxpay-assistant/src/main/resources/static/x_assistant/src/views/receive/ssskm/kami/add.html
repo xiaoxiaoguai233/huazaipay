@@ -1,0 +1,86 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>实时收款码</cite></a>
+        <a><cite>批量添加卡密</cite></a>
+    </div>
+</div>
+
+<style>
+    .layui-form-label {
+        width:15% !important;
+        margin-left:1%;
+    }
+    .layui-input-inline {
+        width: 33% !important;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本信息</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">金额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="amount" name="amount" placeholder="金额" autocomplete="off" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">数量(最多20)</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="count" name="count" placeholder="数量" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="padding-bottom: 20px;">
+                        <button type="button" class="layui-btn" lay-submit="" lay-filter="GetAdd">批量自动生成</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+
+
+
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'],function(){
+        var form = layui.form
+        ,$ = layui.$
+        ,admin = layui.admin
+        ,element = layui.element
+        ,layer = layui.layer;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+
+        // 添加收款账号
+        form.on('submit(GetAdd)', function(data) {
+            //这里可以写ajax方法提交表单
+            admin.req({
+                type: "POST",
+                url: layui.setter.baseUrl + '/receive/ssskm/account/add',
+                data: data.field,
+                success: function(res){
+                    console.log(res)
+                    if(res.code == 0) {
+                        layer.alert(res.msg, {title: "提示"}, function(index){
+                          layer.close(index);
+                          location.href = layui.setter.baseLocal + '/receive/ssskm/my_kami';
+                        });
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+    })
+</script>

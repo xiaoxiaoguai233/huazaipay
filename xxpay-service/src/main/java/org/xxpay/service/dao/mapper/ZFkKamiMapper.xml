@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.xxpay.service.dao.mapper.ZFkKamiMapper" >
+
+    <resultMap id="BaseResultMap" type="org.xxpay.core.entity.ZFkKami" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="BIGINT" />
+        <result column="user_name" property="user_name" jdbcType="VARCHAR" />
+        <result column="provide_user_id" property="provide_user_id" jdbcType="BIGINT" />
+        <result column="provide_user_name" property="provide_user_name" jdbcType="VARCHAR" />
+        <result column="amount" property="amount" jdbcType="BIGINT" />
+        <result column="order_id" property="order_id" jdbcType="BIGINT" />
+        <result column="card" property="card" jdbcType="VARCHAR" />
+        <result column="card_pwd" property="card_pwd" jdbcType="VARCHAR" />
+        <result column="add_time" property="add_time" jdbcType="TIMESTAMP" />
+        <result column="buy_time" property="buy_time" jdbcType="TIMESTAMP" />
+        <result column="use_time" property="use_time" jdbcType="TIMESTAMP" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, user_id, user_name, provide_user_id, provide_user_name, amount, order_id, card, card_pwd, add_time, buy_time, use_time, `state`, remark
+    </sql>
+
+    <!-- *******************************
+                支付业务
+    *******************************  -->
+
+    <!-- 获取最优的收款账号 -->
+    <select id="selectReceiveAccountByUpdateTime" resultType="org.xxpay.core.entity.ZFkKami">
+        select
+        *
+        from t_z_fk_kami
+        where `state` = '1'
+        limit 0,1;
+    </select>
+
+    <!-- 更新数据-->
+    <update id="updateReceiveAccountByUpdateTime" parameterType="org.xxpay.core.entity.ZFkKami" >
+        update t_z_fk_kami
+        set UpdateTime = now()
+        where Id = #{zFkKami.id};
+    </update>
+
+
+
+
+
+    <!-- *******************************
+                常规业务
+    *******************************  -->
+
+    <!-- 查询当前的惠生活账号列表-->
+    <select id="selectList" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.ZFkKami" >
+        select
+        id, user_id, user_name, provide_user_id, provide_user_name, amount, order_id, card, card_pwd, add_time, buy_time, use_time, `state`, remark
+        from t_z_fk_kami
+        where 1 = 1
+        <if test="zFkKami.user_id != null">
+            and user_id = #{zFkKami.user_id}
+        </if>
+        <if test="zFkKami.user_name != null and zFkKami.user_name != ''">
+            and user_name = #{zFkKami.user_name}
+        </if>
+        <if test="zFkKami.provide_user_id != null">
+            and provide_user_id = #{zFkKami.provide_user_id}
+        </if>
+        <if test="zFkKami.provide_user_name != null and zFkKami.provide_user_name != ''">
+            and provide_user_name = #{zFkKami.provide_user_name}
+        </if>
+        <if test="zFkKami.amount != null and zFkKami.amount != '' ">
+            and amount = #{zFkKami.amount}
+        </if>
+        <if test="zFkKami.order_id != null and zFkKami.order_id != '' ">
+            and order_id = #{zFkKami.order_id}
+        </if>
+        <if test="zFkKami.card != null and zFkKami.card != '' ">
+            and card = #{zFkKami.card}
+        </if>
+        <if test="zFkKami.card_pwd != null and zFkKami.card_pwd != '' ">
+            and card_pwd = #{zFkKami.card_pwd}
+        </if>
+        <if test="zFkKami.state != null and zFkKami.state != '' ">
+            and `state` = #{zFkKami.state}
+        </if>
+        <if test="zFkKami.add_time != null and zFkKami.add_time != '' ">
+            and add_time > #{zFkKami.add_time}
+        </if>
+        ORDER BY add_time DESC
+        limit #{page}, #{limit};
+
+
+    </select>
+
+    <!-- 计算全数-->
+    <select id="selectListCount" resultType="Integer">
+        select
+        COUNT(*)
+        from t_z_fk_kami
+        where 1 = 1
+        <if test="user_id != null">
+            and user_id = #{user_id}
+        </if>
+    </select>
+
+    <!-- 查询当前的惠生活账号ByID-->
+    <select id="selectById" resultMap="BaseResultMap" >
+        select
+            id, user_id, user_name, provide_user_id, provide_user_name, amount, order_id, card, card_pwd, add_time, buy_time, use_time, `state`, remark
+        from t_z_fk_kami
+        where id = #{id};
+    </select>
+
+    <!-- 查询当前的惠生活账号ByID-->
+    <select id="selectByCard" resultMap="BaseResultMap" >
+        select
+            id, user_id, user_name, provide_user_id, provide_user_name, amount, order_id, card, card_pwd, add_time, buy_time, use_time, `state`, remark
+        from t_z_fk_kami
+        where card = #{card} and `state` = '1';
+    </select>
+
+
+
+    <!-- 更新数据-->
+    <update id="update" parameterType="org.xxpay.core.entity.ZFkKami" >
+        update t_z_fk_kami
+        set
+            `user_id` = #{zFkKami.user_id},
+            `user_name` = #{zFkKami.user_name},
+            `provide_user_id` =  #{zFkKami.provide_user_id},
+            `provide_user_name` = #{zFkKami.provide_user_name},
+            `amount` = #{zFkKami.amount},
+            `order_id` = #{zFkKami.order_id},
+            `card` = #{zFkKami.card},
+            `card_pwd` = #{zFkKami.card_pwd},
+            `add_time` = #{zFkKami.add_time},
+            `buy_time` = #{zFkKami.buy_time},
+            `use_time` = #{zFkKami.use_time},
+            `remark` = #{zFkKami.remark},
+            `state` = #{zFkKami.state}
+        where `id` = #{zFkKami.id};
+    </update>
+
+    <!-- 添加新-->
+    <insert id="insert" parameterType="org.xxpay.core.entity.ZFkKami">
+        insert into t_z_fk_kami (
+            user_id, user_name, amount, card, card_pwd, add_time, `state`, remark
+        )
+        values (
+            #{zFkKami.user_id},
+            #{zFkKami.user_name},
+            #{zFkKami.amount},
+            #{zFkKami.card},
+            #{zFkKami.card_pwd},
+            now(),
+            '0',
+            #{zFkKami.remark}
+        )
+    </insert>
+
+    <!-- 删除按钮-->
+    <delete id="deleteByPrimaryKey">
+        delete from t_z_fk_kami
+        where id = #{id};
+    </delete>
+
+
+
+</mapper>

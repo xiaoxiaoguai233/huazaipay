@@ -1,0 +1,581 @@
+<div class="layui-card layadmin-header" xmlns="http://www.w3.org/1999/html">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>实时收款码</cite></a>
+        <a><cite>接单</cite></a>
+    </div>
+</div>
+
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">接单</li>
+            </ul>
+            <div class="layui-tab-content">
+<!--                <blockquote class="layui-elem-quote">-->
+<!--                    第一部分： 我的卡密-->
+<!--                </blockquote>-->
+
+<!--                </br>-->
+
+<!--&lt;!&ndash;                <iframe id="iframeMain" src="/x_assistant/start/index.html#/receive/ssskm/my_kami" style="width: 100%"; height="300px";></iframe>&ndash;&gt;-->
+
+<!--                </br></br>-->
+
+<!--                <blockquote class="layui-elem-quote">-->
+<!--                    第二部分： 等待订单-->
+<!--                </blockquote>-->
+
+<!--                </br></br>-->
+
+                <button type="button" class="layui-btn" onclick="refreshTable()">刷新表单</button>
+                <button type="button" class="layui-btn" onclick="refreshTable_switch()">开启自动刷新（10秒）</button>
+                <button type="button" class="layui-btn layui-btn-warm" onclick="refreshTable_switch_close()">关闭自动刷新</button>
+
+                <table id="XxPay_Mgr_Agent_dataAll" lay-filter="XxPay_Mgr_Agent_dataAll"></table>
+
+                <div id="openProductBox" style="display: none; padding: 10px;">
+                    <table id="openProductTable" lay-filter="openProductTable">
+                        <h3 style="text-align: center">可提交的卡密</h3>
+                    </table>
+                </div>
+
+                <audio id="notice_music" controls="controls" style="display: none;" src="/x_assistant/start/layui/css/modules/layer/default/y1839.mp3"></audio>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+<!-- Socket 部分  先连接在线 -->
+<script>
+
+    window.assistantId = '';
+
+
+    layui.use(['admin', 'form', 'table', 'util'], function() {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , element = layui.element
+            , form = layui.form;
+
+        admin.req({
+            type: 'get',
+            url:  layui.setter.baseUrl + '/assistant/get'   //  模拟基本信息接口,
+            ,error: function(err){
+                console.log(err)
+            },
+            success: function(res){
+                if(res.code == 0){
+                    assistantId = res.data.assistantId;
+                    console.log(res);
+
+                }
+            }
+        })
+    })
+
+    // 订单更新通知
+    function orders_status_notice(){
+
+        // 1. 声音通知、单窗通知
+        playSound();
+        layer.msg('订单已更新', {icon: 1});
+        // 表单更新
+        refreshTable();
+    }
+
+
+
+    // 延迟连接
+    setTimeout(function (){
+        // 创建Socket对象
+        socket = new WebSocket('ws://103.211.125.154:8194/websocket/' + assistantId);
+        // socket = new WebSocket('ws://192.168.1.3:8194/websocket/' + assistantId);
+
+        // 2. 监听 WebSocket 连接事件
+        socket.addEventListener("open", function (event) {
+            // console.log("WebSocket connected:", event);
+            console.log("服务器连接成功");
+            layer.msg('服务器连接成功，已自动开启接单功能。', {icon: 1});
+        });
+        // 3. 监听 WebSocket 收到消息事件
+        socket.addEventListener("message", function (event) {
+            console.log("WebSocket message received:", event.data);
+            var msg_data = JSON.parse(event.data);
+            // 订单更新通知
+            if(msg_data.message == 'update'){
+                orders_status_notice();
+            }
+        });
+        // 4. 监听 WebSocket 关闭事件
+        socket.addEventListener("close", function (event) {
+            console.log("WebSocket closed:", event);
+        });
+        // 5. 监听 WebSocket 出错事件
+        socket.addEventListener("error", function (event) {
+            console.error("WebSocket error:", event);
+        });
+    }, 1500)
+
+    // 系统声音调用
+    function playSound() {
+        const a = document.getElementById('notice_music')
+        a.play();
+    }
+
+</script>
+
+
+
+<!-- 操作栏 部分  先连接在线 -->
+<script>
+
+    // 1. 图片上传
+    function upload_img(order){
+        layui.use(['admin', 'form', 'table', 'util'], function() {
+            var $ = layui.$
+            var layer = layui.layer;
+
+            layer.open({
+                type: 1,
+                title: '上传收款码',
+                shadeClose: true,  // 开启遮罩关闭
+                content: [
+                     '<div style="padding: 11px;display: flex;flex-direction: column;">',
+                        '<tr>',
+                        '    <td>',
+                        '        <div style="width: 100%;margin: 0 auto;"><img id="image" src="" style="display: block;height: 200px;;margin: 0 auto;"/></div>',
+                        '        <input type="file" name="file" id="file" onChange="selectImage(this);">',
+                        '        <button style="margin-top: 20px;margin-top: 20px;height: 36px;border-radius: 5px;" class="layui-badge layui-bg-green layui-btn layui-btn"  onClick="importWeldingMachine(' + "'" + order + "'" +' )">上传</button>',
+                        '    </td>',
+                        '</tr>',
+                    '</div>'
+                ].join(''),
+                move: '#ID-test-layer-move'
+            });
+        })
+    }
+
+    //选择文件
+    var imgdata = '';
+
+    function selectImage(obj){
+        var f=$(obj).val();
+        if(f == null || f ==undefined || f == ''){
+            document.getElementById('image').src = "";
+            $("#image").show();
+            return false;
+        }
+
+        if(!/\.(?:png|jpg|bmp|gif|PNG|JPG|BMP|GIF)$/.test(f)){
+            alert("类型必须是图片(.png|jpg|bmp|gif|PNG|JPG|BMP|GIF)");
+            $(obj).val('');
+            return false;
+        }
+
+        imgdata = new FormData();
+        $.each($(obj)[0].files,function(i,file){
+            imgdata.append('file', file);
+        });
+        if(!file.files || !file.files[0]){
+            return;
+        }
+        //将上传的图片显示到页面
+        var reader = new FileReader();
+        reader.onload = function(evt){
+            $("#image").show();
+            document.getElementById('image').src = evt.target.result;
+            uploadfile = evt.target.result;
+        }
+        reader.readAsDataURL(file.files[0]);
+    }
+
+    var imageurl = "";
+
+    //点击上传
+    function importWeldingMachine(order) {
+        $.ajax({
+            type : "post",
+            async : false,
+            url : "/api/receive/ssskm/uploadimage",
+            data : imgdata,
+            cache : false,
+            contentType : false,            //  不可缺
+            processData : false,            //  不可缺,设置为true的时候,ajax提交的时候不会序列化 data，而是直接使用data
+            dataType : "json",              //  返回数据形式为json
+            success : function(result) {
+                console.log(result)
+                if (result) {
+                    if (!result.success) {
+                        imageurl = "";
+                        console.log("上传失败")
+                    } else {
+                        imageurl = result.imgurl;
+
+                        var param = {}
+                        param.orderId = order;
+                        param.imageurl = imageurl;
+                        param.status = '2';
+
+                        update_order_status(param);
+                        layer.msg('图片已上传成功', {icon: 1});
+                    }
+                }
+            },
+            error : function(errorMsg) {
+                alert("数据请求失败，请联系系统管理员!");
+            }
+        });
+    }
+
+
+
+    // 2. 提交卡密
+
+    // 状态 1-正常，2-禁用，3-限额
+    window.KamiState = function(d){
+        if(d.state == 0) {
+            return "<span class='layui-badge layui-bg-green'>可用</span>";
+        }else if(d.state == 1) {
+            return "<span class='layui-badge layui-bg-blue'>已发放</span>";
+        }
+        return "<span class='layui-badge layui-bg-orange'>已使用</span>";
+    };
+    function send_kami(order) {
+        layui.use(['admin', 'table', 'jquery', 'util'], function () {
+            var $ = layui.jquery
+                , table = layui.table
+
+            var layer = layui.layer;
+
+            // 行单击事件( 双击事件为: rowDouble )
+            table.on('row(transfer_order)', function (obj) {
+                var data = obj.data;    // 获取当前行数据
+                var kami = data.card + ',' + data.card_pwd;
+
+                layer.confirm('确认选择 [' + kami + "] ", function (index) {
+
+                    //加载中样式...
+                    loading = layer.msg('正在加载', {icon: 16, shade: 0.3, time: 0});
+
+                    data.order_id = order;
+                    data.access_token = layui.data(layui.setter.tableName).access_token;
+
+                    // 更新卡密状态
+                    $.ajax({
+                        type: "get",
+                        url: layui.setter.baseUrl + '/receive/ssskm/get/update', //列表接口
+                        data: data,
+                        dataType: "json",
+                        success: function (data) {
+                            layer.close(loading);
+
+                            var param = {}
+                            param.orderId = order;
+                            param.card_pwd = kami;
+                            param.status = '5';
+
+                            update_order_status(param);
+
+                            layer.msg('图片已发送成功', {icon: 1});
+
+                            table.reload('transfer_order', {});
+                        }
+                    });
+                });
+            });
+
+            layer.open({  // 打开弹出框
+                type: 1,  // 这个很关键！1为页面层
+                title: '发送卡密',
+                shadeClose: true,  //开启遮罩关闭
+                area: ['70%', '90%'],
+                maxmin: true,
+                content: '<div class="layui-container" style="width: 98%;"><table id="transfer_order" lay-filter="transfer_order" class=""></table></div>',
+                // 弹出层表格定义
+                success: function () {
+                    table.render({
+                        elem: '#transfer_order',  // 弹出层表格id
+                        url: layui.setter.baseUrl + '/receive/ssskm/list/order', //列表接口
+                        where: {
+                            access_token: layui.data(layui.setter.tableName).access_token,
+                            order_id: order
+                        },
+                        // ,method: 'post'
+                        page: true,
+                        // 以下为transfer_order表格的定义
+                        cols: [[
+                            {type: 'radio', fixed: 'left'}
+                            , {field: 'id', title: 'ID'}
+                            , {field: 'card', title: '卡号'}
+                            , {field: 'card_pwd', title: '卡密'}
+                            , {field: 'amount', title: '额度', templet: "<span class='layui-green'>{{ d.amount/100 }}</span>"}
+                            , {
+                                field: 'add_time',
+                                title: '创建时间',
+                                templet: "<div>{{ d.add_time ? layui.util.toDateString(d.add_time, 'yyyy-MM-dd HH:mm:ss') : '-' }}</div>"
+                            }
+                            , {field: 'state', title: '状态', templet: KamiState}
+                            , {field: 'remark', title: '备注'}
+                        ]],
+                        skin: 'line',
+                        limit: 20
+                    })
+                }
+            });
+        })
+    }
+
+    function pings(){
+        layer.msg('功能未开发', {icon: 2});
+    }
+
+
+    function refreshTable_switch_close(){
+        for (let i = 0; i < 100000; i++) {
+            clearInterval(i);
+        }
+        layer.msg('已关闭自动刷新订单', {icon: 1});
+    }
+
+
+    function refreshTable_switch(){
+        refreshTable();
+        layer.msg('已开启自动刷新订单', {icon: 1});
+    }
+
+
+    function refreshTable(){
+        layui.table.reload('tableReload', {});
+
+        clearInterval(intervalId);
+        intervalId  = setInterval(refreshTable, 10 * 1000);
+    }
+
+    // 每 interval 秒刷新一次图表
+    let intervalId;
+
+
+
+
+    // 更新订单信息
+    function update_order_status(param){
+        param.asst_flag = true;
+        // 获取当前订单状态
+        $.ajax({
+            type: "get",
+            url: 'http://pay.astro99.top/api/update/' + param.orderId, //模拟基本信息接口,
+            // url: 'http://192.168.1.3:3020/api/update/' + param.orderId, //模拟基本信息接口,
+            data: param,
+            dataType:"json",
+            success: function (data) {
+                console.log(data);
+                refreshTable();
+            },fail: function (date){
+                setInterval(function () {
+                    //需要执行的代码写在这里
+                    update_order_status(param);
+                }, 5000);
+            }
+        });
+    }
+</script>
+
+
+<!-- Table 部分  先连接在线 -->
+<script>
+
+    layui.use(['admin', 'table', 'util'], function(){
+        var $ = layui.$
+            ,admin = layui.admin
+            ,table = layui.table
+            ,element = layui.element
+            ,form = layui.form;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        // 状态 1-正常，2-禁用，3-限额
+        var tplState = function(d){
+            if(d.status == '1') {
+                return "<span class='layui-badge layui-bg-orange'>交易开始，待发码</span>";
+            }else if(d.status == '2') {
+                return "<span class='layui-badge layui-bg-blue'>码已发，待支付</span>";
+            }else if(d.status == '3') {
+                return "<span class='layui-badge layui-bg-orange'>客户已支付，请查看收款金额，再发卡密</span>";
+            }else if(d.status == '4') {
+                return "<span class='layui-badge layui-bg-orange'>码失效，重新发码</span>";
+            }else if(d.status == '5') {
+                return "<span class='layui-badge layui-bg-blue'>卡密已发，待使用</span>";
+            }else if(d.status == '6') {
+                return "<span class='layui-badge layui-bg-green'>订单已完成</span>";
+            }
+            return "<span class='layui-badge layui-bg-orange'>订单错误</span>";
+        };
+
+        // 支付方式
+        var tplPayMethod = function(d){
+            if(d.pay_method == '微信')
+                return "<span class='layui-badge layui-bg-green'>" + d.pay_method + "</span>";
+            else if(d.pay_method == '支付宝')
+                return "<span class='layui-badge layui-bg-blue'>" + d.pay_method + "</span>";
+            else
+                return "<span class='layui-badge layui-bg-orange'>" + d.pay_method + "</span>";
+        };
+
+
+        // 操作栏按钮
+        var tplEdit = function(d){
+
+            if(d.status == '1' || d.status == '4') {
+                return '<button class="layui-badge layui-bg-green layui-btn layui-btn-xs" onclick="upload_img(' +  "'" + d.orderId + "'" + ' )" >上传收款码</button>';
+            }else if(d.status == '2') {
+                return '<button class="layui-badge layui-bg-orange layui-btn layui-btn-xs" onclick="pings(' +  "'" + d.orderId + "'" + ' )" >检查对方状态</button>';
+            }else if(d.status == '3') {
+                return '<button class="layui-badge layui-bg-blue layui-btn layui-btn-xs" onclick="send_kami(' +  "'" + d.orderId + "'" + ' )" >发送卡密</button>';
+            }else{
+                return '<button class="layui-badge layui-bg-orange layui-btn layui-btn-xs" onclick="pings(' +  "'" + d.orderId + "'" + ' )" >检查对方状态</button>';
+            }
+        };
+
+        // 在线状态
+        var tplOnlineStatus = function(d){
+            if(d.online_status == '掉线')
+                return "<span class='layui-badge layui-bg-danger'>" + d.online_status + "</span>";
+            else
+                return "<span class='layui-badge layui-bg-green'>" + d.online_status + "</span>";
+        };
+
+        //商户列表
+        table.render({
+            elem: '#XxPay_Mgr_Agent_dataAll'
+            ,url: layui.setter.baseUrl + '/receive/ssskm/get_orders_info/' + assistantId //列表接口
+            ,where: { access_token: layui.data(layui.setter.tableName).access_token }
+            ,toolbar: true
+            ,style:'height:auto;overflow:visible;text-overflow:inherit;white-space:normal;'
+            ,id: 'tableReload'
+            ,page: true
+            ,cols: [function(){
+                var arr = [
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'orderId', title: '订单号' }
+                    ,{field: 'amount', title: '额度', templet: function (d){ return "<span class='layui-badge layui-bg-blue'>" + d.amount + "</span>"}}
+                    ,{field: 'card_pwd', title: '卡密', templet: "<div>{{ d.card_pwd ? d.card_pwd : '-' }}</div>" }
+                    ,{field: 'pay_for_name', title: '付款人名称'}
+                    ,{field: 'pay_method', title: '支付方式', templet: tplPayMethod}
+                    ,{field: 'online_status', title: '用户状态', templet: tplOnlineStatus }
+                    ,{field: 'expire_time', title: '订单过期时间', templet: "<div>{{ (d.expire_time / 60).toFixed(2) }} 分钟</div>" }
+                    ,{field: 'state', title: '状态', templet: tplState}
+                    ,{fixed: 'right', title:'操作', width: 134, minWidth: 80, templet: tplEdit }
+                ];
+
+                //初始化筛选状态
+                var local = layui.data ('table-filter-test');
+                layui.each(arr, function(index, item){
+                    if(item.field in local){
+                        item.hide = local[item.field];
+                    }
+                });
+                return arr;
+            }() ]
+            ,done: function(){
+                //记录筛选状态
+                var that = this;
+                that.elem.next().on('mousedown', 'input[lay-filter="LAY_TABLE_TOOL_COLS"]+', function(){
+                    var input = $(this).prev()[0];
+                    layui.data ('table-filter-test', {
+                        key: input.name
+                        ,value: input.checked
+                    })
+                });
+            },
+            skin: 'line',
+            limit: 20
+        });
+
+        // 监听工具条
+        table.on('tool(XxPay_Mgr_Agent_dataAll)', function(obj){
+            if(obj.event === 'edit'){
+
+                // 判断卡密是否可修改
+                table.on('row(XxPay_Mgr_Agent_dataAll)', function(obj_) {
+                    var data = obj_.data; // 获取当前行数据
+
+                    if( data.state == '0' ){
+                        location.href = layui.setter.baseLocal + "receive/ssskm/kami_edit/id=" + obj_.data.id;
+                    }else{
+                        layer.alert('卡密已发放、已使用不能修改');
+                        return;
+                    }
+                })
+            } else if(obj.event === 'copy'){
+                table.on('row(XxPay_Mgr_Agent_dataAll)', function(obj_) {
+                    var data = obj_.data; // 获取当前行数据
+                    var kami = data.card + ',' + data.card_pwd;
+
+                    const input = document.createElement('input');
+                    document.body.appendChild(input);
+                    input.setAttribute('value', kami);
+                    input.select();
+
+                    if (document.execCommand('copy')) {
+                        document.execCommand('copy');
+                        layer.msg('复制成功: ' + kami, {icon: 1, time: 3000});
+                    }
+                    input.remove();
+
+                })
+            }
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function(){
+                var user_id = $('#user_id').val();
+                var user_name = $('#user_name').val();
+                var provide_user_id = $('#provide_user_id').val();
+                var provide_user_name = $('#provide_user_name').val();
+                var amount = $('#amount').val() * 100;
+                var order_id = $('#order_id').val();
+                var card = $('#card').val();
+                var state = $('#state').val();
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        user_id: user_id,
+                        user_name: user_name,
+                        provide_user_id: provide_user_id,
+                        provide_user_name: provide_user_name,
+                        amount: amount,
+                        order_id: order_id,
+                        card: card,
+                        state: state,
+                    }
+                });
+            }
+        };+
+
+            $('#search').on('click', function() {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+        // 渲染表单
+        form.render();
+    });
+</script>
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>

@@ -1,0 +1,141 @@
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>实时收款码</cite></a>
+    <a><cite>卡密管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">在线用户</li>
+      </ul>
+
+
+        <div class="layui-bg-gray" style="padding: 16px;">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">码商在线</div>
+                        <div class="layui-card-body">
+                            <table id="XxPay_Mgr_Manager_dataAll_Asst_Online" lay-filter="XxPay_Mgr_Manager_dataAll_Asst_Online"></table>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">客户在线</div>
+                        <div class="layui-card-body">
+                            <table id="XxPay_Mgr_Manager_dataAll_VIP_Online" lay-filter="XxPay_Mgr_Manager_dataAll_Asst_Online"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'table', 'util'], function(){
+    var $ = layui.$
+            ,table = layui.table
+            ,element = layui.element
+            ,form = layui.form;
+
+    element.render('breadcrumb', 'breadcrumb');
+
+    //商户列表
+    table.render({
+      elem: '#XxPay_Mgr_Manager_dataAll_Asst_Online'
+      ,url: layui.setter.baseUrl + '/receive/ssskm/asst/online/list' //列表接口
+      ,where: {
+        access_token: layui.data(layui.setter.tableName).access_token
+      }
+      ,toolbar: true
+      ,id: 'tableReload_asst_online'
+      ,page: true
+      ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field: 'assistantId', title: '码商ID'}
+        ,{field: 'assistantName', title: '码商名称'}
+      ]],
+      skin: 'line',
+      limit: 20
+    });
+
+    // 渲染表单
+    form.render();
+  });
+</script>
+
+
+<script>
+    layui.use(['admin', 'table', 'util'], function(){
+        var $ = layui.$
+            ,table = layui.table
+            ,element = layui.element
+            ,form = layui.form;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        // 状态 1-正常，2-禁用，3-限额
+        var tplState = function(d){
+            if(d.status == '1') {
+                return "<span class='layui-badge layui-bg-orange'>交易开始，待发码</span>";
+            }else if(d.status == '2') {
+                return "<span class='layui-badge layui-bg-blue'>码已发，待支付</span>";
+            }else if(d.status == '3') {
+                return "<span class='layui-badge layui-bg-orange'>客户已支付，请查看收款金额，再发卡密</span>";
+            }else if(d.status == '4') {
+                return "<span class='layui-badge layui-bg-orange'>码失效，重新发码</span>";
+            }else if(d.status == '5') {
+                return "<span class='layui-badge layui-bg-blue'>卡密已发，待使用</span>";
+            }else if(d.status == '6') {
+                return "<span class='layui-badge layui-bg-green'>订单已完成</span>";
+            }
+            return "<span class='layui-badge layui-bg-orange'>订单错误</span>";
+        };
+
+        // 在线状态
+        var tplOnlineStatus = function(d){
+            if(d.online_status == '在线')
+                return "<span class='layui-badge layui-bg-green'>" + d.online_status + "</span>";
+            else
+                return "<span class='layui-badge layui-bg-danger'>" + d.online_status + "</span>";
+        };
+
+        //商户列表
+        table.render({
+            elem: '#XxPay_Mgr_Manager_dataAll_VIP_Online'
+            ,url: layui.setter.baseUrl + '/receive/ssskm/vip/online/list' //列表接口
+            ,where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            ,toolbar: true
+            ,id: 'tableReload_vip_online'
+            ,page: true
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'orderId', title: '订单号'}
+                ,{field: 'amount', title: '额度', templet: function (d){ return "<span class='layui-badge layui-bg-blue'>" + d.amount + "</span>"}}
+                ,{field: 'pay_method', title: '支付方式'}
+                ,{field: 'pay_for_name', title: '付款人名称'}
+                ,{field: 'online_status', title: '用户状态', templet: tplOnlineStatus }
+                ,{field: 'expire_time', title: '订单过期时间', templet: "<div>{{ (d.expire_time / 60).toFixed(2) }} 分钟</div>" }
+                ,{field: 'state', title: '状态', templet: tplState}
+            ]],
+            skin: 'line',
+            limit: 20
+        });
+
+        // 渲染表单
+        form.render();
+    });
+</script>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.xxpay.service.dao.mapper.ZMthAccountMapper" >
+
+    <resultMap id="BaseResultMap" type="org.xxpay.core.entity.ZMthAccount" >
+        <id column="Id" property="id" jdbcType="BIGINT" />
+        <result column="ParentId" property="parentId" jdbcType="BIGINT" />
+        <result column="Token" property="token" jdbcType="VARCHAR" />
+        <result column="Phone" property="phone" jdbcType="VARCHAR" />
+        <result column="StoreId" property="storeId" jdbcType="BIGINT" />
+        <result column="TodayMoney" property="todayMoney" jdbcType="BIGINT" />
+        <result column="LimitDayMoney" property="limitDayMoney" jdbcType="BIGINT" />
+        <result column="TotalMoney" property="totalMoney" jdbcType="BIGINT" />
+        <result column="LimitMaxMoney" property="limitMaxMoney" jdbcType="BIGINT" />
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="AddressId" property="addressId" jdbcType="BIGINT" />
+        <result column="Remark" property="remark" jdbcType="VARCHAR" />
+        <result column="Status" property="status" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney, LimitMaxMoney, CreateTime, UpdateTime, AddressId, Remark, State
+    </sql>
+
+    <!-- *******************************
+                支付业务
+    *******************************  -->
+
+    <!-- 获取最优的收款账号 -->
+    <select id="selectReceiveAccountByUpdateTime" resultType="org.xxpay.core.entity.ZMthAccount">
+        select
+            *
+        from t_z_mth_account
+        where `State` = 1
+        order by UpdateTime
+            limit 0,1;
+    </select>
+
+    <!-- 更新数据-->
+    <update id="updateReceiveAccountByUpdateTime" parameterType="org.xxpay.core.entity.ZMthAccount" >
+        update t_z_mth_account
+        set UpdateTime = now()
+        where Id = #{zMthAccount.id};
+    </update>
+
+
+
+
+
+    <!-- *******************************
+                常规业务
+    *******************************  -->
+
+    <!-- 查询当前的惠生活账号列表-->
+    <select id="selectList" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.ZMthAccount" >
+        select
+        Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+        LimitMaxMoney, CreateTime, UpdateTime, Remark, `State`
+        from t_z_mth_account
+        where 1 = 1
+        <if test="zMthAccount.parentId != null">
+            and ParentId = #{zMthAccount.parentId}
+        </if>
+        <if test="zMthAccount.token != null and zMthAccount.token != ''">
+            and Token = #{zMthAccount.token}
+        </if>
+        <if test="zMthAccount.phone != null and zMthAccount.phone != '' ">
+            and Phone = #{zMthAccount.phone}
+        </if>
+        <if test="zMthAccount.storeId != null and zMthAccount.storeId != '' ">
+            and StoreId = #{zMthAccount.storeId}
+        </if>
+        order by UpdateTime desc
+        limit #{page}, #{limit};
+    </select>
+
+    <!-- 计算全数-->
+    <select id="selectListCount" resultType="Integer">
+        select
+        COUNT(*)
+        from t_z_mth_account
+        where 1 = 1
+        <if test="parentId != null">
+            and ParentId = #{parentId}
+        </if>
+    </select>
+
+    <!-- 查询当前的惠生活账号By手机号-->
+    <select id="selectByPhone" resultMap="BaseResultMap" >
+        select
+            Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+            LimitMaxMoney, CreateTime, UpdateTime, Remark, `State`
+        from t_z_mth_account
+        where Phone = #{phone};
+    </select>
+
+    <!-- 查询当前的惠生活账号ByID-->
+    <select id="selectById" resultMap="BaseResultMap" >
+        select
+            Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+            LimitMaxMoney, CreateTime, UpdateTime, Remark, `State`
+        from t_z_mth_account
+        where Id = #{id};
+    </select>
+
+    <!-- 更新数据-->
+    <update id="update" parameterType="org.xxpay.core.entity.ZMthAccount" >
+        update t_z_mth_account
+        set Token = #{zMthAccount.token},
+            Phone = #{zMthAccount.phone},
+            StoreId = #{zMthAccount.storeId},
+            TodayMoney = #{zMthAccount.todayMoney},
+            LimitDayMoney = #{zMthAccount.limitDayMoney},
+            TotalMoney = #{zMthAccount.totalMoney},
+            LimitMaxMoney = #{zMthAccount.limitMaxMoney},
+            UpdateTime = now(),
+            Remark = #{zMthAccount.remark},
+            `State` = #{zMthAccount.state}
+        where Id = #{zMthAccount.id};
+    </update>
+
+    <!-- 添加新的收款账号-->
+    <insert id="insert" parameterType="org.xxpay.core.entity.ZMthAccount">
+        insert into t_z_mth_account (
+            ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+            LimitMaxMoney, CreateTime, AddressId, Remark, `State`
+        )
+        values (
+                   #{zMthAccount.parentId},
+                   #{zMthAccount.token},
+                   #{zMthAccount.phone},
+                   #{zMthAccount.storeId},
+                   0,
+                   #{zMthAccount.limitDayMoney},
+                   0,
+                   #{zMthAccount.limitMaxMoney},
+                   now(),
+                   #{zMthAccount.addressId},
+                   #{zMthAccount.remark},
+                   1
+               )
+    </insert>
+
+    <!-- 删除按钮-->
+    <delete id="deleteByPrimaryKey">
+        delete from t_z_mth_account
+        where Id = #{id};
+    </delete>
+
+
+
+</mapper>

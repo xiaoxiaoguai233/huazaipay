@@ -1,0 +1,161 @@
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>码商管理</cite></a>
+    <a><cite>所有码商</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">码商列表</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-row">
+            <div class="layui-form" style="float:right;">
+              <div class="layui-form-item" style="margin:0;">
+                <div class="layui-input-inline">
+                  <input type="text" name="assistantId" id="assistantId" placeholder="码商ID" autocomplete="off" class="layui-input">
+                </div>
+                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+              </div>
+            </div>
+          </div>
+          <div class="layui-row">
+            <div class="layuiAdmin-btns" style="margin-bottom: 10px;">
+              <a class="layui-btn" lay-href="assistant/list/assistant_add">新增</a>
+            </div>
+          </div>
+          <table id="XxPay_Mgr_assistant_dataAll" lay-filter="XxPay_Mgr_assistant_dataAll"></table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'table', 'util'], function(){
+    var $ = layui.$
+            ,admin = layui.admin
+            ,table = layui.table
+            ,element = layui.element
+            ,form = layui.form;
+
+    element.render('breadcrumb', 'breadcrumb');
+
+    var tplStatus = function(d){
+      if(d.status == 1) {
+        return "<span class='layui-badge layui-bg-green' >启用</span>";
+      }
+      return "<span class='layui-badge layui-bg-red'>停止</span>";
+    };
+
+    var tplEdit = function(d){
+      return "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='infoDetail'>查看信息</a>" +
+              // "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='settConfig'>结算设置</a>" +
+              // "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='passage'>支付通道</a>" +
+              // "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='assistantpayPassage'>代付通道</a>" +
+              "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='change'>余额变更</a>" +
+              /*"<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='pwdReset'>重置密码</a>" +*/
+              "<a class='layui-btn layui-btn-xs' lay-event='edit'>编辑</a>";
+
+    };
+
+    //商户列表
+    table.render({
+      elem: '#XxPay_Mgr_assistant_dataAll'
+      ,url: layui.setter.baseUrl + '/assistant_info/list' //列表接口
+      ,where: {
+          access_token: layui.data(layui.setter.tableName).access_token
+      }
+      ,id: 'tableReload'
+      ,page: true
+      ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field: 'assistantId', title: '码商ID'}
+        ,{field: 'assistantName', title: '码商名称'}
+        ,{field: 'assistantBalance', title: '码商余额', templet: function(d){return d.AssistantBalance / 100;}}
+        ,{field: 'status', title: '状态', templet: tplStatus}
+        ,{field: 'createTime', title: '创建时间', width: 200, templet: '<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'}
+        ,{field: 'edit', title: '操作', width: 480, templet: tplEdit }
+      ]]
+      ,skin: 'line'
+    });
+
+    //监听工具条
+    table.on('tool(XxPay_Mgr_assistant_dataAll)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'infoDetail'){
+        location.href = layui.setter.baseLocal + "assistant/list/assistant_view/assistantId=" + data.assistantId;
+      } else if(obj.event === 'accountDetail'){
+        location.href = layui.setter.baseLocal + "assistant/list/account_view/assistantId=" + data.assistantId;
+      } else if(obj.event === 'settConfig'){
+        location.href = layui.setter.baseLocal + "assistant/list/assistant_sett/assistantId=" + data.assistantId;
+      } else if(obj.event === 'passage'){
+        location.href = layui.setter.baseLocal + "assistant/passage/list/assistantId=" + data.assistantId;
+      } else if(obj.event === 'assistantpayPassage'){
+        location.href = layui.setter.baseLocal + "assistant/assistantpay_passage/list/assistantId=" + data.assistantId;
+      } else if(obj.event === 'pwdReset'){
+        layer.prompt({
+          formType: 1,
+          title: '请输入新密码'
+        }, function(value, index, elem){
+          admin.req({
+            type: 'get',
+            url: layui.setter.baseUrl + '/assistant_info/pwd_reset',
+            data: {
+              assistantId : data.assistantId,
+              password : value
+            },
+            error: function(err){
+              layer.alert(JSON.stringify(err.field), {
+                title: '错误提示'
+              })
+            },
+            success: function(res){
+              if(res.code == 0){
+                layer.msg('修改成功', {icon: 1});
+              }
+            }
+          });
+          layer.close(index);
+        });
+
+      }else if(obj.event === 'change'){
+        location.href = layui.setter.baseLocal + "assistant/list/assistant_change/assistantId=" + data.assistantId;
+      }else if(obj.event === 'edit'){
+        location.href = layui.setter.baseLocal + "assistant/list/assistant_edit/assistantId=" + data.assistantId;
+      }
+    });
+
+    // 搜索
+    var $ = layui.$, active = {
+      reload: function(){
+        var assistantId = $('#assistantId').val();
+        var type = $("#type").val();
+        //执行重载
+        table.reload('tableReload', {
+          page: {
+            curr: 1 //重新从第 1 页开始
+          }
+          ,where: {
+            assistantId: assistantId,
+            type : type
+          }
+        });
+      }
+    };
+    $('#search').on('click', function() {
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+    // 渲染表单
+    form.render();
+  });
+</script>

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="92936b5c-378f-4e1c-8701-9278998826fc" name="Changes" comment="更新上传" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Interface" />
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="enabledProfiles">
+      <list>
+        <option value="dev" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="2JO8geNr6DnwQ1bBYKPeCePKBLR" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelOrder2&quot;: &quot;2&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth2&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/WorkSpace/IntelliJ_IDEA/huazaipay/xxpay-manage/src/main/resources/static/x_mgr/src/views/receive/ssskm/online&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;0a986178d8a365d7492488ed19725c8a&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-manage\src\main\resources\static\x_mgr\src\views\receive\ssskm\online" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-manage\src\main\resources\static\x_mgr\src\views\receive\ssskm" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-assistant\src\main\resources\static\x_assistant\start\layui\css\modules\laydate\default" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-assistant\src\main\resources\static\x_assistant\start\layui\css\modules\layer\default" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-assistant\src\main\resources\static\x_assistant\src\views\receive\ssskm" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-manage\src\main\resources\static\x_mgr\src\views\receive\ssskm" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-manage\src\main\resources\static\x_mgr\src\views\receive\ssskm\receive_account" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-pay\src\main\resources\templates\paycenter\ssskm" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-pay\src\main\resources\templates\paycenter" />
+      <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-assistant\src\main\java\org\xxpay" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.xxpay.asst.receive.ctrl" />
+      <recent name="org.xxpay.asst.ctrl" />
+      <recent name="org.xxpay.pay.util" />
+      <recent name="org.xxpay.pay.channel.alipay" />
+      <recent name="org.xxpay.manage.assistant.ctrl" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn package" />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.order.html">
+    <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.paydemo.main" />
+      <module name="paydemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.paydemo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="order.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/huazaipay/xxpay-assistant/static/x_assistant/src/views/receive/ssskm/order.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="PayDemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="paydemo" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.paydemo.PayDemoApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.paydemo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayAgentApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-agent" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.XxPayAgentApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayAssistantApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="ACTIVE_PROFILES" />
+      <module name="xxpay-assistant" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.XxPayAssistantApplication" />
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayManageApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="ACTIVE_PROFILES" />
+      <module name="xxpay-manage" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.XxPayManageApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.xxpay.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayMerchantApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="xxpay-merchant" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.XxPayMerchantApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.xxpay.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayPayAppliaction" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-pay" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.pay.XxPayPayAppliaction" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayServiceAppliaction" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.service.XxPayServiceAppliaction" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayTaskApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-task" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.task.XxPayTaskApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.main" />
+      <item itemvalue="JavaScript Debug.order.html" />
+      <item itemvalue="Spring Boot.XxPayServiceAppliaction" />
+      <item itemvalue="Spring Boot.XxPayPayAppliaction" />
+      <item itemvalue="Spring Boot.XxPayAgentApplication" />
+      <item itemvalue="Spring Boot.XxPayTaskApplication" />
+      <item itemvalue="Spring Boot.XxPayAssistantApplication" />
+      <item itemvalue="Spring Boot.XxPayMerchantApplication" />
+      <item itemvalue="Spring Boot.XxPayManageApplication" />
+      <item itemvalue="Spring Boot.PayDemoApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.XxPayManageApplication" />
+        <item itemvalue="Spring Boot.XxPayMerchantApplication" />
+        <item itemvalue="Spring Boot.PayDemoApplication" />
+        <item itemvalue="JavaScript Debug.order.html" />
+        <item itemvalue="Application.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="92936b5c-378f-4e1c-8701-9278998826fc" name="Changes" comment="" />
+      <created>1671937883433</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1671937883433</updated>
+      <workItem from="1671937885957" duration="28364000" />
+      <workItem from="1671979640609" duration="2362000" />
+      <workItem from="1672041856857" duration="4759000" />
+      <workItem from="1672120643036" duration="10782000" />
+      <workItem from="1672397185454" duration="454000" />
+      <workItem from="1672397647077" duration="2192000" />
+      <workItem from="1673024356148" duration="632000" />
+      <workItem from="1673253065878" duration="957000" />
+      <workItem from="1673283020878" duration="2382000" />
+      <workItem from="1673421108386" duration="7000" />
+      <workItem from="1673625220384" duration="343000" />
+      <workItem from="1673850908396" duration="3519000" />
+      <workItem from="1673938100226" duration="6027000" />
+      <workItem from="1674031948176" duration="5201000" />
+      <workItem from="1674376654306" duration="20627000" />
+      <workItem from="1674891400981" duration="23160000" />
+      <workItem from="1675751863845" duration="32442000" />
+      <workItem from="1675889828880" duration="203000" />
+      <workItem from="1675890129853" duration="112636000" />
+      <workItem from="1676532995820" duration="9353000" />
+      <workItem from="1676584254569" duration="10000" />
+      <workItem from="1676584327517" duration="37000" />
+      <workItem from="1676705227108" duration="35000" />
+      <workItem from="1676705279851" duration="1262000" />
+      <workItem from="1676780109021" duration="594000" />
+      <workItem from="1676781271426" duration="87391000" />
+      <workItem from="1677738803587" duration="14997000" />
+      <workItem from="1677931667847" duration="11000" />
+      <workItem from="1678083752354" duration="12739000" />
+      <workItem from="1678169403784" duration="3575000" />
+      <workItem from="1678252468770" duration="8344000" />
+      <workItem from="1678343123756" duration="6332000" />
+      <workItem from="1678519461447" duration="14397000" />
+      <workItem from="1678915355262" duration="10393000" />
+      <workItem from="1678995132298" duration="6125000" />
+      <workItem from="1679053761706" duration="16763000" />
+      <workItem from="1679130940304" duration="14000" />
+      <workItem from="1679268806406" duration="21924000" />
+      <workItem from="1679348479911" duration="4000" />
+      <workItem from="1679518584288" duration="1275000" />
+      <workItem from="1680313175012" duration="2730000" />
+      <workItem from="1680525288185" duration="681000" />
+      <workItem from="1680878393764" duration="748000" />
+      <workItem from="1681929648819" duration="4000" />
+      <workItem from="1683603093014" duration="1490000" />
+      <workItem from="1683706506788" duration="27778000" />
+      <workItem from="1684909428643" duration="14196000" />
+      <workItem from="1685126861635" duration="1339000" />
+      <workItem from="1685131102078" duration="54751000" />
+      <workItem from="1685595219228" duration="1333000" />
+      <workItem from="1685624855020" duration="798000" />
+      <workItem from="1685647702330" duration="527000" />
+      <workItem from="1685892047644" duration="1668000" />
+      <workItem from="1686392718677" duration="1805000" />
+      <workItem from="1686507783590" duration="933000" />
+      <workItem from="1686562716183" duration="6629000" />
+      <workItem from="1686703557165" duration="112000" />
+      <workItem from="1686926184624" duration="623000" />
+      <workItem from="1686928382915" duration="4095000" />
+      <workItem from="1687117190659" duration="5104000" />
+      <workItem from="1687630480221" duration="101000" />
+      <workItem from="1687704127931" duration="15510000" />
+      <workItem from="1687804145875" duration="3682000" />
+      <workItem from="1687808412577" duration="29895000" />
+      <workItem from="1688013090652" duration="26000" />
+      <workItem from="1688013202502" duration="398000" />
+      <workItem from="1688014018941" duration="16351000" />
+      <workItem from="1688080266798" duration="35554000" />
+      <workItem from="1688218268866" duration="64124000" />
+      <workItem from="1688476269759" duration="34007000" />
+      <workItem from="1688878889573" duration="32000" />
+      <workItem from="1688882045848" duration="2459000" />
+      <workItem from="1688999492543" duration="1086000" />
+      <workItem from="1689049229210" duration="1461000" />
+      <workItem from="1689091699475" duration="3464000" />
+      <workItem from="1689227298202" duration="3663000" />
+      <workItem from="1690219505979" duration="176000" />
+      <workItem from="1690990058629" duration="37726000" />
+      <workItem from="1691346183066" duration="10146000" />
+      <workItem from="1691394408578" duration="6359000" />
+      <workItem from="1691650889205" duration="8833000" />
+      <workItem from="1692395493647" duration="13126000" />
+      <workItem from="1692947518602" duration="2485000" />
+      <workItem from="1693148078881" duration="860000" />
+      <workItem from="1693417780000" duration="7855000" />
+      <workItem from="1693582969141" duration="5331000" />
+      <workItem from="1693684703729" duration="6018000" />
+      <workItem from="1693722869175" duration="57000" />
+      <workItem from="1693843202916" duration="771000" />
+      <workItem from="1694029015170" duration="16445000" />
+      <workItem from="1694285915122" duration="10000" />
+      <workItem from="1694357229782" duration="63913000" />
+      <workItem from="1694585184672" duration="35000" />
+      <workItem from="1694586513173" duration="6000" />
+      <workItem from="1694586538551" duration="9000" />
+      <workItem from="1694656961766" duration="18000" />
+      <workItem from="1694658019872" duration="1131000" />
+      <workItem from="1694904885818" duration="1144000" />
+      <workItem from="1694982522981" duration="28585000" />
+      <workItem from="1695335519917" duration="7816000" />
+      <workItem from="1696428792997" duration="4879000" />
+      <workItem from="1697009895267" duration="7847000" />
+      <workItem from="1697096389547" duration="1427000" />
+      <workItem from="1697125973442" duration="1606000" />
+      <workItem from="1697182762325" duration="559000" />
+      <workItem from="1697226125284" duration="2041000" />
+      <workItem from="1697399724871" duration="8630000" />
+      <workItem from="1698179563486" duration="1049000" />
+      <workItem from="1698451984599" duration="794000" />
+      <workItem from="1698722909265" duration="267000" />
+      <workItem from="1698803630081" duration="11264000" />
+      <workItem from="1698979785604" duration="206000" />
+    </task>
+    <task id="LOCAL-00001" summary="update">
+      <created>1672397403033</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1672397403033</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="更新上传" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新上传" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

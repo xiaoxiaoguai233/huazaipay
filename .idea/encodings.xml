@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/demo/java/paydemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo/java/paydemo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo/java/paydemo/src/main/webapp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-agent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-assistant/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-manage/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-merchant/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-pay/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xxpay-task/src/main/java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

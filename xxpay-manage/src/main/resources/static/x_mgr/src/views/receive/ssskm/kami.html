@@ -1,0 +1,154 @@
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>实时收款码</cite></a>
+        <a><cite>卡密管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">收款账号列表</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row">
+                        <div class="layui-form">
+                            <div class="layui-form-item" style="margin:0;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="phone" id="phone" placeholder="手机号" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="token" id="token" placeholder="Token" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="storeId" id="storeId" placeholder="商店编号" autocomplete="off" class="layui-input">
+                                </div>
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row" style="margin-top: 20px;">
+                        <div class="layuiAdmin-btns" style="margin-bottom: 10px;">
+                            <a class="layui-btn" lay-href="/receive/slrj/receive_account/slrj_add">新增</a>
+                        </div>
+                    </div>
+                    <table id="XxPay_Mgr_Agent_dataAll" lay-filter="XxPay_Mgr_Agent_dataAll"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'table', 'util'], function(){
+        var $ = layui.$
+            ,admin = layui.admin
+            ,table = layui.table
+            ,element = layui.element
+            ,form = layui.form;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        // 状态 1-正常，2-禁用，3-限额
+        var tplStatus = function(d){
+            if(d.state == 1) {
+                return "<span class='layui-badge layui-bg-green'>启用</span>";
+            }else if(d.state == 2) {
+                return "<span class='layui-badge'>禁用</span>";
+            }
+            return "<span class='layui-badge layui-bg-orange'>限额</span>";
+        };
+
+        // 操作栏按钮
+        var tplEdit = function(d){
+            return "<a class='layui-badge layui-bg-green layui-btn layui-btn-xs' lay-event='edit'>编辑</a>" +
+                '<a class="layui-badge layui-btn layui-btn-xs layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+        };
+
+        //商户列表
+        table.render({
+            elem: '#XxPay_Mgr_Agent_dataAll'
+            ,url: layui.setter.baseUrl + '/receive/slrj/account/list' //列表接口
+            ,where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            ,id: 'tableReload'
+            ,page: true
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: 'ID'}
+                // ,{field: 'parentId', title: '创建用户'}
+                ,{field: 'parentName', title: '创建用户'}
+                ,{field: 'phone', title: '手机号(码商)'}
+                // ,{field: 'storeId', title: '取货商店编号'}
+                ,{field: 'token', title: 'Token'}
+                ,{field: 'todayMoney', title: '今日额度', templet: function(d){return d.todayMoney / 100;}}
+                ,{field: 'limitDayMoney', title: '今日限制额度', templet: function(d){return d.limitDayMoney / 100;}}
+                ,{field: 'totalMoney', title: '账号收款总额', templet: function(d){return d.totalMoney / 100;}}
+                ,{field: 'limitMaxMoney', title: '账号限制总额', templet: function(d){return d.limitMaxMoney / 100;}}
+                ,{field: 'status', title: '状态', templet: tplStatus}
+                ,{field: 'createTime', title: '创建时间', width: 200, templet: '<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'}
+                ,{field: 'updateTime', title: '更新时间', width: 200, templet: '<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'}
+                ,{field: 'edit', title: '操作', templet: tplEdit }
+            ]],
+            skin: 'line',
+            limit: 100
+        });
+
+        //监听工具条
+        table.on('tool(XxPay_Mgr_Agent_dataAll)', function(obj){
+            if(obj.event === 'edit'){
+                location.href = layui.setter.baseLocal + "receive/slrj/receive_account/slrj_edit/id=" + obj.data.id;
+            } else if(obj.event === 'del'){
+                console.log(obj.data);
+                layer.confirm('确认删除么', function(index){
+                    admin.req({
+                        type: 'get',
+                        url: layui.setter.baseUrl + '/receive/slrj/account/delete',
+                        data: {
+                            id: obj.data.id,
+                        },
+                        success: function(res){
+                            if(res.code == 0) {
+                                layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                                table.reload("tableReload");
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function(){
+                var phone = $('#phone').val();
+                var token = $("#token").val();
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        token: token,
+                        phone : phone
+                    }
+                });
+            }
+        };
+
+        $('#search').on('click', function() {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        // 渲染表单
+        form.render();
+    });
+</script>

@@ -1,0 +1,3 @@
+# Project exclude paths
+/xxpay-agent/src/main/resources/static/x_agent/node_modules/
+/xxpay-assistant/src/main/resources/static/x_assistant/node_modules/

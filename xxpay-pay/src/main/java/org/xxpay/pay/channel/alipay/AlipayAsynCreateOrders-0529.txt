@@ -1,0 +1,140 @@
+package org.xxpay.pay.channel.alipay;
+
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import org.xxpay.core.common.constant.PayConstant;
+import org.xxpay.core.common.util.MyLog;
+import org.xxpay.core.entity.PayOrder;
+import org.xxpay.core.entity.SysUser;
+import org.xxpay.core.entity.ZSlrjAccount;
+import org.xxpay.pay.constant.CS;
+import org.xxpay.pay.service.RpcCommonService;
+import org.xxpay.pay.util.RedisUtil;
+import java.net.URLEncoder;
+
+@Component
+@Slf4j
+public class AlipayAsynCreateOrders {
+
+    private static final MyLog _log = MyLog.getLog(AlipayAsynCreateOrders.class);
+
+    @Autowired public RpcCommonService rpcCommonService;
+
+    /**
+     * 查询订单状态
+     * @throws InterruptedException
+     */
+    @Async()
+    public int Alipay_SLRJ_App(PayOrder payOrder) throws Exception {
+        String logPrefix = "【8024-支付宝原生任额-8024】";
+        JSONObject retObj = new JSONObject();
+
+        _log.info("{} ==== {} ", logPrefix, payOrder.getPayOrderId());
+
+        // 获取收款账号
+        ZSlrjAccount zSlrjAccount = rpcCommonService.rpcZSlrjAccountService.selectReceiveAccountByUpdateTime();
+        if(zSlrjAccount == null){
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "获取收款账号失败");
+//            return retObj;
+        }
+
+        // 给订单添加手机号, 和码商名称
+        SysUser sysUser = rpcCommonService.rpcSysService.findByUserId(zSlrjAccount.getParentId());
+
+        int res_update_phone = rpcCommonService.rpcPayOrderService.updatePhoneAndChannelUserByOrderId(payOrder.getPayOrderId(), zSlrjAccount.getPhone(), sysUser.getNickName());
+        if(res_update_phone == 0){
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "订单更新收款账号失败");
+//            return retObj;
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("amount", "1");
+        jsonObject.put("invoice_amt", String.valueOf(payOrder.getAmount() / 100));
+        jsonObject.put("value", String.valueOf(payOrder.getAmount() / 100));
+        jsonObject.put("auth_token", zSlrjAccount.getToken());
+
+        // TODO 1. 获取订单号
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"), String.valueOf(jsonObject));
+
+        Request request_getOrder = new Request.Builder()
+                .url("https://app.homeinns.com/api/v4/giftcards/buy")
+                .post(body)
+                .build();
+
+        Response response = new OkHttpClient().newCall(request_getOrder).execute();
+
+        JSONObject json = JSONObject.parseObject(response.body().string());
+        _log.info("{} === 拉起订单结果： {} ===", payOrder.getPayOrderId(), json);
+
+        String orderSn = null;      // SLRJ平台订单
+        // 获取支付链接（过期时间24H）成功
+        if (json.getString("result").equals("购买成功")){
+            orderSn = json.getJSONObject("data").getString("order_no");
+        }else{
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "获取支付链接失败，请联系相关技术人员1002");
+//            return retObj;
+        }
+
+        jsonObject = new JSONObject();
+        jsonObject.put("order_no", orderSn);
+        jsonObject.put("price", String.valueOf(payOrder.getAmount() / 100));
+        jsonObject.put("auth_token", zSlrjAccount.getToken());
+
+        // TODO 2. 获取支付链接
+        RequestBody body_ = RequestBody.create(
+                MediaType.parse("application/json"), String.valueOf(jsonObject));
+        Request request_getPayLink = new Request.Builder()
+                .url("https://app.homeinns.com/api/v4/giftcards/buy")
+                .post(body_)
+                .build();
+        Response response_payLink = new OkHttpClient().newCall(request_getPayLink).execute();
+
+        JSONObject json_ = JSONObject.parseObject(response_payLink.body().string());
+        _log.info("{} === 拉起支付链接结果： {} ===", payOrder.getPayOrderId(), json_);
+
+        String result_ = null;      // 三喜生活平台订单
+        // 获取支付链接（过期时间24H）成功
+        if (json_.getInteger("result_code") == 0 && json_.getJSONObject("data").getString("price").equals( String.valueOf(payOrder.getAmount() / 100))){
+            result_ = json_.getString("result");
+        }else{
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "获取支付链接失败，请联系相关技术人员1003");
+//            return retObj;
+        }
+
+        // 将结果链接编码
+        result_ = "alipays://plarformapi/startapp?appId=20000125&orderSuffix=" + URLEncoder.encode( result_, "UTF-8" );
+
+        // Redis添加查单信息
+        JSONObject redis_param = new JSONObject();
+        redis_param.put("payOrderId", payOrder.getPayOrderId());
+        redis_param.put("phone", zSlrjAccount.getPhone());
+        redis_param.put("token", zSlrjAccount.getToken());
+        redis_param.put("orderSn", orderSn);
+        redis_param.put("amount", String.valueOf(payOrder.getAmount() / 100));
+        redis_param.put("status", "1");
+        redis_param.put("method", "alipay");
+        redis_param.put("payLink", result_);
+        RedisUtil.setString(payOrder.getPayOrderId(), redis_param.toJSONString(), CS.CHANNEL_KEY_TIME);
+
+        // 填充支付链接到相关的app
+        retObj.put(PayConstant.RETURN_PARAM_RETCODE, PayConstant.RETURN_VALUE_SUCCESS);
+
+
+        // 更改支付状态为支付中
+        rpcCommonService.rpcPayOrderService.updateStatus4Ing(payOrder.getPayOrderId(), null);
+
+//        return retObj;
+        return 1;
+    }
+}

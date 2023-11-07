@@ -1,0 +1,137 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>电子账户管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">选择商户ID</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row">
+                        <div class="layui-form" style="float:left; margin-bottom: 10px;">
+                            <div class="layui-form-item" style="margin:0;">
+
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchId" id="mchId" placeholder="商户ID" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchName" id="mchName" placeholder="商户名称" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <table id="XxPay_Mgr_PayOrder_dataAll" lay-filter="XxPay_Mgr_PayOrder_dataAll"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="xxpayBar">
+   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="chooseMchId">确定</a>
+</script>
+<!--<script type="text/html" id="indexTpl">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>-->
+<script>
+    layui.use(['admin', 'table', 'util', 'laydate'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , element = layui.element
+            , laydate = layui.laydate
+            , form = layui.form;
+
+        element.render('breadcrumb', 'breadcrumb');
+        $.setCountResult = function (mchId, name, type, status, createTimeStart, createTimeEnd) {
+            admin.req({
+                type: 'get',
+                url: layui.setter.baseUrl + '/trade_order/stat',
+                data: {
+                    createTimeStart: createTimeStart,
+                    createTimeEnd: createTimeEnd
+                },
+                error: function (err) {
+                    layer.alert(JSON.stringify(err.field), {
+                        title: '错误提示'
+                    })
+                },
+                success: function (res) {
+
+                }
+            });
+        };
+
+
+        // 初始化统计结果
+        $.setCountResult();
+
+        //用户列表
+        table.render({
+            elem: '#XxPay_Mgr_PayOrder_dataAll'
+            , url: layui.setter.baseUrl + '/trade_order/account' //用户列表接口
+            , where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            , id: 'tableReload'
+            , page: true
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'mchId', title: '商户ID'}
+                , {field: 'name', title: '商户名称'}
+                , {field: 'choosed', title: '选择确定', toolbar: '#xxpayBar'}
+            ]]
+            , skin: 'line'
+        });
+
+
+        //监听工具条
+        table.on('tool(XxPay_Mgr_PayOrder_dataAll)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'chooseMchId') {
+                window.parent.layui.$("#mchId").val(data.mchId);
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            }
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var mchId = $('#mchId').val();
+                var name = $('#mchName').val();
+                $.setCountResult(mchId, name);
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        mchId: mchId,
+                        name: name
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        form.render();
+    });
+</script>
+
+

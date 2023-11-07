@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>商户系统 - </title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon" href="x_mch/start/layui/images/favicon.ico" />
+    <link rel="stylesheet" href="x_mch/start/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="x_mch/src/style/login.css" media="all">
+</head>
+<body style="position: relative;">
+<div class="page">
+    <!-- nav部分 -->
+    <div class="layui-header header-index" winter>
+        <!-- 公司logo -->
+        <a class="logo layui-hide-xs" href="/index.html" id="siteLogo"></a>
+        <ul class="layui-nav xxpay-nav" lay-filter="xxpay_nav">
+            <li class="layui-nav-item layui-this"><a href="/index.html">首页</a></li>
+            <li class="layui-nav-item"><a href="/demo.html">支付体验</a></li>
+            <li class="layui-nav-item"><a href="x_mch/start/index.html"><button class="layui-btn mch-login">商户登录</button></a></li>
+        </ul>
+        <div class="main-title">
+            <p id="mainAdvert"></p>
+            <p id="subAdvert"></p>
+        </div>
+        <div class="main-product xxpay-position" style="padding-bottom: 10px;">
+            <div class="layui-container">
+                <div class="layui-row layui-col-space30">
+                    <div class="layui-col-xs6 layui-col-md3">
+                        <div class="content">
+                            <div class="image_group">
+                                <img src="x_mch/start/layui/images/imgs/payproduct.png">
+                                <img src="x_mch/start/layui/images/imgs/payproduct_hover.png">
+                            </div>
+                            <div>
+                                <p class="label">支付产品</p>
+                                <p class="label2">提供微信、支付宝、云闪付等聚合收款产品</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6 layui-col-md3 ">
+                        <div class="content">
+                            <div class="image_group">
+                                <img src="x_mch/start/layui/images/imgs/mgrutil.png">
+                                <img src="x_mch/start/layui/images/imgs/mgrutil_hover.png">
+                            </div>
+                            <div>
+                                <p class="label">运营工具</p>
+                                <p class="label2">包括运行平台、代理商系统、码商系统、商户系统</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6 layui-col-md3 ">
+                        <div class="content">
+                            <div class="image_group">
+                                <img src="x_mch/start/layui/images/imgs/moneymgr.png">
+                                <img src="x_mch/start/layui/images/imgs/moneymgr_hover.png">
+                            </div>
+                            <div>
+                                <p class="label">资金管理</p>
+                                <p class="label2">为商家提供收款、代付等资金解决方案</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6 layui-col-md3 ">
+                        <div class="content">
+                            <div class="image_group">
+                                <img src="x_mch/start/layui/images/imgs/manage.png">
+                                <img src="x_mch/start/layui/images/imgs/manage_hover.png">
+                            </div>
+                            <div>
+                                <p class="label">扩展工具</p>
+                                <p class="label2">开放技术能力，提供安全稳定的API接口</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-product  layui-hide-sm layui-hide-lg layui-hide-md">
+        <p class="title">行业解决方案</p>
+        <div class="layui-carousel" id="banner">
+            <div carousel-item>
+                <div style="background: url('https://wx.gtimg.com/pay/img/home/solution/1.jpg') no-repeat rgb(245, 241, 206);width:100%;">
+                    <div class="xxpay-carousel-item">
+                        <p>智慧电商</p>
+                        <p>随着巨头的形成，流量获取越加困难，获客成本居高不下。我们希望通过汇智整合能力，帮助电商从业者挖掘到新的流量洼地，整合公众平台内容、服务等多方能力，为用户提供更友好的购物体验。</p>
+                    </div>
+                </div>
+                <div style="background: url('https://wx.gtimg.com/pay/img/home/solution/2.jpg') no-repeat rgb(245, 241, 206);width:100%;">
+                    <div class="xxpay-carousel-item">
+                        <p>商超便利店</p>
+                        <p>商超便利店行业逐步在开展智慧门店项目。用户进店后，即可识别身份，在门店进行小程序扫码购、自助收银等自助服务；支付前后，企业可运用汇智大数据，对用户进行精准触达，提升转化率、客单与复购。</p>
+                    </div>
+                </div>
+                <div style="background: url('https://wx.gtimg.com/pay/img/home/solution/3.jpg') no-repeat rgb(245, 241, 206);width:100%;">
+                    <div class="xxpay-carousel-item">
+                        <p>高校</p>
+                        <p>汇智触达能力协助学校精准触达到每一位师生；汇智小程序则可将教务、教学设施和生活设施的管理线上化；同时汇智智慧校园卡也让学生可以做到免带卡畅行校园，实现无卡进出图书馆，线下消费等。</p>
+                    </div>
+                </div>
+                <div style="background: url('https://wx.gtimg.com/pay/img/home/solution/4.jpg') no-repeat rgb(245, 241, 206);width:100%;">
+                    <div class="xxpay-carousel-item">
+                        <p>停车场</p>
+                        <p>我们希望通过汇智智慧停车场自助化服务流程，随时随地缴纳停车费，无需排队等待，并提供自助查车、寻车、缴费，大量释放人力，收集顾客造访状态，与顾客实时交流，提供多种异业合作可能。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-product layui-hide-xs" style="margin-top: 100px; padding-bottom: 10px;">
+        <p class="title">行业解决方案</p>
+        <div class="accordion">
+            <ul>
+                <li style="background: url('https://wx.gtimg.com/pay/img/home/solution/1.jpg') no-repeat rgb(245, 241, 206);width:190px;">
+                    <a class="link-area" href="javascript:void(0);" target="_blank"></a>
+                    <div class="text-area">
+                        <i class="ico ico-ecommerce"></i>
+                        <h3 class="tit underline">智慧电商</h3>
+                        <p class="txt">随着巨头的形成，流量获取越加困难，获客成本居高不下。我们希望通过汇智整合能力，帮助电商从业者挖掘到新的流量洼地，整合公众平台内容、服务等多方能力，为用户提供更友好的购物体验。</p>
+                        <p class="opt">了解详情</p>
+                    </div>
+                    <div class="text-mask"></div>
+                </li>
+                <li class="selected" style="background: url('https://wx.gtimg.com/pay/img/home/solution/2.jpg') no-repeat rgb(254, 253, 251);width:1333px;">
+                    <a class="link-area" href="javascript:void(0);" target="_blank"></a>
+                    <div class="text-area">
+                        <i class="ico ico-supermarket"></i>
+                        <h3 class="tit underline">商超便利店</h3>
+                        <p class="txt">商超便利店行业逐步在开展智慧门店项目。用户进店后，即可识别身份，在门店进行小程序扫码购、自助收银等自助服务；支付前后，企业可运用汇智大数据，对用户进行精准触达，提升转化率、客单与复购。</p>
+                        <p class="opt">了解详情</p>
+                    </div>
+                    <div class="text-mask"></div>
+                </li>
+                <li style="background: url('https://wx.gtimg.com/pay/img/home/solution/3.jpg') no-repeat rgb(242, 237, 234);width:190px;">
+                    <a class="link-area" href="javascript:void(0);" target="_blank"></a>
+                    <div class="text-area">
+                        <i class="ico ico-school"></i>
+                        <h3 class="tit underline">高校</h3>
+                        <p class="txt">汇智触达能力协助学校精准触达到每一位师生；汇智小程序则可将教务、教学设施和生活设施的管理线上化；同时汇智智慧校园卡也让学生可以做到免带卡畅行校园，实现无卡进出图书馆，线下消费等。</p>
+                        <p class="opt">了解详情</p>
+                    </div>
+                    <div class="text-mask"></div>
+                </li>
+                <li style="background: url('https://wx.gtimg.com/pay/img/home/solution/4.jpg') no-repeat rgb(247, 246, 242);width:190px;">
+                    <a class="link-area" href="javascript:void(0);" target="_blank"></a>
+                    <div class="text-area">
+                        <i class="ico ico-parking"></i>
+                        <h3 class="tit underline">停车场</h3>
+                        <p class="txt">我们希望通过汇智智慧停车场自助化服务流程，随时随地缴纳停车费，无需排队等待，并提供自助查车、寻车、缴费，大量释放人力，收集顾客造访状态，与顾客实时交流，提供多种异业合作可能。</p>
+                        <p class="opt">了解详情</p>
+                    </div>
+                    <div class="text-mask"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-product" style="padding-bottom: 70px;">
+        <div class="layui-container">
+            <p class="title">接入聚合支付</p>
+            <div class="layui-row layui-col-space30">
+                <div class="layui-col-xs12 layui-col-md3">
+                    <div class="regcontent">
+                        <div class="regtitle">
+                            <p class="text">1</p>
+                        </div>
+                        <div class="regtext">
+                            <img src="x_mch/start/layui/images/imgs/regmch.png">
+                            <p class="label">申请商户</p>
+                        </div>
+                        <div class="regDes">申请成为平台商户</div>
+                    </div>
+                </div>
+                <div class="layui-col-md1 layui-hide-xs">
+                    <div class="dayucontent">
+                        <img class="dayu" src="x_mch/start/layui/images/imgs/dayu.png">
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-md3">
+                    <div class="regcontent">
+                        <div class="regtitle">
+                            <p class="text">2</p>
+                        </div>
+                        <div class="regtext">
+                            <img src="x_mch/start/layui/images/imgs/api.png">
+                            <p class="label">对接API</p>
+                        </div>
+                        <div class="regDes">集成SDK或对接API按文档所需进行对接即可</div>
+                    </div>
+                </div>
+                <div class="layui-col-md1 layui-hide-xs">
+                    <div class="dayucontent">
+                        <img class="dayu" src="x_mch/start/layui/images/imgs/dayu.png">
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-md3">
+                    <div class="regcontent">
+                        <div class="regtitle">
+                            <p class="text">3</p>
+                        </div>
+                        <div class="regtext">
+                            <img src="x_mch/start/layui/images/imgs/use.png">
+                            <p class="label">正式使用</p>
+                        </div>
+                        <div class="regDes">集成好后即可使用聚合支付啦</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- footer部分 -->
+<div class="footer">
+    <div class="layui-container">
+        <div class="layui-row footer-contact">
+            <div class="layui-col-xs12 layui-col-md6 layui-row">
+                <div class="layui-col-xs4 layui-col-md4">
+                    <h2 style="color: #ffffff">关于我们</h2><br /><br />
+                    <a href="javascript:void(0);">关于我们</a><br />
+                </div>
+                <div class="layui-col-xs4 layui-col-md4">
+                    <h2>服务支持</h2><br /><br />
+                    <a href="javascript:void(0);">开发文档</a>
+                </div>
+                <div class="layui-col-xs4 layui-col-md4">
+                    <h2>联系我们</h2><br /><br />
+                    <a id="serviceTel"></a><br /><br />
+                    <a id="serviceQQ"></a><br /><br />
+                </div>
+            </div>
+            <div class="layui-hide-xs layui-col-md6">
+                <div style="width:50%;margin-left: 50%">
+                    <h2>合作伙伴</h2><br /><br />
+                    <img src="/images/alipay.png"/>&nbsp;&nbsp;
+                    <img src="/images/wxpay.png"/>
+                </div>
+            </div>
+        </div>
+        <div id="copyRight" style="color: rgba(255,255,255,0.4);margin:15px auto;text-align: center"></div>
+    </div>
+</div>
+<script src="x_mch/start/layui/layui.js"></script>
+<script>
+    layui.use(['carousel', 'form'], function(){
+        var carousel = layui.carousel
+            ,$ = layui.$
+            ,form = layui.form;
+
+        //变更网站标题
+        $.ajax({
+            async: false, type: 'get',
+            url: 'api/auth/siteTitle',
+            success: function(res){
+                $('title').append(res.data.siteTitle);
+                $("#siteLogo").append('<img src="'+res.data.siteLogo+'" style="height: 30px;width: 120px;" alt="'+res.data.siteTitle+'">');
+                $("#copyRight").text(res.data.copyRight);
+                $("#mainAdvert").text(res.data.mainAdvert);
+                $("#subAdvert").text(res.data.subAdvert);
+                $("#serviceTel").append(res.data.serviceTel);
+                $("#serviceQQ").append(res.data.serviceQQ);
+            }
+        });
+
+        //建造实例
+        carousel.render({
+            elem: '#banner'
+            ,width: '100%' //设置容器宽度
+            ,height: '300px'
+        });
+
+        function initSlide() {
+            var size = $(".accordion ul li").length;
+            var width = $(window).width();
+            var slideWidth = width - 190 * (size - 1);
+            $(".accordion ul li.selected").css('width', slideWidth);
+        }
+        $( window ).resize(function() {
+            initSlide();
+        });
+        $( document ).ready(function() {
+            initSlide();
+        });
+        $(".accordion ul li").mouseover(function(){
+            var _index=0;
+            _index=$(this).index();
+            var size = $(".accordion ul li").length;
+            var width = $(window).width();
+            var slideWidth = width - 190 * (size - 1);
+            $(this).stop().animate({width:slideWidth},500).siblings("li").stop().animate({width:190},500);
+            $(".accordion ul li").eq(_index).addClass("selected").siblings(".accordion ul li").removeClass("selected");
+        });
+        form.render();
+
+    });
+</script>
+</body>
+</html>
+
+
+
