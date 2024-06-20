@@ -1,0 +1,157 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>新天龙八部</cite></a>
+        <a><cite>编辑收款账号</cite></a>
+    </div>
+</div>
+
+<style>
+    .layui-form-label {
+        width:15% !important;
+        margin-left:1%;
+    }
+    .layui-input-inline {
+        width: 33% !important;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本信息</li>
+                </ul>
+                <input type="hidden" id="id" name="id" class="layui-input">
+                <div class="layui-tab-content">
+                    <div class="layui-form-item">
+                        <!--                        <label class="layui-form-label">手机号</label>-->
+                        <!--                        <div class="layui-input-inline">-->
+                        <!--                            <input type="text" id="phone" name="phone" readonly lay-verify="required" placeholder="输入手机号" autocomplete="off" class="layui-input">-->
+                        <!--                        </div>-->
+                        <label class="layui-form-label">游戏账号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="token" name="token" lay-verify="required" placeholder="输入Token" autocomplete="off" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-inline">
+                            <input type="tel" id="remark" name="remark" placeholder="备注" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <!--                    <div class="layui-form-item">-->
+                    <!--                        <label class="layui-form-label">收卡店铺编号：</label>-->
+                    <!--                        <div class="layui-input-inline">-->
+                    <!--                            <input type="text" id="storeId" name="storeId" lay-verify="required" placeholder="核对店铺表再填入店铺编号" autocomplete="off" class="layui-input">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">今日额度</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="todayMoney" name="todayMoney" lay-verify="required" placeholder="今日额度" autocomplete="off" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">今日限制额度</label>
+                        <div class="layui-input-inline">
+                            <input type="tel" id="limitDayMoney" name="limitDayMoney" lay-verify="required" placeholder="今日限制额度" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号收款总额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="totalMoney" name="totalMoney" lay-verify="required" placeholder="账号收款总额" autocomplete="off" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">账号限制总额</label>
+                        <div class="layui-input-inline">
+                            <input type="tel" id="limitMaxMoney" name="limitMaxMoney" placeholder="账号限制总额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="state" value="1" title="启用" checked="checked">
+                            <input type="radio" name="state" value="2" title="禁用">
+                            <input type="radio" name="state" value="3" title="限额">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="padding-bottom: 20px;">
+                        <button type="button" class="layui-btn" lay-submit="" lay-filter="Edit">保存</button>
+                        <a class="layui-btn" lay-href="/receive/tlbb/receive_account/">返回</a>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'],function(){
+        var form = layui.form
+        ,$ = layui.$
+        ,admin = layui.admin
+        ,element = layui.element
+        ,layer = layui.layer;
+
+        // 导航
+        element.render('breadcrumb', 'breadcrumb');
+        var router = layui.router();
+        var id = router.search.id;
+
+        admin.req({
+            type: 'get',
+            url: layui.setter.baseUrl + '/receive/tlbb/account/get',
+            data: {
+                id : id
+            },
+            error: function(err){
+                layer.alert(JSON.stringify(err.field), {
+                    title: '错误提示'
+                })
+            },
+            success: function(res){
+                if(res.code == 0){
+                    $('#id').val(res.data.id);
+                    $('#phone').val(res.data.phone);
+                    $('#storeId').val(res.data.storeId);
+                    $('#token').val(res.data.token);
+                    $('#todayMoney').val(res.data.todayMoney / 100);
+                    $('#limitDayMoney').val(res.data.limitDayMoney / 100);
+                    $('#totalMoney').val(res.data.totalMoney / 100);
+                    $('#limitMaxMoney').val(res.data.limitMaxMoney / 100);
+                    $('#state').val(res.data.state);
+                    $('#remark').val(res.data.remark);
+
+                    if(res.data.state == 1) {
+                        $("input[name='state'][value='1']").attr("checked", true);
+                    }else if(res.data.state == 2){
+                        $("input[name='state'][value='2']").attr("checked", true);
+                    }else{
+                        $("input[name='state'][value='3']").attr("checked", true);
+                    }
+
+                    form.render();
+                }
+            }
+        });
+
+        form.on('submit(Edit)', function(data) {
+            //这里可以写ajax方法提交表单
+            admin.req({
+                type: "POST",
+                url: layui.setter.baseUrl + '/receive/tlbb/account/update',
+                data: data.field,
+                success: function(res){
+                    if(res.code == 0) {
+                        layer.alert(res.msg, {title: "提示"}, function(index){
+                          layer.close(index);
+                          location.href = layui.setter.baseLocal + '/receive/tlbb/receive_account/';
+                        });
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+    })
+</script>

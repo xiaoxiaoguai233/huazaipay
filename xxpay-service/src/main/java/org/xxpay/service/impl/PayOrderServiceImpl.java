@@ -163,6 +163,19 @@ public class PayOrderServiceImpl implements IPayOrderService {
 
 
     @Override
+    public int systeminfo(String status) {
+        if (status.equals("1")){
+            return payOrderMapper.systeminfo();
+        } else if (status.equals("2")) {
+            return payOrderMapper.systeminfo1();
+        }else {
+            return payOrderMapper.systeminfo2();
+        }
+
+    }
+
+
+    @Override
     public int updatePhoneAndChannelUserByOrderId(String payOrderId, String phone, String nickUser, String card) {
         return payOrderMapper.updatePhoneAndChannelUserAndCardByOrderId(payOrderId,phone,nickUser, card);
     }
@@ -170,6 +183,11 @@ public class PayOrderServiceImpl implements IPayOrderService {
     @Override
     public int updatePhoneAndChannelUserByOrderId(String payOrderId, String phone, String nickUser) {
         return payOrderMapper.updatePhoneAndChannelUserByOrderId(payOrderId,phone,nickUser);
+    }
+
+    @Override
+    public int updateTokenAndChannelUserByOrderId(String payOrderId, String token, String nickUser) {
+        return payOrderMapper.updateTokenAndChannelUserByOrderId(payOrderId,token,nickUser);
     }
 
     @Override

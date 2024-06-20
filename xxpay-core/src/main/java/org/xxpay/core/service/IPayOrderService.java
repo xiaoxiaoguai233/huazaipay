@@ -23,6 +23,7 @@ public interface IPayOrderService {
      */
 
     int updatePhoneAndChannelUserByOrderId(String payOrderId, String phone, String nickUser, String card);
+
     /**
      * 自定义订单更新手机号码
      * @param payOrderId
@@ -30,6 +31,14 @@ public interface IPayOrderService {
      * @return
      */
     int updatePhoneAndChannelUserByOrderId(String payOrderId, String phone, String nickUser);
+
+    /**
+     * 自定义订单更新手机号码
+     * @param payOrderId
+     * @param token
+     * @return
+     */
+    int updateTokenAndChannelUserByOrderId(String payOrderId, String token, String nickUser);
 
 
     /**
@@ -41,8 +50,11 @@ public interface IPayOrderService {
     int updateCardPwdByOrderId(@Param("payOrderId") String payOrderId, @Param("cardPwd") String cardPwd);
 
 
-
-
+    /**
+     * 获取系统信息
+     * @return
+     */
+    int systeminfo(String status);
 
 
 

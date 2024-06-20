@@ -44,6 +44,7 @@ public class AlipayPaymentService extends BasePayment {
     public final static String PAY_CHANNEL_ALIPAY_COUNPON_APP = "alipay_coupon_app";	        // 支付宝红包无线支付
 
     public final static String PAY_CHANNEL_ALIPAY_APP_SLRJ = "alipay_app_slrj";	        // 支付宝APP支付-SLRJ
+    public final static String PAY_CHANNEL_ALIPAY_APP_TLBB = "alipay_app_tlbb";	        // 支付宝APP支付-SLRJ
 
     @Value("payment")
     private String request_str;
@@ -66,6 +67,9 @@ public class AlipayPaymentService extends BasePayment {
         switch (channelId) {
             case PAY_CHANNEL_ALIPAY_APP_SLRJ :                  // 支付宝APP - SLRJ
                 retObj = doAliPayAPPSLRJReq(payOrder);
+                break;
+            case PAY_CHANNEL_ALIPAY_APP_TLBB :                  // 支付宝APP - TLBB
+                retObj = doAliPayAPPTLBBReq(payOrder);
                 break;
             case PayConstant.PAY_CHANNEL_ALIPAY_MOBILE :
                 retObj = doAliPayMobileReq(payOrder);
@@ -188,6 +192,56 @@ public class AlipayPaymentService extends BasePayment {
 //            payParams.put("payUrl", "http://192.168.1.3:3020/api/waiting/" + payOrder.getPayOrderId());
 
             payParams.put("payUrl", "http://pay.huazaipay.info/api/waiting/" + payOrder.getPayOrderId());
+
+//            payParams.put("payUrl", "https://payment.wuye6688.com/api/waiting/" + payOrder.getPayOrderId());
+
+            retObj.put("payParams", payParams);
+        }else{
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "金额错误，请重试！");
+        }
+        return retObj;
+    }
+
+
+    /**
+     * 支付宝APP支付-TLBB
+     * @param payOrder
+     * @return
+     */
+    public JSONObject doAliPayAPPTLBBReq(PayOrder payOrder) throws Exception {
+
+        String logPrefix = "【8026-支付宝原生任额-8026】";
+
+        JSONObject retObj = new JSONObject();
+
+//        String amount = String.valueOf(payOrder.getAmount() / 100);
+
+        double amount = Double.valueOf(payOrder.getAmount() / 100);
+
+        if(amount >= 0 && amount <= 50000.0){
+
+            // 填充支付链接到相关的app
+            retObj.put(PayConstant.RETURN_PARAM_RETCODE, PayConstant.RETURN_VALUE_SUCCESS);
+
+            alipayAsynCreateOrders.Alipay_TLBB_App(payOrder);
+
+            // Redis参数设置
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("status", "0");
+
+            RedisUtil.setString(payOrder.getPayOrderId(), jsonObject.toJSONString(), 60);
+
+            // formJump payUrl
+            // urlJump  payUrl
+            // codeImg  codeImgUrl
+
+            JSONObject payParams = new JSONObject();
+            payParams.put("payMethod", "urlJump");
+
+            payParams.put("payUrl", "http://pay.lalapay.cyou/api/waiting/" + payOrder.getPayOrderId());
+
+//            payParams.put("payUrl", "http://pay.huazaipay.info/api/waiting/" + payOrder.getPayOrderId());
 
 //            payParams.put("payUrl", "https://payment.wuye6688.com/api/waiting/" + payOrder.getPayOrderId());
 

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.xxpay.service.dao.mapper.ZTlbbAccountMapper" >
+
+    <resultMap id="BaseResultMap" type="org.xxpay.core.entity.ZTlbbAccount" >
+        <id column="Id" property="id" jdbcType="BIGINT" />
+        <result column="ParentId" property="parentId" jdbcType="BIGINT" />
+        <result column="Token" property="token" jdbcType="VARCHAR" />
+        <result column="Phone" property="phone" jdbcType="VARCHAR" />
+        <result column="StoreId" property="storeId" jdbcType="BIGINT" />
+        <result column="TodayMoney" property="todayMoney" jdbcType="BIGINT" />
+        <result column="LimitDayMoney" property="limitDayMoney" jdbcType="BIGINT" />
+        <result column="TotalMoney" property="totalMoney" jdbcType="BIGINT" />
+        <result column="LimitMaxMoney" property="limitMaxMoney" jdbcType="BIGINT" />
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="AddressId" property="addressId" jdbcType="BIGINT" />
+        <result column="Remark" property="remark" jdbcType="VARCHAR" />
+        <result column="Status" property="status" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney, LimitMaxMoney, CreateTime, UpdateTime, AddressId, Remark, State
+    </sql>
+
+    <!-- *******************************
+                支付业务
+    *******************************  -->
+
+    <!-- 获取最优的收款账号 -->
+    <select id="selectReceiveAccountByUpdateTime" resultType="org.xxpay.core.entity.ZTlbbAccount">
+        select
+            *
+        from t_z_tlbb_account
+        where `State` = 1
+        order by UpdateTime
+            limit 0,1;
+    </select>
+
+    <!-- 更新数据-->
+    <update id="updateReceiveAccountByUpdateTime" parameterType="org.xxpay.core.entity.ZTlbbAccount" >
+        update t_z_tlbb_account
+        set UpdateTime = now()
+        where Id = #{zTlbbAccount.id};
+    </update>
+
+
+
+
+
+    <!-- *******************************
+                常规业务
+    *******************************  -->
+
+    <!-- 查询当前的惠生活账号列表-->
+    <select id="selectList" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.ZMthAccount" >
+        select
+        Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+        LimitMaxMoney, CreateTime, UpdateTime, Remark, `State`
+        from t_z_tlbb_account
+        where 1 = 1
+        <if test="zTlbbAccount.parentId != null">
+            and ParentId = #{zTlbbAccount.parentId}
+        </if>
+        <if test="zTlbbAccount.token != null and zTlbbAccount.token != ''">
+            and Token = #{zTlbbAccount.token}
+        </if>
+        <if test="zTlbbAccount.phone != null and zTlbbAccount.phone != '' ">
+            and Phone = #{zTlbbAccount.phone}
+        </if>
+        <if test="zTlbbAccount.storeId != null and zTlbbAccount.storeId != '' ">
+            and StoreId = #{zTlbbAccount.storeId}
+        </if>
+        order by UpdateTime desc
+        limit #{page}, #{limit};
+    </select>
+
+    <!-- 计算全数-->
+    <select id="selectListCount" resultType="Integer">
+        select
+        COUNT(*)
+        from t_z_tlbb_account
+        where 1 = 1
+        <if test="parentId != null">
+            and ParentId = #{parentId}
+        </if>
+    </select>
+
+    <!-- 查询当前的惠生活账号By手机号-->
+    <select id="selectByPhone" resultMap="BaseResultMap" >
+        select
+            Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+            LimitMaxMoney, CreateTime, UpdateTime, Remark, `State`
+        from t_z_tlbb_account
+        where Phone = #{phone};
+    </select>
+
+    <!-- 查询当前的惠生活账号By token-->
+    <select id="selectByToken" resultMap="BaseResultMap" >
+        select
+            Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+            LimitMaxMoney, CreateTime, UpdateTime, Remark, `State`
+        from t_z_tlbb_account
+        where Token = #{token};
+    </select>
+
+    <!-- 查询当前的惠生活账号ByID-->
+    <select id="selectById" resultMap="BaseResultMap" >
+        select
+            Id, ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+            LimitMaxMoney, CreateTime, UpdateTime, Remark, `State`
+        from t_z_tlbb_account
+        where Id = #{id};
+    </select>
+
+    <!-- 更新数据-->
+    <update id="update" parameterType="org.xxpay.core.entity.ZTlbbAccount" >
+        update t_z_tlbb_account
+        set Token = #{zTlbbAccount.token},
+            Phone = #{zTlbbAccount.phone},
+            StoreId = #{zTlbbAccount.storeId},
+            TodayMoney = #{zTlbbAccount.todayMoney},
+            LimitDayMoney = #{zTlbbAccount.limitDayMoney},
+            TotalMoney = #{zTlbbAccount.totalMoney},
+            LimitMaxMoney = #{zTlbbAccount.limitMaxMoney},
+            UpdateTime = now(),
+            Remark = #{zTlbbAccount.remark},
+            `State` = #{zTlbbAccount.state}
+        where Id = #{zTlbbAccount.id};
+    </update>
+
+    <!-- 添加新的收款账号-->
+    <insert id="insert" parameterType="org.xxpay.core.entity.ZTlbbAccount">
+        insert into t_z_tlbb_account (
+            ParentId, Token, Phone, StoreId, TodayMoney, LimitDayMoney, TotalMoney,
+            LimitMaxMoney, CreateTime, AddressId, Remark, `State`
+        )
+        values (
+                   #{zTlbbAccount.parentId},
+                   #{zTlbbAccount.token},
+                   #{zTlbbAccount.phone},
+                   -1,
+                   0,
+                   #{zTlbbAccount.limitDayMoney},
+                   0,
+                   #{zTlbbAccount.limitMaxMoney},
+                   now(),
+                   -1,
+                   #{zTlbbAccount.remark},
+                   1
+               )
+    </insert>
+
+    <!-- 删除按钮-->
+    <delete id="deleteByPrimaryKey">
+        delete from t_z_tlbb_account
+        where Id = #{id};
+    </delete>
+
+    <!-- 清零当日收款数据-->
+    <update id="clearTodayMoney">
+        update t_z_tlbb_account set TodayMoney = 0;
+    </update>
+
+
+</mapper>

@@ -1,12 +1,17 @@
 package org.xxpay.pay.ctrl.paycenter;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
+import java.util.Random;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.xxpay.core.common.domain.BizResponse;
 import org.xxpay.core.common.domain.XxPayPageRes;
 import org.xxpay.core.common.domain.XxPayResponse;
@@ -50,12 +53,19 @@ public class PayCenterController extends BaseController {
 
 //    public String paySiteUrl = "http://payment.wuye6688.com/api/orders/";	// 代付补单任务开关
 
-    public String paySiteUrl = "http://pay.huazaipay.info/api/orders/";	// 代付补单任务开关
+//    public String paySiteUrl = "http://pay.huazaipay.info/api/orders/";	// 代付补单任务开关
+
+
+
+    // TODO 1. 新天龙八部
+    public String paySiteUrl = "http://pay.lalapay.cyou/api/orders/";	// 代付补单任务开关
+//
+    private String imgUrl = "http://pay.lalapay.cyou/upLoadfile/imagefile/";  // 上传图片
+
 
 //    public String paySiteUrl = "http://192.168.1.3:3020/api/orders/";	// 代付补单任务开关
-
-
-
+//
+//    private String imgUrl = "http://127.0.0.1:3020/upLoadfile/imagefile/";  // 上传图片
 
 
     @RequestMapping("/api/orders/{orderId}")
@@ -209,6 +219,51 @@ public class PayCenterController extends BaseController {
         return ResponseEntity.ok(XxPayResponse.buildSuccess());
 
     }
+
+
+    /**
+     * 图片上传到服务器文件夹中
+     * @param
+     * @return imgurl图片路径，success接口状态
+     */
+    @RequestMapping("/api/uploadimage")
+    @ResponseBody
+    public String uploadPicture(@RequestParam(value = "file", required = false) MultipartFile file,
+                                HttpServletRequest request, HttpServletResponse response) {
+        JSONObject obj = new JSONObject();
+        File targetFile = null;
+        String url = "";// 返回存储路径
+        String fileName = file.getOriginalFilename();// 获取文件名加后缀
+        if (fileName != null && fileName != "") {
+            //文件存储位置
+            ServletContext scontext = request.getSession().getServletContext();
+            // 获取绝对路径
+            String path = scontext.getRealPath("/") + "upLoadfile/imagefile";
+            String lastname = fileName.substring(fileName.lastIndexOf("."), fileName.length());//文件后缀
+            fileName = new Date().getTime() + "_" + new Random().nextInt(1000) + lastname;//当前时间+随机数=新的文件名
+            // 如果文件夹不存在则创建
+            File pathfile = new File(path);
+            if (!pathfile.exists()) {
+                pathfile.mkdirs();
+            }
+            // 将图片存入文件夹
+            targetFile = new File(path, fileName);
+            try {
+                // 将上传的文件写到服务器上指定的文件。
+                file.transferTo(targetFile);
+                obj.put("success", true);
+                url = fileName;//保存路径，便于后续存入数据库
+            } catch (Exception e) {
+                e.printStackTrace();
+                obj.put("success", false);
+                obj.put("errorMsg", e.getMessage());
+            }
+        }
+        obj.put("imgurl", imgUrl + url);
+        return obj.toString();
+    }
+
+
 
 
     @RequestMapping("/api/createOrder")

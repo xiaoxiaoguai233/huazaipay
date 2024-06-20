@@ -124,9 +124,9 @@ public class TransOrderService {
             Boolean status = retObj.getBooleanValue("isSuccess");
             if(status)  {
                 // 更新转账状态为成功
-                String channelOrderNo = retObj.getString("channelOrderNo");
-                result = rpcCommonService.rpcTransOrderService.updateStatus4Success(transOrderId, channelOrderNo);
-                _log.info("更新转账订单状态为成功({}),transOrderId={},返回结果:{}", PayConstant.TRANS_STATUS_SUCCESS, transOrderId, result);
+//                String channelOrderNo = retObj.getString("channelOrderNo");
+//                result = rpcCommonService.rpcTransOrderService.updateStatus4Success(transOrderId, channelOrderNo);
+//                _log.info("更新转账订单状态为成功({}),transOrderId={},返回结果:{}", PayConstant.TRANS_STATUS_SUCCESS, transOrderId, result);
             }else {
                 // 更新转账状态为失败
                 String channelErrCode = retObj.getString("channelErrCode");

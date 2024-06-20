@@ -6,6 +6,7 @@ import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.xxpay.core.common.constant.PayConstant;
 import org.xxpay.core.common.util.MyLog;
 import org.xxpay.core.entity.*;
@@ -21,6 +22,96 @@ public class AlipayAsynCreateOrders {
     private static final MyLog _log = MyLog.getLog(AlipayAsynCreateOrders.class);
 
     @Autowired public RpcCommonService rpcCommonService;
+
+    /**
+     * 查询订单状态
+     * @throws InterruptedException
+     */
+    @Async("mqExecutor")
+    public void Alipay_TLBB_App(PayOrder payOrder) throws Exception {
+        String logPrefix = "【8026-支付宝原生任额-8026】";
+        JSONObject retObj = new JSONObject();
+
+        _log.info("{} ==== {} ", logPrefix, payOrder.getPayOrderId());
+
+        // 获取收款账号
+        ZTlbbAccount zTlbbAccount = rpcCommonService.rpcZTlbbAccountService.selectReceiveAccountByUpdateTime();
+        if(zTlbbAccount == null){
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "获取收款账号失败");
+//            return retObj;
+        }
+
+        // 给订单添加手机号, 和码商名称
+        AssistantInfo assistant = null;
+        SysUser sysUser = null;
+
+        String asstname = "";
+        if (zTlbbAccount.getParentId() >= 30000000){
+            assistant = rpcCommonService.rpcAsstInfoService.findByAssistantId(zTlbbAccount.getParentId());
+            asstname = assistant.getAssistantName();
+        }else {
+            sysUser = rpcCommonService.rpcSysService.findByUserId(zTlbbAccount.getParentId());
+            asstname = sysUser.getNickName();
+        }
+
+
+        int res_update_phone = rpcCommonService.rpcPayOrderService.updatePhoneAndChannelUserByOrderId(payOrder.getPayOrderId(), zTlbbAccount.getToken(), asstname);
+        if(res_update_phone == 0){
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "订单更新收款账号失败");
+        }
+
+        // TODO 1. 获取订单号
+        JSONObject jsonObject = new JSONObject();
+        String amount= String.valueOf(payOrder.getAmount() / 100);
+        String token = zTlbbAccount.getToken();
+
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"), String.valueOf(jsonObject));
+
+        Request request_getOrder = new Request.Builder()
+                .url("http://127.0.0.1:8002/paystr?amount=" + amount + "&token=" + token)
+                .get()
+                .build();
+
+        Response response = new OkHttpClient().newCall(request_getOrder).execute();
+        JSONObject res_orderSn_json = JSONObject.parseObject(response.body().string());
+
+        _log.info("{} === 拉起订单结果： {} ===", payOrder.getPayOrderId(), res_orderSn_json);
+
+        // TODO 2. 获取支付二维码
+        String orderSn = null;
+        String result = null;
+        // 获取支付链接（过期时间24H）成功
+        if (!StringUtils.isEmpty(res_orderSn_json.getString("spsn"))){
+            // 支付订单
+            orderSn = res_orderSn_json.getString("spsn");
+            // 支付二维码
+            result = res_orderSn_json.getString("imgurl");
+        }else{
+            retObj.put(PayConstant.RESULT_PARAM_ERRCODE, PayConstant.RESULT_VALUE_FAIL);        // errCode -1
+            retObj.put(PayConstant.RESULT_PARAM_ERRDES, "获取支付链接失败，请联系相关技术人员1002");
+            _log.info("{} === 获取支付链接失败，请联系相关技术人员1002 ===", payOrder.getPayOrderId());
+        }
+
+        // TODO 2. Redis添加查单信息
+        JSONObject redis_param = new JSONObject();
+        redis_param.put("payOrderId", payOrder.getPayOrderId());
+        redis_param.put("token", zTlbbAccount.getToken());
+        redis_param.put("orderSn", orderSn);
+        redis_param.put("amount", String.valueOf(payOrder.getAmount() / 100));
+        redis_param.put("status", "1");
+        redis_param.put("method", "alipay");
+        redis_param.put("payLink", result);
+        RedisUtil.setString(payOrder.getPayOrderId(), redis_param.toJSONString(), CS.CHANNEL_KEY_TIME);
+
+        // 更改支付状态为支付中
+        rpcCommonService.rpcPayOrderService.updateStatus4Ing(payOrder.getPayOrderId(), null);
+
+        _log.info("{} === Redis添加查单信息： {} ===", payOrder.getPayOrderId(), res_orderSn_json);
+    }
+
 
     /**
      * 查询订单状态

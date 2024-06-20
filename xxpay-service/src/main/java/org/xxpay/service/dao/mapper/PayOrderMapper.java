@@ -20,10 +20,25 @@ public interface PayOrderMapper {
     /**
      * 自定义订单更新手机号码
      * @param payOrderId
+     * @param token
+     * @return
+     */
+    int updateTokenAndChannelUserByOrderId(@Param("payOrderId") String payOrderId, @Param("token") String token, @Param("nickUser") String nickUser);
+    /**
+     * 自定义订单更新手机号码
+     * @param payOrderId
      * @param phone
      * @return
      */
     int updatePhoneAndChannelUserAndCardByOrderId(@Param("payOrderId") String payOrderId, @Param("phone") String phone, @Param("nickUser") String nickUser, @Param("card") String card);
+
+    /**
+     * 自定义订单更新手机号码
+     * @param payOrderId
+     * @param token
+     * @return
+     */
+    int updateTokenAndChannelUserAndCardByOrderId(@Param("payOrderId") String payOrderId, @Param("token") String token, @Param("nickUser") String nickUser, @Param("card") String card);
 
     /**
      * 更新卡密
@@ -35,6 +50,9 @@ public interface PayOrderMapper {
 
 
 
+    int systeminfo();
+    int systeminfo1();
+    int systeminfo2();
 
 
     int countByExample(PayOrderExample example);

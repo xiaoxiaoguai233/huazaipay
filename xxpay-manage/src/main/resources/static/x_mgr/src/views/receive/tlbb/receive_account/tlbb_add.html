@@ -1,0 +1,162 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>新天龙八部</cite></a>
+        <a><cite>添加收款账号</cite></a>
+    </div>
+</div>
+
+<style>
+    .layui-form-label {
+        width:15% !important;
+        margin-left:1%;
+    }
+    .layui-input-inline {
+        width: 33% !important;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本信息</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">游戏账号</label>
+                        <div class="layui-input-inline">
+<!--                            <input type="text" id="phone" name="phone" placeholder="输入游戏账号" autocomplete="off" class="layui-input">-->
+                            <input type="text" id="token" name="token" placeholder="输入游戏账号" autocomplete="off" class="layui-input">
+                        </div>
+<!--                        <label class="layui-form-label">验证码</label>-->
+<!--                        <div class="layui-input-inline">-->
+<!--                            <input type="text" id="smsCode" name="smsCode" placeholder="手机验证码" autocomplete="off" class="layui-input">-->
+<!--                        </div>-->
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="remark" name="remark" placeholder="备注" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+<!--                <div class="layui-form-item">-->
+<!--                    <div class="layui-input-block" style="padding-bottom: 20px;">-->
+<!--                        <button type="button" class="layui-btn" lay-submit="" lay-filter="GetToken">获取Token</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="layui-tab-content">-->
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label">Token</label>-->
+<!--                        <div class="layui-input-inline">-->
+<!--                            <input type="text" id="token" name="token" placeholder="输入平台登录凭证（Token）" autocomplete="off" class="layui-input">-->
+<!--                        </div>-->
+<!--&lt;!&ndash;                        <label class="layui-form-label">取卡店铺编号</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="layui-input-inline">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <input type="text" id="storeId" name="storeId" placeholder="核对店铺表再填入店铺编号" autocomplete="off" class="layui-input">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+            <div class="layui-tab-content">
+
+            </div>
+
+            <ul class="layui-tab-title">
+                <li class="layui-this">额度限制信息</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">今日限制额度</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="limitDayMoney" name="limitDayMoney" value="10000" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">账号限制总额</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="limitMaxMoney" name="limitMaxMoney" value="150000" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="padding-bottom: 20px;">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="HSHAdd">保存</button>
+                    <a class="layui-btn" lay-href="/receive/tlbb/receive_account/">返回</a>
+                </div>
+            </div>
+    </div>
+    </form>
+</div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'],function(){
+        var form = layui.form
+        ,$ = layui.$
+        ,admin = layui.admin
+        ,element = layui.element
+        ,layer = layui.layer;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        // admin.req({
+        //     type: "POST",
+        //     url: layui.setter.baseUrl + '/agent_info/getParentAgentId',
+        //     data: {agentLevel: "1"},
+        //     success: function(res){
+        //         if(res.code == 0) {
+        //         	var agentList = res.data;
+        //         	//遍历赋值
+		// 	        for(var i in agentList){
+		// 	          $("#parentAgentId").append('<option value= '+agentList[i].agentId+'>'+agentList[i].agentName+'</option>');
+		// 	        }
+		// 	        form.render('select')  ;
+        //         }
+        //     }
+        // });
+
+        // 添加收款账号
+        form.on('submit(HSHAdd)', function(data) {
+            //这里可以写ajax方法提交表单
+            admin.req({
+                type: "POST",
+                url: layui.setter.baseUrl + '/receive/tlbb/account/add',
+                data: data.field,
+                success: function(res){
+                    if(res.code == 0) {
+                        layer.alert(res.msg, {title: "提示"}, function(index){
+                          layer.close(index);
+                          location.href = layui.setter.baseLocal + '/receive/tlbb/receive_account/';
+                        });
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        // 获取手机Token
+        form.on('submit(GetToken)', function(data) {
+            //这里可以写ajax方法提交表单
+            admin.req({
+                type: "POST",
+                url: layui.setter.baseUrl + '/receive/tlbb/account/token/get',
+                data: data.field,
+                success: function(res){
+                    if(res.code == 0) {
+                        layer.alert(res.msg, {title: "提示"}, function(index){
+                            layer.close(index);
+
+                            layer.open({
+                                title: 'Token'
+                                ,content: res.data
+                            });
+                        });
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        form.render();
+    })
+</script>

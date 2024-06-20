@@ -75,7 +75,7 @@ public class AgentpayService {
         // 3. 处理转账结果
         String transOrderId = resultObj.getString("transOrderId");
         String  transStatusStr = resultObj.getString("status");
-        handleAgentpayResult(mchAgentpayRecord, transOrderId, transStatusStr);
+//        handleAgentpayResult(mchAgentpayRecord, transOrderId, transStatusStr);
     }
 
     /**

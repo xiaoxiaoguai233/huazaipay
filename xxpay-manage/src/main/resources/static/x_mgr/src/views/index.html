@@ -155,7 +155,7 @@
       </div>
     </div>-->
     <!--商户统计-->
-    <!--<div class="layui-col-md12">
+    <div class="layui-col-md12">
       <div class="layui-card">
         <div class="layui-card-header">商户</div>
         <div class="layui-card-body">
@@ -172,13 +172,15 @@
                   <li class="layui-col-xs3">
                     <a lay-href="" class="layadmin-backlog-body">
                       <h3>余额</h3>
-                      <p><cite>{{d.data.mchObj.totalBalance/100}}</cite> 元</p>
+<!--                      <p><cite>{{d.data.mchObj.totalBalance/100}}</cite> 元</p>-->
+                      <p><cite>-</cite> 元</p>
                     </a>
                   </li>
                   <li class="layui-col-xs3">
                     <a lay-href="" class="layadmin-backlog-body">
                       <h3>可结算金额</h3>
-                      <p><cite>{{d.data.mchObj.totalSettAmount/100}}</cite> 元</p>
+<!--                      <p><cite>{{d.data.mchObj.totalSettAmount/100}}</cite> 元</p>-->
+                      <p><cite>-</cite> 元</p>
                     </a>
                   </li>
                   <li class="layui-col-xs3">
@@ -217,7 +219,7 @@
           </div>
         </div>
       </div>
-    </div>-->
+    </div>
     <!--图表-->
     <div class="layui-col-md12">
       <div class="layui-card">
@@ -255,25 +257,29 @@
                   <li class="layui-col-xs2">
                     <a lay-href="" class="layadmin-backlog-body">
                       <h3>收款订单</h3>
-                      <p><cite>{{d.data.payDataObj.totalCount}}</cite> 个</p>
+<!--                      <p><cite>{{d.data.payDataObj.totalCount}}</cite> 个</p>-->
+                      <p><cite>-</cite> 个</p>
                     </a>
                   </li>
                   <li class="layui-col-xs2">
                     <a lay-href="" class="layadmin-backlog-body">
                       <h3>收款总额</h3>
-                      <p><cite>{{d.data.payDataObj.totalAmount/100}}</cite> 元</p>
+<!--                      <p><cite>{{d.data.payDataObj.totalAmount/100}}</cite> 元</p>-->
+                      <p><cite>-</cite> 元</p>
                     </a>
                   </li>
                   <li class="layui-col-xs2">
                     <a lay-href="" class="layadmin-backlog-body">
                       <h3>充值订单</h3>
-                      <p><cite>{{d.data.rechargeDataObj.totalCount}}</cite> 个</p>
+                      <p><cite>0.00</cite> 个</p>
+<!--                      <p><cite>{{d.data.rechargeDataObj.totalCount}}</cite> 个</p>-->
                     </a>
                   </li>
                   <li class="layui-col-xs2">
                     <a lay-href="" class="layadmin-backlog-body">
                       <h3>充值总额</h3>
-                      <p><cite>{{d.data.rechargeDataObj.totalAmount/100}}</cite> 元</p>
+                      <p><cite>0.00</cite> 元</p>
+<!--                      <p><cite>{{d.data.rechargeDataObj.totalAmount/100}}</cite> 元</p>-->
                     </a>
                   </li>
                   <li class="layui-col-xs2">

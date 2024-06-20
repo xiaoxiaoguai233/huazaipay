@@ -12,6 +12,10 @@
 
     <image src="https://s1.locimg.com/2023/10/16/94f941333d9c8.png" style="width: 100%;height: auto" ></image>
 
+<#--    <div style="width:100%; height:100px; text-align:center; line-height:100px;font-size: 6em;    font-weight: bolder;">-->
+<#--        AstroPay-->
+<#--    </div>-->
+
     <div class="layui-tab-content">
 
         <div class="layui-panel" style="padding: 10px;">
@@ -20,26 +24,26 @@
             </blockquote>
 
             <div class="layui-panel" style="padding: 10px;">
-                <table class="layui-table" id="table_kefu">
-                    <colgroup>
-                        <col width="150">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>商家列表</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <#list online_assistants as online_assistant>
-                        <tr>
-                            <td>
-                                点击购买：
-                                <button style="color: #0a64ab;border: 0;outline: none;background-color: transparent;" onclick="chooseAssistant('${online_assistant.assistantId ! ''}','${online_assistant.assistantName ! ''}')">${online_assistant.assistantName ! ''}</button>
-                            </td>
-                        </tr>
-                    </#list>
-                    </tbody>
-                </table>
+<#--                <table class="layui-table" id="table_kefu">-->
+<#--                    <colgroup>-->
+<#--                        <col width="150">-->
+<#--                    </colgroup>-->
+<#--                    <thead>-->
+<#--                    <tr>-->
+<#--                        <th>商家列表</th>-->
+<#--                    </tr>-->
+<#--                    </thead>-->
+<#--                    <tbody>-->
+<#--&lt;#&ndash;                    <#list online_assistants as online_assistant>&ndash;&gt;-->
+<#--&lt;#&ndash;                        <tr>&ndash;&gt;-->
+<#--&lt;#&ndash;                            <td>&ndash;&gt;-->
+<#--&lt;#&ndash;                                点击购买：&ndash;&gt;-->
+<#--&lt;#&ndash;                                <button style="color: #0a64ab;border: 0;outline: none;background-color: transparent;" onclick="chooseAssistant('${online_assistant.assistantId ! ''}','${online_assistant.assistantName ! ''}')">${online_assistant.assistantName ! ''}</button>&ndash;&gt;-->
+<#--&lt;#&ndash;                            </td>&ndash;&gt;-->
+<#--&lt;#&ndash;                        </tr>&ndash;&gt;-->
+<#--&lt;#&ndash;                    </#list>&ndash;&gt;-->
+<#--                    </tbody>-->
+<#--                </table>-->
 
 
 
@@ -51,7 +55,7 @@
                     </colgroup>
                     <thead>
                     <tr>
-                        <th>网点列表 &nbsp;&nbsp;&nbsp;(购买Astropay卡、不要买错了)</th>
+                        <th>网点列表 &nbsp;&nbsp;&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -109,26 +113,7 @@
                         <span style="color: red;font-weight: bolder;font-size: 25px;display: flex;justify-content: center;margin-bottom: 20px;"><p>↓ ↓ ↓&nbsp;</p>操作教程<p>&nbsp;↓ ↓ ↓</p></span>
                         <p style="color: red;padding: 10px; font-size: 20px;">1. 点击如上商家购买卡密。</p>
                         <p style="color: red;padding: 10px; font-size: 20px;">2. 购买成功后，将商家发送的卡密粘贴到提交框内进行上分。</p>
-                    </div>
-
-
-                    <div style="display: flex;flex-direction: column;margin-top: 50px;">
-                        <div style="display: flex;flex-direction: row; color: #000000">
-                            <p style="font-weight: bolder;">格式：</p>
-                            <p>卡号,密码(多个请换行)</p>
-                        </div>
-
-                        <div style="display: flex;flex-direction: column; color: #000000">
-                            <p style="font-weight: bolder;">示例：</p>
-                            <p>9462503327,912234</p>
-                            <p>5292857980,651310</p>
-                            <p>4230471410,561832</p>
-                            <p>2815085138,495504</p>
-                            <p>4826979080,959014</p>
-                            <p>0394545283,494388</p>
-                            <p>9406659016,348847</p>
-                            <p>...,...</p>
-                        </div>
+                        <p style="color: red;padding: 10px; font-size: 20px;">3. 格式：卡号,密码</p>
                     </div>
                 </div>
             </div>

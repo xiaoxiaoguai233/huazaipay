@@ -38,6 +38,7 @@ public enum RetEnum {
     RET_SERVICE_CASHIER_CONFIG_NOT_EXIST(11020, "收银台没有配置"),
     RET_SERVICE_CASHIER_CONFIG_NOT_OPEN(11021, "收银台未开启"),
     RET_SERVICE_REPEAT_PHONE(11022, "添加的手机号码重复"),
+    RET_SERVICE_REPEAT_TOKEN(11022, "添加的账号号码重复"),
     RET_SERVICE_Error_PHONE_And_SMS(11023, "手机号或验证码填写有误，请检查后重试"),
 
     // 商户系统返回码12开头

@@ -33,7 +33,7 @@ public class CheckOrderStatusScheduled {
      * 查询订单状态
      * @throws InterruptedException
      */
-    @Async
+//    @Async
 //    @Scheduled(fixedDelay = 1000 * 10)  //   间隔10秒
     public void PayOrderCheckState() throws InterruptedException {
 

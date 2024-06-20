@@ -177,4 +177,10 @@ public class RpcCommonService {
 
     @Reference(version = "1.0.0", timeout = 10000, retries = -1)
     public IZFkKamiShopService rpcZFkKamiShopService;
+
+    @Reference(version = "1.0.0", timeout = 10000, retries = -1)
+    public IZTlbbAccountService rpcZTlbbAccountService;
+
+    @Reference(version = "1.0.0", timeout = 10000, retries = -1)
+    public IZZfAccountService rpcZZfAccountService;
 }

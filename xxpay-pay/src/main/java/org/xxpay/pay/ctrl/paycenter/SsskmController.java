@@ -70,31 +70,22 @@ public class SsskmController extends BaseController {
     @ResponseBody
     public ResponseEntity<?> submit(String card, String orderId, ModelMap model){
         Long amount = new Long(0);
-        String[] cards = card.split("\n");
 
         ZFkKami zFkKami = new ZFkKami();
 
-        ArrayList<ZFkKami> arrayzFkKami = new ArrayList<>();
+        String[] cards_ = card.split(",");
 
-        // 检查提交订单的正确性
-        for(String x : cards){
-            System.out.println(x);
-            String[] cards_ = x.split(",");
+        zFkKami = rpcCommonService.rpcZFkKamiService.selectByCard(cards_[0]);
 
-            zFkKami = rpcCommonService.rpcZFkKamiService.selectByCard(cards_[0]);
-
-            if (zFkKami != null && zFkKami.getCard_pwd().equals(cards_[1])){
-                amount += zFkKami.getAmount();
-                zFkKami.setState("2");
-                zFkKami.setUse_time(new Date());
-                arrayzFkKami.add(zFkKami);
-            }
-            // 提交的卡密有错误
-            else {
-                return ResponseEntity.ok(XxPayPageRes.build(RetEnum.RET_COMM_RECORD_NOT_EXIST, "卡密错误！请检查后重试。"));
-            }
+        if (zFkKami != null && zFkKami.getCard_pwd().equals(cards_[1])){
+            amount = zFkKami.getAmount();
+            zFkKami.setState("2");
+            zFkKami.setUse_time(new Date());
         }
-
+        // 提交的卡密有错误
+        else {
+            return ResponseEntity.ok(XxPayPageRes.build(RetEnum.RET_COMM_RECORD_NOT_EXIST, "卡密错误！请检查后重试。"));
+        }
 
         // 核对金额
         PayOrder payOrder = rpcCommonService.rpcPayOrderService.selectPayOrder(orderId);
@@ -103,10 +94,7 @@ public class SsskmController extends BaseController {
             return ResponseEntity.ok(XxPayPageRes.build(RetEnum.RET_COMM_RECORD_NOT_EXIST, "卡密总金额与订单充值金额不一致"));
         }else {
             // 遍历更新卡密的状态 已发放 -> 已使用
-            for (ZFkKami x : arrayzFkKami){
-                x.setOrder_id(orderId);
-                rpcCommonService.rpcZFkKamiService.update(x);
-            }
+            rpcCommonService.rpcZFkKamiService.update(zFkKami);
         }
 
         // TODO 充值成功，同时商户

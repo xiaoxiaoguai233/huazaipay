@@ -55,4 +55,7 @@ public class RpcCommonService {
 
     @Reference(version = "1.0.0", timeout = 10000, retries = -1)
     public IZSlrjAccountService rpcZSlrjAccountService;
+
+    @Reference(version = "1.0.0", timeout = 10000, retries = -1)
+    public IZTlbbAccountService rpcZTlbbAccountService;
 }

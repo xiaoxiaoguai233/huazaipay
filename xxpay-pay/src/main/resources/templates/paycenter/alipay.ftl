@@ -130,16 +130,8 @@
         </div>
 
         <div class="row">
-            <div class="_submit col-xs-10 col-sm-10 col-md-10 col-lg-10" style="text-align: center;
-                    padding: 15px;
-                    margin: 0 auto;
-                    margin-bottom: 20px;
-                    width: 70%;
-                    font-size: 20px;
-                    border-radius: 8px;
-                    background: #1677FF;
-                ">
-                <a style="text-decoration:none;color: white" href="${payLink!'www.baidu.com'}">点击支付</a>
+            <div class="_submit col-xs-10 col-sm-10 col-md-10 col-lg-10" style="overflow: hidden;">
+                <img src="${payLink!'www.baidu.com'}" style="width: 100%;transform: scale(1.9,1.9);"/>
             </div>
         </div>
     </div>
