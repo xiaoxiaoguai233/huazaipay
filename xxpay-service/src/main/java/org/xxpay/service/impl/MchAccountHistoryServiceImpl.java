@@ -15,6 +15,7 @@ import org.xxpay.core.service.IAgentInfoService;
 import org.xxpay.core.service.IMchAccountHistoryService;
 import org.xxpay.service.dao.mapper.MchAccountHistoryMapper;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,6 +147,16 @@ public class MchAccountHistoryServiceImpl implements IMchAccountHistoryService {
         example.setOrderByClause("createTime DESC");
         example.setOffset(offset);
         example.setLimit(limit);
+        MchAccountHistoryExample.Criteria criteria = example.createCriteria();
+        if(mchId != null) criteria.andMchIdEqualTo(mchId);
+        setCriteria(criteria, mchAccountHistory, queryObj);
+        return mchAccountHistoryMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<MchAccountHistory> select(Long mchId, MchAccountHistory mchAccountHistory, JSONObject queryObj) {
+        MchAccountHistoryExample example = new MchAccountHistoryExample();
+        example.setOrderByClause("createTime DESC");
         MchAccountHistoryExample.Criteria criteria = example.createCriteria();
         if(mchId != null) criteria.andMchIdEqualTo(mchId);
         setCriteria(criteria, mchAccountHistory, queryObj);

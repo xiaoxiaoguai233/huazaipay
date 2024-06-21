@@ -3,6 +3,7 @@ package org.xxpay.core.service;
 import com.alibaba.fastjson.JSONObject;
 import org.xxpay.core.entity.MchAccountHistory;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,7 @@ public interface IMchAccountHistoryService {
 
     List<MchAccountHistory> select(Long mchId, int offset, int limit, MchAccountHistory mchAccountHistory, JSONObject queryObj);
 
+    List<MchAccountHistory> select(Long mchId, MchAccountHistory mchAccountHistory, JSONObject queryObj);
     int count(Long mchId, MchAccountHistory mchAccountHistory, JSONObject queryObj);
 
     List<MchAccountHistory> select(int offset, int limit, MchAccountHistory mchAccountHistory, JSONObject queryObj);

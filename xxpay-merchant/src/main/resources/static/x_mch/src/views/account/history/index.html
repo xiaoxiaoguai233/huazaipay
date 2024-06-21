@@ -42,6 +42,7 @@
 		                    </select>
 		                  </div>
                         <button id="search" class="layui-btn" data-type="reload">搜索</button>
+						<button id="exportOrder" class="layui-btn " lay-event="table_export">导出订单</button>
                         </div>
                     </div>
                 </div>
@@ -57,12 +58,14 @@
         };
 
 
-     layui.use(['table','util','form','laydate'], function(){
-        var table = layui.table
-        ,$ = layui.$
-        ,form = layui.form
-        ,laydate = layui.laydate
-        ,element = layui.element;
+	 layui.use(['admin', 'table', 'util', 'laydate','excel'], function(){
+		 var $ = layui.$
+		 ,admin = layui.admin
+		 ,table = layui.table
+		 ,element = layui.element
+		 ,laydate = layui.laydate
+		 ,form = layui.form
+		 ,excel = layui.excel;
 
         element.render('breadcrumb', 'breadcrumb');//渲染导航信息
 
@@ -85,7 +88,7 @@
                 {field:'id', title: '流水号', sort: true }
                 ,{field: 'balance',title: '变更前余额(元)',templet: '<div>{{d.balance/100}}</div>'}
                 ,{field: 'amount',title: '变更金额(元)',templet: tplAmount}
-                ,{field: 'balance',title: '变更后余额(元)',templet: '<div>{{d.afterBalance/100}}</div>'}
+                ,{field: 'after_balance',title: '变更后余额(元)',templet: '<div>{{d.afterBalance/100}}</div>'}
                 ,{field: 'bizType',title: '业务类型',templet: '<div>{{d.bizType == 1?"支付":d.bizType == 2?"提现":d.bizType == 3?"调账":d.bizType == 4?"充值":d.bizType == 5?"差错处理":d.bizType == 6?"代付":""}}</div>'}
                 ,{field: 'orderId',title: '业务订单' ,width: 270}
                 ,{field: 'orderAmount',title: '订单金额(元)',templet: '<div>{{d.orderAmount/100}}</div>'}
@@ -140,6 +143,59 @@
         // 渲染表单
         form.render();
 
+		 // 导出
+		 $("#exportOrder").on('click',function(){
+			 var createTimeStart = $('#createTimeStart').val();
+			 var createTimeEnd = $('#createTimeEnd').val();
+			 var orderId = $('#orderId').val();
+			 var fundDirection = $('#fundDirection').val();
+			 var bizType = $('#bizType').val();
+
+			 var accessToken = layui.data(layui.setter.tableName).access_token;
+			 var reqUrl= layui.setter.baseUrl + '/account/downhistory'+'?' +'access_token='+ accessToken
+					 + '&createTimeStart=' + createTimeStart + '&createTimeEnd=' + createTimeEnd
+					 +'&orderId=' + orderId +'&bizType=' + bizType + '&fundDirection=' + fundDirection;
+			 exportFile(reqUrl);
+		 })
+
+
+		 //表格导出
+		 function exportFile(reqUrl) {
+
+			 var headerArr = [ 'id','before_balance','amount','after_balance','bizType','orderId', 'orderAmount', 'fee', 'createTime'];
+			 var titles = {
+				 id:"流水号",
+				 before_balance:"变更前余额(元)",
+				 amount:"变更金额(元)",
+				 after_balance:"变更后余额(元)",
+				 bizType:"业务类型",
+				 orderId:"业务订单",
+				 orderAmount:"订单金额(元)",
+				 fee:"手续费(元)",
+				 createTime:"创建时间"
+			 };
+			 $.ajax({
+				 url: reqUrl,
+				 dataType: 'json',
+				 success:function(res) {
+					 var data = res.data;
+					 data = excel.filterExportData(data,headerArr);
+					 //将标题行置顶添加到数组
+					 data.unshift(titles);
+					 //导出excel
+					 var year = new Date().getFullYear();
+					 var month = new Date().getMonth()+1;
+					 var date = new Date().getDate();
+					 excel.exportExcel({
+						 商户订单: data
+					 }, 'MchAccountHistoryList_' +year+'-'+ month+'-'+date+ '.xlsx', 'xlsx');
+				 },
+				 error:function(){
+					 layer.alert('获取数据失败');
+				 }
+
+			 });
+		 }
 
      })
 </script>

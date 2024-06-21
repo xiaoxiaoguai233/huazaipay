@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92936b5c-378f-4e1c-8701-9278998826fc" name="Changes" comment="更新上传">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/devCommons/config/dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/conf/devCommons/config/dev.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xxpay-core/src/main/java/org/xxpay/core/service/IMchAccountHistoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-core/src/main/java/org/xxpay/core/service/IMchAccountHistoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xxpay-merchant/src/main/java/org/xxpay/mch/user/ctrl/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-merchant/src/main/java/org/xxpay/mch/user/ctrl/AccountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xxpay-merchant/src/main/resources/static/x_mch/src/views/account/history/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-merchant/src/main/resources/static/x_mch/src/views/account/history/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/impl/MchAccountHistoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/impl/MchAccountHistoryServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +31,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="laomao" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -231,8 +241,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.XxPayMerchantApplication" />
         <item itemvalue="Spring Boot.XxPayManageApplication" />
+        <item itemvalue="Spring Boot.XxPayMerchantApplication" />
         <item itemvalue="Spring Boot.PayDemoApplication" />
         <item itemvalue="Application.TransMain" />
         <item itemvalue="JavaScript Debug.order.html" />
@@ -388,7 +398,7 @@
       <workItem from="1716715951813" duration="1255000" />
       <workItem from="1716842144850" duration="1735000" />
       <workItem from="1717918519028" duration="596000" />
-      <workItem from="1718863031199" duration="1481000" />
+      <workItem from="1718863031199" duration="18580000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1672397403033</created>
@@ -397,7 +407,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672397403033</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="更新上传">
+      <created>1718865851662</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1718865851662</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -408,7 +425,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="laomao" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
