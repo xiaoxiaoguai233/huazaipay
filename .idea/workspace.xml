@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="92936b5c-378f-4e1c-8701-9278998826fc" name="Changes" comment="更新上传">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/devCommons/config/dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/conf/devCommons/config/dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-core/src/main/java/org/xxpay/core/service/IMchAccountHistoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-core/src/main/java/org/xxpay/core/service/IMchAccountHistoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-merchant/src/main/java/org/xxpay/mch/user/ctrl/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-merchant/src/main/java/org/xxpay/mch/user/ctrl/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-merchant/src/main/resources/static/x_mch/src/views/account/history/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-merchant/src/main/resources/static/x_mch/src/views/account/history/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/impl/MchAccountHistoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/impl/MchAccountHistoryServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -431,7 +426,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="laomao" />
+                        <option value="meiyangyang" />
                       </list>
                     </value>
                   </entry>
@@ -445,7 +440,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="更新上传" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新上传" />
+    <MESSAGE value="ssskm页面修改图片和添加美洽按钮" />
+    <option name="LAST_COMMIT_MESSAGE" value="ssskm页面修改图片和添加美洽按钮" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
