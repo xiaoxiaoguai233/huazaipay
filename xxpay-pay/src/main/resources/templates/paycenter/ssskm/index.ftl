@@ -10,7 +10,7 @@
 <body>
 <div class="layui-tab layui-tab-brief">
 
-    <image src="https://s1.locimg.com/2023/10/16/94f941333d9c8.png" style="width: 100%;height: auto" ></image>
+    <image src="https://i.postimg.cc/N0tpV6ps/2024-06-30-16-34-10.jpg" style="width: 100%;height: auto" ></image>
 
 <#--    <div style="width:100%; height:100px; text-align:center; line-height:100px;font-size: 6em;    font-weight: bolder;">-->
 <#--        AstroPay-->
@@ -123,6 +123,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.8.8/layui.js" integrity="sha512-tQC4F8lHFB2IAdzFd0zE4ogMgnco1nJG3hgt26H/ZPysSBR8SGRkNi+T/ah7SerkrstEanqzmJf3mXlVdkqRJw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+
+
+<script type='text/javascript'>
+    (function(a, b, c, d, e, j, s) {
+        a[d] = a[d] || function() {
+            (a[d].a = a[d].a || []).push(arguments)
+        };
+        j = b.createElement(c),
+            s = b.getElementsByTagName(c)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = 'https://static.meiqia.com/widget/loader.js';
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '_MEIQIA');
+    _MEIQIA('entId', 'e578730da18dc5fe2eeef088c0022523');
+</script>
 
 <script type="text/javascript">
 

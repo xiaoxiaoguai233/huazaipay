@@ -74,7 +74,10 @@ public class SsskmPaymentService extends BasePayment {
         payParams.put("payMethod", "urlJump");
 
 
+        // 老猫1
         payParams.put("payUrl", "http://pay.astro88.cc/api/ssskm/" + payOrder.getPayOrderId());
+        // 老猫2
+//        payParams.put("payUrl", "http://pay.astro55.top/api/ssskm/" + payOrder.getPayOrderId());
 
 //        payParams.put("payUrl", "http://192.168.1.3:3020/api/ssskm/" + payOrder.getPayOrderId());
 
