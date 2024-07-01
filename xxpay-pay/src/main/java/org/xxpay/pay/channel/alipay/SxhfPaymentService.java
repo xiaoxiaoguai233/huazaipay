@@ -18,7 +18,7 @@ import java.util.Random;
 
 // 圣鑫话费
 @Service
-public class SxhfPaymentService  extends BasePayment {
+public class    SxhfPaymentService  extends BasePayment {
 
     private static final MyLog _log = MyLog.getLog(SjyhPaymentService.class);
     public final static String PAY_CHANNEL_SXHF_ALIPAY_SC = "sxhf_alipay_sc";                // 支付宝当面付之H5支付

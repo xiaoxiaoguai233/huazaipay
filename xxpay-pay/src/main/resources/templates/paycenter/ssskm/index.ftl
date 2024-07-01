@@ -10,13 +10,18 @@
 <body>
 <div class="layui-tab layui-tab-brief">
 
-    <image src="https://s1.locimg.com/2023/10/16/94f941333d9c8.png" style="width: 100%;height: auto" ></image>
+<#--    <image src="https://s1.locimg.com/2023/10/16/94f941333d9c8.png" style="width: 100%;height: auto" ></image>-->
 
 <#--    <div style="width:100%; height:100px; text-align:center; line-height:100px;font-size: 6em;    font-weight: bolder;">-->
 <#--        AstroPay-->
 <#--    </div>-->
 
-    <div class="layui-tab-content">
+    <div class="layui-panel" style="padding: 10px;">
+        <blockquote class="" style="color: red;font-size: 23px;font-weight: bolder;">
+            &nbsp;温馨提示：先购买卡密，再提交充值，付款过程中不要关闭对话页面，以免找不到相应的售卡客服！
+        </blockquote>
+    </div>
+        <div class="layui-tab-content">
 
         <div class="layui-panel" style="padding: 10px;">
             <blockquote class="layui-elem-quote" style="color: red; font-size: 16px; font-weight: bolder;">
@@ -65,7 +70,7 @@
                         <tr>
                             <td>
                                 点击购买：
-                                <a href="${ShopList.link}" style="color: #0a64ab;border: 0;outline: none;background-color: transparent;" target="_blank">${ShopList.name ! ''}</a>
+                                <a href="${ShopList.link}" style="font-size: 16px;color: #0a64ab;border: 0;outline: none;background-color: transparent;" target="_blank">${ShopList.name ! ''}</a>
                             </td>
                         </tr>
                     </#list>
@@ -123,6 +128,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.8.8/layui.js" integrity="sha512-tQC4F8lHFB2IAdzFd0zE4ogMgnco1nJG3hgt26H/ZPysSBR8SGRkNi+T/ah7SerkrstEanqzmJf3mXlVdkqRJw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+
+<script type='text/javascript'>
+    (function(a, b, c, d, e, j, s) {
+        a[d] = a[d] || function() {
+            (a[d].a = a[d].a || []).push(arguments)
+        };
+        j = b.createElement(c),
+            s = b.getElementsByTagName(c)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = 'https://static.meiqia.com/widget/loader.js';
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '_MEIQIA');
+    _MEIQIA('entId', '7b94d75df1f38f167800bdba0c407e01');
+</script>
 
 <script type="text/javascript">
 

@@ -7,10 +7,9 @@
     <list default="true" id="92936b5c-378f-4e1c-8701-9278998826fc" name="Changes" comment="更新上传">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conf/devCommons/config/dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/conf/devCommons/config/dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-core/src/main/java/org/xxpay/core/service/IMchAccountHistoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-core/src/main/java/org/xxpay/core/service/IMchAccountHistoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-merchant/src/main/java/org/xxpay/mch/user/ctrl/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-merchant/src/main/java/org/xxpay/mch/user/ctrl/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-merchant/src/main/resources/static/x_mch/src/views/account/history/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-merchant/src/main/resources/static/x_mch/src/views/account/history/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/impl/MchAccountHistoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/impl/MchAccountHistoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xxpay-pay/src/main/java/org/xxpay/pay/channel/alipay/SsskmPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-pay/src/main/java/org/xxpay/pay/channel/alipay/SsskmPaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xxpay-pay/src/main/java/org/xxpay/pay/channel/alipay/SxhfPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-pay/src/main/java/org/xxpay/pay/channel/alipay/SxhfPaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xxpay-pay/src/main/resources/templates/paycenter/ssskm/index.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-pay/src/main/resources/templates/paycenter/ssskm/index.ftl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +46,6 @@
         <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
-    <option name="enabledProfiles">
-      <list>
-        <option value="dev" />
-      </list>
-    </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/usr/local/Cellar/php@5.6/5.6.40_9/bin/php" />
   <component name="ProjectId" id="2JO8geNr6DnwQ1bBYKPeCePKBLR" />
@@ -62,33 +56,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelOrder2&quot;: &quot;2&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth2&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/xiaoxiaoguai/Desktop/Workspace/IntelliJ_IDEA/huazaipay&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;8c8fa3be1159734dc369edcc20454663&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelOrder2": "2",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RequestMappingsPanelWidth2": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ToolWindowGit.ShowToolbar": "false",
+    "WebServerToolWindowFactoryState": "false",
+    "jdk.selected.JAVA_MODULE": "1.8",
+    "last_opened_file_path": "/Users/xiaoxiaoguai/Desktop/Workspace/IntelliJ_IDEA/huazaipay",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "File.Encoding",
+    "spring.configuration.checksum": "8c8fa3be1159734dc369edcc20454663",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\WorkSpace\IntelliJ_IDEA\huazaipay\xxpay-manage\src\main\resources\static\x_mgr\src\views\receive\zf\mf178" />
@@ -241,8 +236,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.XxPayManageApplication" />
         <item itemvalue="Spring Boot.XxPayMerchantApplication" />
+        <item itemvalue="Spring Boot.XxPayManageApplication" />
         <item itemvalue="Spring Boot.PayDemoApplication" />
         <item itemvalue="Application.TransMain" />
         <item itemvalue="JavaScript Debug.order.html" />
