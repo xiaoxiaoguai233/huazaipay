@@ -30,8 +30,8 @@ public class XxPayNotifyServiceImpl implements IXxPayNotifyService {
 	 */
 	public void executePayNotify(String payOrderId) {
 		_log.info(">>>>>> 调取rpc补发支付通知,payOrderId：{}", payOrderId);
-		PayOrder payOrder = rpcCommonService.rpcPayOrderService.findByPayOrderId(payOrderId);
-		baseNotify4MchPay.doNotify(payOrder, true);
+//		PayOrder payOrder = rpcCommonService.rpcPayOrderService.findByPayOrderId(payOrderId);
+//		baseNotify4MchPay.doNotify(payOrder, true);
 		_log.info(">>>>>> 调取rpc补发支付通知完成  <<<<<<");
 	}
 

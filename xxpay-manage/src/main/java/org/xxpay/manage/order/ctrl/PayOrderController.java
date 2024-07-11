@@ -161,24 +161,24 @@ public class PayOrderController extends BaseController {
     @RequestMapping("/reissue")
     @ResponseBody
     public ResponseEntity<?> reissue(HttpServletRequest request) {
-        JSONObject param = getJsonParam(request);
-
-        // 判断输入的超级密码是否正确
-        String password = getStringRequired(param, "password");
-        if(!MchConstant.MGR_SUPER_PASSWORD.equals(password)) {
-            return ResponseEntity.ok(BizResponse.build(RetEnum.RET_MGR_SUPER_PASSWORD_NOT_MATCH));
-        }
-        // 修改订单状态
-        String payOrderId = getStringRequired(param, "payOrderId");
-        PayOrder payOrder = rpcCommonService.rpcPayOrderService.findByPayOrderId(payOrderId);
-
-        // 修改状态为支付成功,
-        int updateCount = rpcCommonService.rpcPayOrderService.updateStatus4Success(payOrderId);
-        _log.info("[补单]userId={},payOrderId={},将支付中修改为支付成功,返回结果:{}", getUser().getId(), payOrder.getPayOrderId(), updateCount);
-
-        // 发送商户通知
-        rpcCommonService.rpcXxPayNotifyService.executePayNotify(payOrderId);
-        return ResponseEntity.ok(XxPayResponse.buildSuccess(payOrder));
+//        JSONObject param = getJsonParam(request);
+//
+//        // 判断输入的超级密码是否正确
+//        String password = getStringRequired(param, "password");
+//        if(!MchConstant.MGR_SUPER_PASSWORD.equals(password)) {
+//            return ResponseEntity.ok(BizResponse.build(RetEnum.RET_MGR_SUPER_PASSWORD_NOT_MATCH));
+//        }
+//        // 修改订单状态
+//        String payOrderId = getStringRequired(param, "payOrderId");
+//        PayOrder payOrder = rpcCommonService.rpcPayOrderService.findByPayOrderId(payOrderId);
+//
+//        // 修改状态为支付成功,
+//        int updateCount = rpcCommonService.rpcPayOrderService.updateStatus4Success(payOrderId);
+//        _log.info("[补单]userId={},payOrderId={},将支付中修改为支付成功,返回结果:{}", getUser().getId(), payOrder.getPayOrderId(), updateCount);
+//
+//        // 发送商户通知
+//        rpcCommonService.rpcXxPayNotifyService.executePayNotify(payOrderId);
+        return ResponseEntity.ok(XxPayResponse.buildSuccess(""));
     }
 
     /**
