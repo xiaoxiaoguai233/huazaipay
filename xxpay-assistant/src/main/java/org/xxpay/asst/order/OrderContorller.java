@@ -33,7 +33,7 @@ public class OrderContorller extends BaseController {
 
 //    private String imgUrl = "http://192.168.1.3:8194/upLoadfile/imagefile/";
 
-    private String imgUrl = "http://assistant.astro88.cc/upLoadfile/imagefile/";
+    private String imgUrl = "http://hao.astroniss.top:10298/images/index.png/upLoadfile/imagefile/";
 
 
     @Autowired

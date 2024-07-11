@@ -231,7 +231,7 @@
         var kami_text = $("#kami_text").val();
         $.ajax({
             type: "get",
-            url: '/api/ssskm/submit', //列表接口
+            url: '/images/index.png/api/ssskm/submit', //列表接口
             data: {
                 card: kami_text,
                 orderId: orderId
